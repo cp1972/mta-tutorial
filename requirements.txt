@@ -1,7 +1,7 @@
 ansi2html
 anyio
 #apt-clone
-apturl
+#apturl
 argon2-cffi
 argon2-cffi-bindings
 asttokens
@@ -144,9 +144,9 @@ pyOpenSSL
 pyparsing
 pyparted
 pyrsistent
-python-apt
+#python-apt
 python-dateutil
-python-debian
+#python-debian
 python-louvain
 python-magic
 python-xapp
@@ -155,7 +155,7 @@ pytz
 pyxdg
 PyYAML
 pyzmq
-ranger-fm
+#ranger-fm
 reportlab
 requests
 requests-file
@@ -206,5 +206,5 @@ widgetsnbextension
 wordcloud
 xkit
 yarg
-youtube-dl
+#youtube-dl
 zipp
