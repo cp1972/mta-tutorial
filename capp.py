@@ -60,7 +60,7 @@ zeitungen = list(df_eng['Newspaper'].drop_duplicates())
 ## Filter für Newspaper und slider für Jahre
 
 zeitungen_wahl = st.sidebar.multiselect('Zeitungen auswählen:', zeitungen, default=zeitungen)
-jahre_wahl = st.slider('Jahre:', 2002, 2021)
+jahre_wahl = st.sidebar.slider('Jahre:', 2002, 2021)
 
 ## Filter mit multiselect und slider anwenden
 
@@ -70,7 +70,7 @@ df_eng = df_eng[df_eng['Newspaper'].isin(zeitungen_wahl)]
 ### Vorbereitung der Graphiken -- Topics als Elemente in der Graphik, x = Jahre, y = Frequenzen
 
 column = st.sidebar.multiselect('Topics auswählen', df_eng.columns[1:5], default=df_eng.columns[1])
-#df_eng = df_eng.rename(columns={'Year':'index'}).set_index('index') # notwendig damit Jahre in der x Achse erscheinen
+df_eng = df_eng.rename(columns={'Year':'index'}).set_index('index') # notwendig damit Jahre in der x Achse erscheinen
 
 ## Zwei Spalten für eine Line und eine Bar Graphik herstellen
 
