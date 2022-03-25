@@ -60,7 +60,6 @@ zeitungen = list(df_eng['Newspaper'].drop_duplicates())
 ## Filter für Newspaper und slider für Jahre
 
 zeitungen_wahl = st.sidebar.multiselect('Zeitungen auswählen:', zeitungen, default=zeitungen)
-jahre_wahl = st.slider('Jahre:', 2002, 2021)
 
 ## Filter mit multiselect und slider anwenden
 
@@ -88,5 +87,7 @@ with col2:
     #col2.write("Dichte der Topics in der Zeit") nicht zentriert
     col2.markdown("<h3 style='text-align: center; color: white;'>Topics kumulativ</h3>", unsafe_allow_html=True)
     st.bar_chart(df_eng[column])
+
+jahre_wahl = st.slider('Jahre:', 2002, 2021)
 
 st.markdown('Hier können wir weitere Erklärungen für beide Graphiken schreiben.')
