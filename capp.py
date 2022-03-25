@@ -70,7 +70,7 @@ df_eng = df_eng[df_eng['Newspaper'].isin(zeitungen_wahl)]
 ### Vorbereitung der Graphiken -- Topics als Elemente in der Graphik, x = Jahre, y = Frequenzen
 
 column = st.sidebar.multiselect('Topics auswählen', df_eng.columns[1:5], default=df_eng.columns[1])
-df_eng_n = df_eng.rename(columns={'Year':'index'}).set_index('index') # notwendig damit Jahre in der x Achse erscheinen
+df_eng = df_eng.rename(columns={'Year':'index'}).set_index('index') # notwendig damit Jahre in der x Achse erscheinen
 
 ## Zwei Spalten für eine Line und eine Bar Graphik herstellen
 
@@ -80,13 +80,13 @@ with col1:
     col1.header = "Line Graphik"
     #col1.write("Entwicklung der Topics in der Zeit") nicht zentriert
     col1.markdown("<h3 style='text-align: center; color: white;'>Topics in der Zeit</h3>", unsafe_allow_html=True)
-    st.line_chart(df_eng_n[column])
+    st.line_chart(df_eng[column])
     st.markdown('Beispiel für eine Beschreibung in der Spalte unter der Graphik')
 
 with col2:
     col2.header = "Bar Graphik"
     #col2.write("Dichte der Topics in der Zeit") nicht zentriert
     col2.markdown("<h3 style='text-align: center; color: white;'>Topics kumulativ</h3>", unsafe_allow_html=True)
-    st.bar_chart(df_eng_n[column])
+    st.bar_chart(df_eng[column])
 
 st.markdown('Hier können wir weitere Erklärungen für beide Graphiken schreiben.')
