@@ -81,7 +81,7 @@ with col1:
     #col1.write("Entwicklung der Topics in der Zeit") nicht zentriert
     col1.markdown("<h3 style='text-align: center; color: white;'>Topics in der Zeit</h3>", unsafe_allow_html=True)
     st.line_chart(df_eng[column])
-    st.markdown('Beispiel für eine Beschreibung in der Spalte unter der Graphik')
+    col1.markdown('Beispiel für eine Beschreibung in der Spalte unter der Graphik')
 
 with col2:
     col2.header = "Bar Graphik"
