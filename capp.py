@@ -60,7 +60,7 @@ zeitungen = list(df_eng['Newspaper'].drop_duplicates())
 ## Filter für Newspaper und slider für Jahre
 
 zeitungen_wahl = st.sidebar.multiselect('Zeitungen auswählen:', zeitungen, default=zeitungen)
-jahre_wahl = st.sidebar.slider('Jahre:', 2002, 2021, (2002, 2021)
+jahre_wahl = st.sidebar.slider('Jahre:', 2002, 2021, (2002, 2021))
 
 ## Filter mit multiselect und slider anwenden
 
