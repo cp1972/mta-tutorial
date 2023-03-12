@@ -24,7 +24,7 @@ if button == 'Bedeutung von LNG':
         check_1 = st.checkbox("Liquid Natural Gasoline")
         check_2 = st.checkbox("Liquified Natural Gas")
         check_3 = st.checkbox("Liquified Naturalised Gaspipeline")
-        if check_1 == True and check_2 == False and check_3 == False:
+        if check_1 == False and check_2 == True and check_3 == False:
             st.session_state.results += 1
         else:
             st.session_state.results += 0
@@ -169,7 +169,62 @@ elif button == 'Ergebnis':
     st.write('Ihr Ergebnis ist: ', str(st.session_state.results), ' Punkt/e von 14 möglichen Punkten')
     st.session_state.mylist.append(st.session_state.results)
 
-    st.markdown('**Ihr Ergebnis im Vergleich**')
-
+    st.markdown("<h3 style='text-align: center; color: pink;'>Ihr Ergebnis im Vergleich</h3>", unsafe_allow_html=True)
     st.bar_chart(st.session_state.mylist)
     st.session_state.results = 0
+
+
+    st.markdown("<h3 style='text-align: center; color: pink;'>Die richtigen Antworten zum Quiz</h3>", unsafe_allow_html=True)
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        st.markdown('**Bedeutung von LNG**')
+        st.checkbox("Liquid Natural Gasoline", value=False)
+        st.checkbox("Liquified Natural Gas", value=True)
+        st.checkbox("Liquified Naturalised Gaspipeline", value=False)
+
+        st.markdown("**Wo gibt es bereits LNG-Terminals in Deutschland?**")
+        st.checkbox("Ilmenau", value=False)
+        st.checkbox("München", value=False)
+        st.checkbox("Bielefeld", value=False)
+        st.checkbox("Stade", value=True)
+
+        st.markdown("**Wie viele LNG-Terminals wurden bereits gebaut?**")
+        st.checkbox("1", value=False)
+        st.checkbox("2", value=True)
+        st.checkbox("3", value=False)
+        st.checkbox("Keine", value=False)
+
+    with col2:
+        st.markdown("**Wie transportiert man das LNG?**")
+        st.checkbox("Durch Zug", value=False)
+        st.checkbox("Durch Piplines", value=True)
+        st.checkbox("Durch Schifftransport", value=True)
+        st.checkbox("Durch Flugzeuge", value=False)
+
+        st.markdown("**Wie wandelt man Erdgas in LNG um?**")
+        st.checkbox("Verflüssigung", value=False)
+        st.checkbox("Kompression", value=True)
+        st.checkbox("Abkühlung", value=True)
+
+        st.markdown("**Gib einen Vor- und einen Nachteil der Umwandlung von Erdgas in LNG?**")
+        st.checkbox("Verschmutzung", value=False)
+        st.checkbox("Infrastruktur überschaubar", value=True)
+        st.checkbox("Energieverlust", value=True)
+        st.checkbox("Niedriege Kosten", value=False)
+
+    with col3:
+        st.markdown("**Welche Länder beliefern Deutschland mit Erdgas zur Zeit?**")
+        st.checkbox("Belgien", value=True)
+        st.checkbox("Dänmark", value=False)
+        st.checkbox("Katar", value=True)
+        st.checkbox("Marokko", value=False)
+        st.checkbox("Frankreich", value=True)
+        st.checkbox("Russland", value=False)
+        st.checkbox("Griechenland", value=False)
+        st.checkbox("Bhutan", value=True)
+
+        st.markdown("**Wieso drosselt Tschechien die Lieferung von LNG nach Deutschland?**")
+        st.checkbox("Tschechien braucht Gas für sich selber", value=True)
+        st.checkbox("Tschechiens Regierung mag Deutschland nicht", value=False)
+        st.checkbox("Klimaaktivisten haben die Pipeline sabotiert", value=False)
