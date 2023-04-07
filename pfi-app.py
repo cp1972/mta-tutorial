@@ -23,13 +23,13 @@ teilnehmer = {
 "Geschichte": [8, 33],
 "Kunstge.": [1, 0],
 "Orient.": [2, 0],
-"Philosophie": [1, 3],
+"Philosophie": [2, 3],
 "Politikw.": [1, 2],
 "Archeologie": [2, 4],
 "Psychologie": [5, 7],
 "Soziologie": [3, 6],
-"PF Gesamt": [29, 61],
-"PF Gesamt (%)": [69, 64],
+"PF Gesamt": [30, 61],
+"PF Gesamt (%)": [71, 64],
 }
 
 #load data into a DataFrame object:
