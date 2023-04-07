@@ -65,6 +65,7 @@ if button == 'Altertumwissenschaft':
     df_eng = df_eng[df_eng['Autor'].isin(zeitungen_wahl)]
     column = st.sidebar.multiselect('Topics auswählen', df_eng.columns[1:5])
     df_1 = df_eng.rename(columns={'Jahr':'index'}).set_index('index') # notwendig damit Jahre in der x Achse erscheinen
+
     st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Verteilung der Topics in der Zeit</h4>", unsafe_allow_html=True)
     st.markdown("Topic_0: Schriftkultur in Ägypten und Griechenland in der ptolemäischen Zeit; Vergleich mit Latein/Rom")
     st.markdown("Topic_1: Grabepigramme in der ptolemäischen Zeit bezogen auf Machtakteure wie Könige oder auf wichtige kulturelle Institutionen wie Religion")
@@ -72,7 +73,7 @@ if button == 'Altertumwissenschaft':
     st.markdown("Topic_3: Verbindungen mit Kulten (wie etwa Opfer- und Gabenkulten) auch in Verbindung mit anderen Disziplinen wie Archeologie")
     st.bar_chart(df_1[column])
 
-    st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Verhältnis zu Transformation, Nachhaltigkeit, Digitalisierung, Wissen</h4>", unsafe_allow_html=True)
+    st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Semantische Felder um Transformation, Nachhaltigkeit, Digitalisierung, Wissen</h4>", unsafe_allow_html=True)
     st.image("Final/ALTW.pdf-1.png",width=1400)
 
 elif button == 'Ethnologie':
@@ -97,6 +98,7 @@ elif button == 'Ethnologie':
     df_eng = df_eng[df_eng['Autor'].isin(zeitungen_wahl)]
     column = st.sidebar.multiselect('Topics auswählen', df_eng.columns[1:6])
     df_1 = df_eng.rename(columns={'Jahr':'index'}).set_index('index') # notwendig damit Jahre in der x Achse erscheinen
+
     st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Verteilung der Topics in der Zeit</h4>", unsafe_allow_html=True)
     st.markdown("Topic_0: Politische Kultur und Gestaltung der Kulturen in der Welt im Rahmen der UNESCO Welterbe")
     st.markdown("Topic_1: Rückgabe vom Land in Südafrika nach der Apartheid und Fragen der Justiz und der Identität in diesem Kontext, auch nicht zuletzt in Vergleich mit anderen Regionen in der Welt (wie etwa Irland)")
@@ -105,7 +107,7 @@ elif button == 'Ethnologie':
     st.markdown("Topic_4: Fragen der Identität, der Emotionen, der Empathie, der Zugehörigkeit und der Ethik in Bezug auf unterschiedliche Kulturen in der Welt (Asien, Australien, Deutschland)")
     st.bar_chart(df_1[column])
 
-    st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Verhältnis zu Transformation, Nachhaltigkeit, Digitalisierung, Wissen</h4>", unsafe_allow_html=True)
+    st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Semantische Felder um Transformation, Nachhaltigkeit, Digitalisierung, Wissen</h4>", unsafe_allow_html=True)
     st.image("Final/ETHNO.pdf-1.png",width=1400)
 
 elif button == 'Geschichte':
@@ -130,6 +132,7 @@ elif button == 'Geschichte':
     df_eng = df_eng[df_eng['Autor'].isin(zeitungen_wahl)]
     column = st.sidebar.multiselect('Topics auswählen', df_eng.columns[1:6])
     df_1 = df_eng.rename(columns={'Jahr':'index'}).set_index('index') # notwendig damit Jahre in der x Achse erscheinen
+
     st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Verteilung der Topics in der Zeit</h4>", unsafe_allow_html=True)
     st.markdown("Topic_0: Herrschaftspraktiken in Mitteldeutschland, mit besonderem Fokus auf Fürsten in Anhalt/Sachsen")
     st.markdown("Topic_1: Politik, Kapitalismus und Herrschaft in der Neuzeit, mit Akzentsetzung auf Erziehung/Waisenhaus und auf Pietismus")
@@ -139,7 +142,7 @@ elif button == 'Geschichte':
 
     st.bar_chart(df_1[column])
 
-    st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Verhältnis zu Transformation, Nachhaltigkeit, Digitalisierung, Wissen</h4>", unsafe_allow_html=True)
+    st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Semantische Felder um Transformation, Nachhaltigkeit, Digitalisierung, Wissen</h4>", unsafe_allow_html=True)
     st.image("Final/GESCH.pdf-1.png",width=1400)
 
 elif button == 'Kunst':
@@ -164,6 +167,7 @@ elif button == 'Kunst':
     df_eng = df_eng[df_eng['Autor'].isin(zeitungen_wahl)]
     column = st.sidebar.multiselect('Topics auswählen', df_eng.columns[1:5])
     df_1 = df_eng.rename(columns={'Jahr':'index'}).set_index('index') # notwendig damit Jahre in der x Achse erscheinen
+
     st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Verteilung der Topics in der Zeit</h4>", unsafe_allow_html=True)
     st.markdown("Topic_0: Krieg und (entartete) Kunst in der NS-Zeit, Expressionismus, Sammlungen und Austellungen in diesem Kontext")
     st.markdown("Topic_1: Kunst in der Zwischenkriegszeit in Deutschland und Österreich, besonders im Bezug auf Einzelkünstler und ihre Rezeption; Sachlichkeit von Kunst in diesem Kontext")
@@ -236,8 +240,10 @@ elif button == 'Philosophie':
     st.markdown("Topic_3: Große Rahmenthemen der Philosophie mit Fragen zum Naturalismus, Realismus, Objektivität, Wahrheit, Kontingenz in Bezug auf Sprachphilosophie; auch in diesem Topic Fragen zur Moral (Pflicht, Ethik, Kreativität) ")
     st.markdown("Topic_4: Debatten zwischen Denktraditionen (bes. Empirismus, Kantianismus, analytischer Philosophie und Sprachphilosophie), mit Einbezug der Philosophie von M. Heidegger und der praktischen Philosophie")
     st.bar_chart(df_1[column])
+
+    st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Semantische Felder um Transformation, Nachhaltigkeit, Digitalisierung, Wissen</h4>", unsafe_allow_html=True)
 #    st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Verhältnis zu Transformation Nachhaltigkeit Digitalisierung</h4>", unsafe_allow_html=True)
-#    st.image("Final/PHILO.pdf-1.png",width=1400)
+    st.image("Final/PHILO.pdf-1.png",width=1400)
 
 elif button == 'Politikwissenschaft':
     df_eng = pd.read_csv('Final/POWI.csv')
@@ -269,7 +275,8 @@ elif button == 'Politikwissenschaft':
     st.markdown("Topic_3: Europäisierung und Governance im Bezug auf Wirtschaft, Digitalisierung und Familien")
 
     st.bar_chart(df_1[column])
-    st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Verhältnis zu Transformation Nachhaltigkeit Digitalisierung</h4>", unsafe_allow_html=True)
+
+    st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Semantische Felder um Transformation, Nachhaltigkeit, Digitalisierung, Wissen</h4>", unsafe_allow_html=True)
     st.image("Final/POWI.pdf-1.png",width=1400)
 
 elif button == 'Archeologie':
@@ -301,7 +308,8 @@ elif button == 'Archeologie':
     st.markdown("Topic_2: Gegenstände (etwa Keramiken) zur Interpration von Kulten und Riten in diesen Kulturen")
 
     st.bar_chart(df_1[column])
-    st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Verhältnis zu Transformation Nachhaltigkeit Digitalisierung</h4>", unsafe_allow_html=True)
+
+    st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Semantische Felder um Transformation, Nachhaltigkeit, Digitalisierung, Wissen</h4>", unsafe_allow_html=True)
     st.image("Final/PREHIST.pdf-1.png",width=1400)
 
 elif button == 'Psychologie':
@@ -335,7 +343,8 @@ elif button == 'Psychologie':
     st.markdown("Topic_4: Sozialpsychologische Themen im Bezug auf gesellschaftliche Differenzierungsphänomene (etwa Diskriminierung, Mitgefühl, Rollen, Vorurteile) und aktuelle gesellschaftliche Themen (wie etwa Klimawandel)")
 
     st.bar_chart(df_1[column])
-    st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Verhältnis zu Transformation Nachhaltigkeit Digitalisierung</h4>", unsafe_allow_html=True)
+
+    st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Semantische Felder um Transformation, Nachhaltigkeit, Digitalisierung, Wissen</h4>", unsafe_allow_html=True)
     st.image("Final/PSY.pdf-1.png",width=1400)
 
 elif button == 'Soziologie':
@@ -368,5 +377,6 @@ elif button == 'Soziologie':
     st.markdown("Topic_3: Soziologie von kleineren Kontexten in sozialstrukturellen Perspektiven (Kommunen, Kreisen), Migrationssoziologie, Soziologie der digitalen Welt mit Bezug auf relationale Perspektiven")
 
     st.bar_chart(df_1[column])
-    st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Verhältnis zu Transformation Nachhaltigkeit Digitalisierung</h4>", unsafe_allow_html=True)
+
+    st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Semantische Felder um Transformation, Nachhaltigkeit, Digitalisierung, Wissen</h4>", unsafe_allow_html=True)
     st.image("Final/SOZ.pdf-1.png",width=1400)
