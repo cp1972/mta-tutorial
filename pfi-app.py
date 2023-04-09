@@ -18,7 +18,7 @@ st.markdown("<h1 style='text-align: center; color: DarkOliveGreen;'>PF-I - Theme
 st.markdown("<h4 style='text-align: left; color: OliveDrab;'>Folgende freiwillige Mitglieder der PF-I nehmen an dieser Umfrage teil (Stand jetzt)</h4>", unsafe_allow_html=True)
 
 teilnehmer = {
-"Altertumw.": [2, 0],
+"Altertumw.": [2, 1],
 "Ethnologie": [4, 6],
 "Geschichte": [8, 33],
 "Kunstge.": [1, 0],
@@ -28,8 +28,8 @@ teilnehmer = {
 "Archeologie": [2, 4],
 "Psychologie": [5, 7],
 "Soziologie": [3, 6],
-"PF Gesamt": [30, 61],
-"PF Gesamt (%)": [71, 64],
+"PF Gesamt": [30, 62],
+"PF Gesamt (%)": [71, 65],
 }
 
 #load data into a DataFrame object:
@@ -67,9 +67,9 @@ if button == 'Altertumwissenschaft':
     df_1 = df_eng.rename(columns={'Jahr':'index'}).set_index('index') # notwendig damit Jahre in der x Achse erscheinen
 
     st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Verteilung der Topics in der Zeit</h4>", unsafe_allow_html=True)
-    st.markdown("Topic_0: Schriftkultur in Ägypten und Griechenland in der ptolemäischen Zeit; Vergleich mit Latein/Rom")
-    st.markdown("Topic_1: Grabepigramme in der ptolemäischen Zeit bezogen auf Machtakteure wie Könige oder auf wichtige kulturelle Institutionen wie Religion")
-    st.markdown("Topic_2: Beschreibung von Riten (Priesterprozession, Kaiserkult usw.) in Verbindung mit Machtakteuren an der Schnittstelle zwischen Macht und Religion")
+    st.markdown("Topic_0: Schriftkultur in Ägypten und Griechenland in der ptolemäischen Zeit; Wechselwirkungen und Vergleich mit Latein/Rom")
+    st.markdown("Topic_1: Grabepigramme und Kunstgeschichte in der ptolemäischen Zeit bezogen auf Machtakteure wie Könige oder auf wichtige kulturelle Institutionen wie Religion/Recht")
+    st.markdown("Topic_2: Beschreibung von Riten (Priesterprozession, Kaiserkult usw.) in Verbindung mit Machtakteuren an der Schnittstelle zwischen Macht und Religion/Recht")
     st.markdown("Topic_3: Verbindungen mit Kulten (wie etwa Opfer- und Gabenkulten) auch in Verbindung mit anderen Disziplinen wie Archeologie")
     st.bar_chart(df_1[column])
 
