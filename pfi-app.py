@@ -18,18 +18,18 @@ st.markdown("<h1 style='text-align: center; color: DarkOliveGreen;'>PF-I - Theme
 st.markdown("<h4 style='text-align: left; color: OliveDrab;'>Folgende freiwillige Mitglieder der PF-I nehmen an dieser Umfrage teil (Stand jetzt)</h4>", unsafe_allow_html=True)
 
 teilnehmer = {
-"Altertumw.": [2, 1],
+"Altertumw.": [3, 1],
 "Ethnologie": [4, 6],
 "Geschichte": [8, 33],
 "Kunstge.": [1, 0],
 "Orient.": [2, 0],
-"Philosophie": [2,4], 
+"Philosophie": [2,4],
 "Politikw.": [1, 2],
-"Archeologie": [2, 4],
-"Psychologie": [5, 7],
-"Soziologie": [3, 6],
-"PF Gesamt": [30, 63],
-"PF Gesamt (%)": [71, 66],
+"Archeologie": [4, 9],
+"Psychologie": [7, 9],
+"Soziologie": [4, 8],
+"PF Gesamt": [36, 72],
+"PF Gesamt (%)": [86, 76],
 }
 
 #load data into a DataFrame object:
@@ -67,9 +67,9 @@ if button == 'Altertumwissenschaft':
     df_1 = df_eng.rename(columns={'Jahr':'index'}).set_index('index') # notwendig damit Jahre in der x Achse erscheinen
 
     st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Verteilung der Topics in der Zeit</h4>", unsafe_allow_html=True)
-    st.markdown("Topic_0: Schriftkultur in Ägypten und Griechenland in der ptolemäischen Zeit; Wechselwirkungen und Vergleich mit Latein/Rom")
+    st.markdown("Topic_0: Schriftkulturen in Ägypten und Griechenland in der ptolemäischen Zeit; Wechselwirkungen und Vergleich mit Latein/Rom")
     st.markdown("Topic_1: Grabepigramme und Kunstgeschichte in der ptolemäischen Zeit bezogen auf Machtakteure wie Könige oder auf wichtige kulturelle Institutionen wie Religion/Recht")
-    st.markdown("Topic_2: Beschreibung von Riten (Priesterprozession, Kaiserkult usw.) in Verbindung mit Machtakteuren an der Schnittstelle zwischen Macht und Religion/Recht")
+    st.markdown("Topic_2: Beschreibung von Riten (Priesterprozession, Kaiserkult, Tiere usw.) in Verbindung mit Machtakteuren an der Schnittstelle zwischen Macht und Religion/Recht; Bedeutung von Plutarch")
     st.markdown("Topic_3: Verbindungen mit Kulten (wie etwa Opfer- und Gabenkulten) auch in Verbindung mit anderen Disziplinen wie Archeologie")
     st.bar_chart(df_1[column])
 
@@ -285,7 +285,7 @@ elif button == 'Archeologie':
     df_eng.rename(columns={ df_eng.columns[1]: "Topic_0" }, inplace = True)
     df_eng.rename(columns={ df_eng.columns[2]: "Topic_1" }, inplace = True)
     df_eng.rename(columns={ df_eng.columns[3]: "Topic_2" }, inplace = True)
- #    df_eng.rename(columns={ df_eng.columns[4]: "Topic_3" }, inplace = True)
+    df_eng.rename(columns={ df_eng.columns[4]: "Topic_3" }, inplace = True)
  #    df_eng.rename(columns={ df_eng.columns[5]: "Topic_4" }, inplace = True)
     df_eng.drop('Dominant_Topic_NMF',axis=1,inplace=True)
     df_eng['Jahr'] = df_eng['Veröffentlichungen']
@@ -304,8 +304,8 @@ elif button == 'Archeologie':
     st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Verteilung der Topics in der Zeit</h4>", unsafe_allow_html=True)
 
     st.markdown("Topic_0: Forschung zu antiken und archaischen Kulturen bes. in der Turkey (Didyma)")
-    st.markdown("Topic_1: Forschung zu mittelaterlischen Kulturen in Sachsen-Anhalt (Quedlingburg) und in Österreich")
-    st.markdown("Topic_2: Gegenstände (etwa Keramiken) zur Interpration von Kulten und Riten in diesen Kulturen")
+    st.markdown("Topic_1: Forschung zu mittelaterlischen Kulturen in Sachsen-Anhalt (Quedlingburg) und in Österreich; besondere Bedeutung von DNA Untersuchungen")
+    st.markdown("Topic_2: Gegenstände (etwa Keramiken) zur Interpration von Kulten und Riten in diesen Kulturen; Bedeutung von Ringheiligtum und Evolution in Europa")
 
     st.bar_chart(df_1[column])
 
@@ -336,11 +336,11 @@ elif button == 'Psychologie':
     df_1 = df_eng.rename(columns={'Jahr':'index'}).set_index('index') # notwendig damit Jahre in der x Achse erscheinen
     st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Verteilung der Topics in der Zeit</h4>", unsafe_allow_html=True)
 
-    st.markdown("Topic_0: Forschung zum Wohlbefinden von Akteuren bezogen auf Themen wie Humor, Verspieltheit, Gelotophobie")
-    st.markdown("Topic_1: Forschungsmethoden und Modellierungen in der Psychologie")
-    st.markdown("Topic_2: Psychologie der Erwachsenen bezogen einerseits auf Beziehungen mit anderen (etwa ausgelacht werden, Täuschungen) und andererseits auf eigene kognitive Dimensionen (Persönlichkeit, Depression)")
-    st.markdown("Topic_3: Sozialpsychologische Themen (Zuschreibungen, Wahrnehmungen, Stereotypen, Glauben) im Bezug auf Alterung mit kognitiven Folgen")
-    st.markdown("Topic_4: Sozialpsychologische Themen im Bezug auf gesellschaftliche Differenzierungsphänomene (etwa Diskriminierung, Mitgefühl, Rollen, Vorurteile) und aktuelle gesellschaftliche Themen (wie etwa Klimawandel)")
+    st.markdown("Topic_0: Forschung zur Kognition insb. Gedächtnis, Selektionsprozesse, Aufmerksamkeit, Kontrolle bei Erwachsenen")
+    st.markdown("Topic_1: Forschung zum Wohlbefinden von Akteuren bezogen auf Themen wie Humor, Verspieltheit, Gelotophobie")
+    st.markdown("Topic_2: Forschungsmethoden, Tests und Modellierungen in der Psychologie (Antwortzeiten, Motivation)")
+    st.markdown("Topic_3: Psychologie der Erwachsenen bezogen einerseits auf Beziehungen mit anderen (etwa ausgelacht werden, Täuschungen) und andererseits auf eigene kognitive Dimensionen (Persönlichkeit, Depression)")
+    st.markdown("Topic_4: Sozialpsychologische Themen (Zuschreibungen, Wahrnehmungen, Stereotypen, Glauben) im Bezug auf Alterung mit kognitiven Folgen und aktuelle gesellschaftliche Themen (wie etwa Klimawandel)")
 
     st.bar_chart(df_1[column])
 
@@ -372,7 +372,7 @@ elif button == 'Soziologie':
     st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Verteilung der Topics in der Zeit</h4>", unsafe_allow_html=True)
 
     st.markdown("Topic_0: Relationale Soziologie und Differenzierungstheorien bes. im Bereich der Kunst (bes. digitalen Kunst) und der Chancengleichheit vor (Hoch)Schulen im internationalen Vergleich")
-    st.markdown("Topic_1: Bildungsforschung zur Akademisierung und Hochschulexpansion bes. in Deutschland")
+    st.markdown("Topic_1: Bildungsforschung zur Akademisierung und Hochschulexpansion bes. in Deutschland; Familien- und Gesundheitssoziologie mit Praxis- und Interventionsbezügen")
     st.markdown("Topic_2: Institutionalisierungstheorien und Erziehungstheorien mit Brücken zwischen Ausbildungssystem und Arbeitsmarkt und mit Bezug auf Emotionen und Gefühlen")
     st.markdown("Topic_3: Soziologie von kleineren Kontexten in sozialstrukturellen Perspektiven (Kommunen, Kreisen), Migrationssoziologie, Soziologie der digitalen Welt mit Bezug auf relationale Perspektiven")
 
