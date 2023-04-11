@@ -304,8 +304,9 @@ elif button == 'Archeologie':
     st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Verteilung der Topics in der Zeit</h4>", unsafe_allow_html=True)
 
     st.markdown("Topic_0: Forschung zu antiken und archaischen Kulturen bes. in der Turkey (Didyma)")
-    st.markdown("Topic_1: Forschung zu mittelaterlischen Kulturen in Sachsen-Anhalt (Quedlingburg) und in Österreich; besondere Bedeutung von DNA Untersuchungen")
-    st.markdown("Topic_2: Gegenstände (etwa Keramiken) zur Interpration von Kulten und Riten in diesen Kulturen; Bedeutung von Ringheiligtum und Evolution in Europa")
+    st.markdown("Topic_1: Forschung zu mittelaterlischen Kulturen (etwa Keramiken, Grabungsergebnisse, Hausgeisterglauben usw.) in Sachsen-Anhalt (Quedlingburg), Pfalz und in Österreich")
+    st.markdown("Topic_2: Interpration von Kulten und Riten, Bedeutung von Ringheiligtum, Opfer im Bezug auf Europa")
+    st.markdown("Topic_3: Rekonstruktion der gesellschaftlichen Komplexität, der gesellschaftlichen Differenzierung in der Steinzeit in Europa und in Detuschland; Bedeutung von Sakralbauten und damit verbundenen Riten")
 
     st.bar_chart(df_1[column])
 
