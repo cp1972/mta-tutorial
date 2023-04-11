@@ -45,7 +45,7 @@ button = st.sidebar.selectbox("**Institute/Bereiche auswählen**", ('Altertumwis
 #button2 = st.sidebar.radio("**PF-I Gesamt**", ('Topics', 'Trends'))
 
 if button == 'Altertumwissenschaft':
-    df_eng = pd.read_csv('/home/cpsoz/MLU-PUbli-2013-2023/TRAIN/Fin/Final/ALTW.csv')
+    df_eng = pd.read_csv('Final/ALTW.csv')
     df_eng.rename(columns={ df_eng.columns[0]: "Veröffentlichungen" }, inplace = True)
     df_eng.rename(columns={ df_eng.columns[1]: "Topic_0" }, inplace = True)
     df_eng.rename(columns={ df_eng.columns[2]: "Topic_1" }, inplace = True)
@@ -74,10 +74,10 @@ if button == 'Altertumwissenschaft':
     st.bar_chart(df_1[column])
 
     st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Semantische Felder um Transformation, Nachhaltigkeit, Digitalisierung, Wissen</h4>", unsafe_allow_html=True)
-    st.image("/home/cpsoz/MLU-PUbli-2013-2023/TRAIN/Fin/ALTW.pdf-1.png",width=1400)
+    st.image("Final/ALTW.pdf-1.png",width=1400)
 
 elif button == 'Ethnologie':
-    df_eng = pd.read_csv('/home/cpsoz/MLU-PUbli-2013-2023/TRAIN/Fin/Final/ETHNO.csv')
+    df_eng = pd.read_csv('Final/ETHNO.csv')
     df_eng.rename(columns={ df_eng.columns[0]: "Veröffentlichungen" }, inplace = True)
     df_eng.rename(columns={ df_eng.columns[1]: "Topic_0" }, inplace = True)
     df_eng.rename(columns={ df_eng.columns[2]: "Topic_1" }, inplace = True)
@@ -108,10 +108,10 @@ elif button == 'Ethnologie':
     st.bar_chart(df_1[column])
 
     st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Semantische Felder um Transformation, Nachhaltigkeit, Digitalisierung, Wissen</h4>", unsafe_allow_html=True)
-    st.image("/home/cpsoz/MLU-PUbli-2013-2023/TRAIN/Fin/ETHNO.pdf-1.png",width=1400)
+    st.image("Final/ETHNO.pdf-1.png",width=1400)
 
 elif button == 'Geschichte':
-    df_eng = pd.read_csv('/home/cpsoz/MLU-PUbli-2013-2023/TRAIN/Fin/Final/GESCH.csv')
+    df_eng = pd.read_csv('Final/GESCH.csv')
     df_eng.rename(columns={ df_eng.columns[0]: "Veröffentlichungen" }, inplace = True)
     df_eng.rename(columns={ df_eng.columns[1]: "Topic_0" }, inplace = True)
     df_eng.rename(columns={ df_eng.columns[2]: "Topic_1" }, inplace = True)
@@ -143,10 +143,10 @@ elif button == 'Geschichte':
     st.bar_chart(df_1[column])
 
     st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Semantische Felder um Transformation, Nachhaltigkeit, Digitalisierung, Wissen</h4>", unsafe_allow_html=True)
-    st.image("/home/cpsoz/MLU-PUbli-2013-2023/TRAIN/Fin/GESCH.pdf-1.png",width=1400)
+    st.image("Final/GESCH.pdf-1.png",width=1400)
 
 elif button == 'Kunst':
-    df_eng = pd.read_csv('/home/cpsoz/MLU-PUbli-2013-2023/TRAIN/Fin/Final/KUNST.csv')
+    df_eng = pd.read_csv('Final/KUNST.csv')
     df_eng.rename(columns={ df_eng.columns[0]: "Veröffentlichungen" }, inplace = True)
     df_eng.rename(columns={ df_eng.columns[1]: "Topic_0" }, inplace = True)
     df_eng.rename(columns={ df_eng.columns[2]: "Topic_1" }, inplace = True)
@@ -176,10 +176,10 @@ elif button == 'Kunst':
 
     st.bar_chart(df_1[column])
 #    st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Verhältnis zu Transformation Nachhaltigkeit Digitalisierung</h4>", unsafe_allow_html=True)
-#    st.image("/home/cpsoz/MLU-PUbli-2013-2023/TRAIN/Fin/KUNST.pdf-1.png",width=1400)
+#    st.image("KUNST.pdf-1.png",width=1400)
 
 elif button == 'Orient':
-    df_eng = pd.read_csv('/home/cpsoz/MLU-PUbli-2013-2023/TRAIN/Fin/Final/ORI.csv')
+    df_eng = pd.read_csv('Final/ORI.csv')
     df_eng.rename(columns={ df_eng.columns[0]: "Veröffentlichungen" }, inplace = True)
     df_eng.rename(columns={ df_eng.columns[1]: "Topic_0" }, inplace = True)
     df_eng.rename(columns={ df_eng.columns[2]: "Topic_1" }, inplace = True)
@@ -208,10 +208,10 @@ elif button == 'Orient':
 
     st.bar_chart(df_1[column])
  #   st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Verhältnis zu Transformation Nachhaltigkeit Digitalisierung</h4>", unsafe_allow_html=True)
- #   st.image("/home/cpsoz/MLU-PUbli-2013-2023/TRAIN/Fin/ORI.pdf-1.png",width=1400)
+ #   st.image("ORI.pdf-1.png",width=1400)
 
 elif button == 'Philosophie':
-    df_eng = pd.read_csv('/home/cpsoz/MLU-PUbli-2013-2023/TRAIN/Fin/Final/PHILO.csv')
+    df_eng = pd.read_csv('Final/PHILO.csv')
     df_eng.rename(columns={ df_eng.columns[0]: "Veröffentlichungen" }, inplace = True)
     df_eng.rename(columns={ df_eng.columns[1]: "Topic_0" }, inplace = True)
     df_eng.rename(columns={ df_eng.columns[2]: "Topic_1" }, inplace = True)
@@ -243,10 +243,10 @@ elif button == 'Philosophie':
 
     st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Semantische Felder um Transformation, Nachhaltigkeit, Digitalisierung, Wissen</h4>", unsafe_allow_html=True)
 #    st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Verhältnis zu Transformation Nachhaltigkeit Digitalisierung</h4>", unsafe_allow_html=True)
-    st.image("/home/cpsoz/MLU-PUbli-2013-2023/TRAIN/Fin/PHILO.pdf-1.png",width=1400)
+    st.image("Final/PHILO.pdf-1.png",width=1400)
 
 elif button == 'Politikwissenschaft':
-    df_eng = pd.read_csv('/home/cpsoz/MLU-PUbli-2013-2023/TRAIN/Fin/Final/POWI.csv')
+    df_eng = pd.read_csv('Final/POWI.csv')
     df_eng.rename(columns={ df_eng.columns[0]: "Veröffentlichungen" }, inplace = True)
     df_eng.rename(columns={ df_eng.columns[1]: "Topic_0" }, inplace = True)
     df_eng.rename(columns={ df_eng.columns[2]: "Topic_1" }, inplace = True)
@@ -277,10 +277,10 @@ elif button == 'Politikwissenschaft':
     st.bar_chart(df_1[column])
 
     st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Semantische Felder um Transformation, Nachhaltigkeit, Digitalisierung, Wissen</h4>", unsafe_allow_html=True)
-    st.image("/home/cpsoz/MLU-PUbli-2013-2023/TRAIN/Fin/POWI.pdf-1.png",width=1400)
+    st.image("Final/POWI.pdf-1.png",width=1400)
 
 elif button == 'Archeologie':
-    df_eng = pd.read_csv('/home/cpsoz/MLU-PUbli-2013-2023/TRAIN/Fin/Final/PREHIST.csv')
+    df_eng = pd.read_csv('Final/PREHIST.csv')
     df_eng.rename(columns={ df_eng.columns[0]: "Veröffentlichungen" }, inplace = True)
     df_eng.rename(columns={ df_eng.columns[1]: "Topic_0" }, inplace = True)
     df_eng.rename(columns={ df_eng.columns[2]: "Topic_1" }, inplace = True)
@@ -310,10 +310,10 @@ elif button == 'Archeologie':
     st.bar_chart(df_1[column])
 
     st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Semantische Felder um Transformation, Nachhaltigkeit, Digitalisierung, Wissen</h4>", unsafe_allow_html=True)
-    st.image("/home/cpsoz/MLU-PUbli-2013-2023/TRAIN/Fin/PREHIST.pdf-1.png",width=1400)
+    st.image("Final/PREHIST.pdf-1.png",width=1400)
 
 elif button == 'Psychologie':
-    df_eng = pd.read_csv('/home/cpsoz/MLU-PUbli-2013-2023/TRAIN/Fin/Final/PSY.csv')
+    df_eng = pd.read_csv('Final/PSY.csv')
     df_eng.rename(columns={ df_eng.columns[0]: "Veröffentlichungen" }, inplace = True)
     df_eng.rename(columns={ df_eng.columns[1]: "Topic_0" }, inplace = True)
     df_eng.rename(columns={ df_eng.columns[2]: "Topic_1" }, inplace = True)
@@ -345,10 +345,10 @@ elif button == 'Psychologie':
     st.bar_chart(df_1[column])
 
     st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Semantische Felder um Transformation, Nachhaltigkeit, Digitalisierung, Wissen</h4>", unsafe_allow_html=True)
-    st.image("/home/cpsoz/MLU-PUbli-2013-2023/TRAIN/Fin/PSY.pdf-1.png",width=1400)
+    st.image("Final/PSY.pdf-1.png",width=1400)
 
 elif button == 'Soziologie':
-    df_eng = pd.read_csv('/home/cpsoz/MLU-PUbli-2013-2023/TRAIN/Fin/Final/SOZ.csv')
+    df_eng = pd.read_csv('Final/SOZ.csv')
     df_eng.rename(columns={ df_eng.columns[0]: "Veröffentlichungen" }, inplace = True)
     df_eng.rename(columns={ df_eng.columns[1]: "Topic_0" }, inplace = True)
     df_eng.rename(columns={ df_eng.columns[2]: "Topic_1" }, inplace = True)
@@ -379,4 +379,4 @@ elif button == 'Soziologie':
     st.bar_chart(df_1[column])
 
     st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Semantische Felder um Transformation, Nachhaltigkeit, Digitalisierung, Wissen</h4>", unsafe_allow_html=True)
-    st.image("/home/cpsoz/MLU-PUbli-2013-2023/TRAIN/Fin/SOZ.pdf-1.png",width=1400)
+    st.image("Final/SOZ.pdf-1.png",width=1400)
