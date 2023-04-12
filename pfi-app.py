@@ -8,7 +8,7 @@ import csv
 plt.rcParams['figure.figsize'] = [12, 8]
 plt.rcParams.update({'font.size': 16})
 plt.rcParams.update({"figure.facecolor":  (0.0, 0.0, 0.0, 0.0)})
-plt.rcParams.update({'text.color' : "deeppink"})
+plt.rcParams.update({'text.color' : "cyan"})
 ### Streamlit dashboard mit multipages -- hiermit benutzen wir radio buttons und if Bedingungen, um die Seiten zu simulieren
 
 st.set_page_config(layout="wide") # um die Webseite breiter zu machen
