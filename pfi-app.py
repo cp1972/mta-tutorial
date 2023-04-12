@@ -15,7 +15,7 @@ st.set_page_config(layout="wide") # um die Webseite breiter zu machen
 
 #st.title("Vorstellung erster Ergebnisse") # Haupttitle nicht im Zentrum der Seite
 
-st.markdown("<h1 style='text-align: center; color: DarkOliveGreen;'>PF-I - Themen aus den Veröffentlichungen 2013-2023</h1>", unsafe_allow_html=True) # Jetzt Haupttitle zentriert
+st.markdown("<h1 style='text-align: center; color: DarkOliveGreen;'>PF-I - Themen aus den Veröffentlichungslisten 2013-2023</h1>", unsafe_allow_html=True) # Jetzt Haupttitle zentriert
 
 st.markdown("""
 Was wird untersucht, wie, wozu und mit welchem Ergebnis?:
