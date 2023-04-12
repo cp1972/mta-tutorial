@@ -15,7 +15,7 @@ st.set_page_config(layout="wide") # um die Webseite breiter zu machen
 
 st.markdown("<h1 style='text-align: center; color: DarkOliveGreen;'>PF-I - Themen aus den Veröffentlichungen 2013-2023</h1>", unsafe_allow_html=True) # Jetzt Haupttitle zentriert
 
-st.markdown("**Was wird untersucht, wie, wozu und mit welchem Ergebnis?**: 
+st.markdown("Was wird untersucht, wie, wozu und mit welchem Ergebnis?: 
 
   - *Was?*: Abbildung der Themen aus den Veröffentlichungen der Mitglieder der PF-I nach Bereichen/Instituten für die Zeit 2013-2023. 
   - *Wie?*: Topic-Modell-Analyse mit MTA-Software (https://cp.soziologie.uni-halle.de/MTA/doku.php).
