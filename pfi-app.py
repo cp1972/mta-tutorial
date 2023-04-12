@@ -49,7 +49,7 @@ teilnehmer = {
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    st.text("Teilnehmer Gesamt PF-I")
+    st.markdown("Teilnehmer Gesamt PF-I")
     labels = 'Professoren', 'Mitarbeiter', 'NA-Profs', 'NA-Mit.'
     sizes = [27, 53, 4, 6]
     explode = (0, 0, 0, 0)  # only "explode" the 2nd slice (i.e. 'Hogs')
@@ -58,8 +58,8 @@ with col1:
     ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
     st.pyplot(fig1)
 
-with col1:
-    st.text("Professoren PF-I")
+with col2:
+    st.markdown("Professoren PF-I")
     labels = 'Professoren', 'NA'
     sizes = [88, 12]
     explode = (0, 0)  # only "explode" the 2nd slice (i.e. 'Hogs')
@@ -68,8 +68,8 @@ with col1:
     ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
     st.pyplot(fig2)
 
-with col1:
-    st.text("Post-Dok. und Mitarbeiter PF-I")
+with col3:
+    st.markdown("Post-Dok. und Mitarbeiter PF-I")
     labels = 'PD und Mit.', 'NA'
     sizes = [77, 23]
     explode = (0, 0)  # only "explode" the 2nd slice (i.e. 'Hogs')
