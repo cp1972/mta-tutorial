@@ -16,14 +16,12 @@ st.set_page_config(layout="wide") # um die Webseite breiter zu machen
 st.markdown("<h1 style='text-align: center; color: DarkOliveGreen;'>PF-I - Themen aus den Veröffentlichungen 2013-2023</h1>", unsafe_allow_html=True) # Jetzt Haupttitle zentriert
 
 st.markdown("Was wird untersucht, wie, wozu und mit welchem Ergebnis?: 
-
   - *Was?*: Abbildung der Themen aus den Veröffentlichungen der Mitglieder der PF-I nach Bereichen/Instituten für die Zeit 2013-2023. 
   - *Wie?*: Topic-Modell-Analyse mit MTA-Software (https://cp.soziologie.uni-halle.de/MTA/doku.php).
   - *Wozu?*: Selbstbild der Themen in der PF-I, daran die Mitglieder der PF-I in den unterschiedlichen Bereich arbeiten. Bessere Position im Bezug auf die durchgeführte Diskussion zur inhaltlichen Profilierung der MLU und zu den Begriffen, die in diesem Zusammenhang kursieren (bes. Transformation, Nachhaltigkeit und Wissen -- unten wurde noch Digitalisierung hinzugefügt).
   - *Ergebnis?*: hohe Teilnahme an der Untersuchung führt zur mehrheitlichen guten bis sehr guten Abbildung der Themen in der PF-I; trotzdem bleiben einige Bereiche (Kunstgeschichte, Orient, Politikwissenschaft) unzureichend belegt, weshalb dort die Analyse nur Themen von teilnehmenden Einzelakteuren abbildet.")
 
 st.markdown("*Grenzen*:
-
   - *Allgemein*: Die Abbildung von Themen auf der Grundlage der Titel von Veröffentlichungen führt häufig zu Unter/Überschätzungen, weil Titel Inhalte grob zusammenfassen; wir bilden also inhaltliche Tendenzen ab.
   - *Spezifisch*: Der Bezug auf Begriffe, die vom Rektorat im Rahmen der Profilierung der MLU verwendet werden, erfolgt oft mittelbar -- dabei wird bes. der Begriff Nachhaltigkeit wenig unterstützt (etwa mittelbar in der Psychologie und in der Soziologie). Deshalb werden auch Synonymen von Transformation, Nachhaltigkeit, Digitalisierung und Wissen auf Deutsch und Englisch verwendet (wie etwa Wandel, sustainability, digital, education usw.)"
     )
