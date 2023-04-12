@@ -21,13 +21,13 @@ Was wird untersucht, wie, wozu und mit welchem Ergebnis?:
 
   - *Was?*: Abbildung der Themen aus den Veröffentlichungen der Mitglieder der PF-I nach Bereichen/Instituten für die Zeit 2013-2023.
   - *Wie?*: Topic-Modell-Analyse mit MTA-Software (https://cp.soziologie.uni-halle.de/MTA/doku.php).
-  - *Wozu?*: Selbstbild der Themen in der PF-I, daran die Mitglieder der PF-I in den unterschiedlichen Bereich arbeiten. Bessere Position im Bezug auf die durchgeführte Diskussion zur inhaltlichen Profilierung der MLU und zu den Begriffen, die in diesem Zusammenhang kursieren (bes. Transformation, Nachhaltigkeit und Wissen -- unten wurde noch Digitalisierung hinzugefügt).
-  - *Ergebnis?*: Hohe Teilnahme an der Untersuchung führt zur mehrheitlichen guten bis sehr guten Abbildung der Themen in der PF-I; trotzdem bleiben einige Bereiche (Kunstgeschichte, Orient, Politikwissenschaft) unzureichend belegt, weshalb dort die Analyse nur Themen von teilnehmenden Einzelakteuren abbildet.
+  - *Wozu?*: Selbstbild der Themen in der PF-I, daran die Mitglieder der PF-I in den unterschiedlichen Bereichen arbeiten. Bessere Position im Bezug auf die durchgeführte Diskussion zur inhaltlichen Profilierung der MLU und zu den Begriffen, die in diesem Zusammenhang kursieren (bes. Transformation, Nachhaltigkeit und Wissen -- unten wurde noch Digitalisierung hinzugefügt).
+  - *Ergebnis?*: Hohe Teilnahme an der Untersuchung führt zu mehrheitlichen guten bis sehr guten Abbildungen der Themen in der PF-I; trotzdem bleiben einige Bereiche (Kunstgeschichte, Orient, Politikwissenschaft) unzureichend belegt, weshalb dort die Analyse nur Themen von teilnehmenden Einzelakteuren abbildet.
 """)
 
-st.markdown("""*Grenzen*:
-  - *Allgemein*: Die Abbildung von Themen auf der Grundlage der Titel von Veröffentlichungen führt häufig zu Unter/Überschätzungen, weil Titel Inhalte grob zusammenfassen; wir bilden also inhaltliche Tendenzen ab.
-  - *Spezifisch*: Der Bezug auf Begriffe, die vom Rektorat im Rahmen der Profilierung der MLU verwendet werden, erfolgt oft mittelbar -- dabei wird bes. der Begriff Nachhaltigkeit wenig unterstützt (etwa mittelbar in der Psychologie und in der Soziologie). Deshalb werden auch Synonymen von Transformation, Nachhaltigkeit, Digitalisierung und Wissen auf Deutsch und Englisch verwendet (wie etwa Wandel, sustainability, digital, education usw.)
+st.markdown("""Grenzen:
+  - *Allgemein*: Die Abbildung von Themen auf der Grundlage der Titel von Veröffentlichungen führt zu Unter/Überschätzungen, weil Titel Inhalte nur verkürzt und grob widergeben; wir bilden also inhaltliche *Tendenzen* ab.
+  - *Spezifisch*: Der Bezug auf Begriffe, die vom Rektorat im Rahmen der Profilierung der MLU verwendet werden, erfolgt oft mittelbar -- dabei wird in der PF-I bes. der Begriff Nachhaltigkeit wenig unterstützt (etwa mittelbar in der Psychologie im Bezug auf Klimawandel und in der Soziologie im Bezug auf CSR). Deshalb werden auch Synonymen von Transformation, Nachhaltigkeit, Digitalisierung und Wissen auf Deutsch und Englisch verwendet (wie etwa Wandel, sustainability, digital, education usw.)
     """)
 
 st.markdown("<h4 style='text-align: left; color: OliveDrab;'>Folgende freiwillige Mitglieder der PF-I nehmen an dieser Untersuchung teil</h4>", unsafe_allow_html=True)
@@ -91,33 +91,45 @@ button = st.sidebar.selectbox("**Institute/Bereiche auswählen**", ('Altertumwis
 #button2 = st.sidebar.radio("**PF-I Gesamt**", ('Topics', 'Trends'))
 
 if button == 'Altertumwissenschaft':
-    df_eng = pd.read_csv('Final/ALTW.csv')
-    df_eng.rename(columns={ df_eng.columns[0]: "Veröffentlichungen" }, inplace = True)
-    df_eng.rename(columns={ df_eng.columns[1]: "Topic_0" }, inplace = True)
-    df_eng.rename(columns={ df_eng.columns[2]: "Topic_1" }, inplace = True)
-    df_eng.rename(columns={ df_eng.columns[3]: "Topic_2" }, inplace = True)
-    df_eng.rename(columns={ df_eng.columns[4]: "Topic_3" }, inplace = True)
-    df_eng.drop('Dominant_Topic_NMF',axis=1,inplace=True)
-    df_eng['Jahr'] = df_eng['Veröffentlichungen']
-    df_eng['Autor'] = df_eng['Veröffentlichungen']
-    df_eng['Jahr']= df_eng['Jahr'].map(lambda x: str(x)[0:4])
-    df_eng['Autor']= df_eng['Autor'].map(lambda x: str(x)[5:7])
-    jahre = list(df_eng['Jahr'].drop_duplicates())
-    zeitungen = list(df_eng['Autor'].drop_duplicates())
+    col1, col2 = st.columns(2)
+    with col1:
+        df_eng = pd.read_csv('Final/ALTW.csv')
+        df_eng.rename(columns={ df_eng.columns[0]: "Veröffentlichungen" }, inplace = True)
+        df_eng.rename(columns={ df_eng.columns[1]: "Topic_0" }, inplace = True)
+        df_eng.rename(columns={ df_eng.columns[2]: "Topic_1" }, inplace = True)
+        df_eng.rename(columns={ df_eng.columns[3]: "Topic_2" }, inplace = True)
+        df_eng.rename(columns={ df_eng.columns[4]: "Topic_3" }, inplace = True)
+        df_eng.drop('Dominant_Topic_NMF',axis=1,inplace=True)
+        df_eng['Jahr'] = df_eng['Veröffentlichungen']
+        df_eng['Autor'] = df_eng['Veröffentlichungen']
+        df_eng['Jahr']= df_eng['Jahr'].map(lambda x: str(x)[0:4])
+        df_eng['Autor']= df_eng['Autor'].map(lambda x: str(x)[5:7])
+        jahre = list(df_eng['Jahr'].drop_duplicates())
+        zeitungen = list(df_eng['Autor'].drop_duplicates())
 
-    zeitungen_wahl = st.sidebar.multiselect('Autor auswählen:', zeitungen, default=zeitungen)
-    jahre_wahl = st.sidebar.slider('Jahre (slider links/rechts bewegen):', 2013, 2023, value=2015)
-    df_eng = df_eng[df_eng['Jahr'] <= str(jahre_wahl)] # str is important, if not there, then you'll get an error
-    df_eng = df_eng[df_eng['Autor'].isin(zeitungen_wahl)]
-    column = st.sidebar.multiselect('Topics aus der Liste auswählen:', df_eng.columns[1:5])
-    df_1 = df_eng.rename(columns={'Jahr':'index'}).set_index('index') # notwendig damit Jahre in der x Achse erscheinen
+        zeitungen_wahl = st.sidebar.multiselect('Autor auswählen:', zeitungen, default=zeitungen)
+        jahre_wahl = st.sidebar.slider('Jahre (slider links/rechts bewegen):', 2013, 2023, value=2015)
+        df_eng = df_eng[df_eng['Jahr'] <= str(jahre_wahl)] # str is important, if not there, then you'll get an error
+        df_eng = df_eng[df_eng['Autor'].isin(zeitungen_wahl)]
+        column = st.sidebar.multiselect('Topics aus der Liste auswählen:', df_eng.columns[1:5])
+        df_1 = df_eng.rename(columns={'Jahr':'index'}).set_index('index') # notwendig damit Jahre in der x Achse erscheinen
 
-    st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Verteilung der Topics in der Zeit</h4>", unsafe_allow_html=True)
-    st.markdown("Topic_0 (55%): Schriftkulturen in Ägypten und Griechenland in der ptolemäischen Zeit; Wechselwirkungen und Vergleich mit Latein/Rom")
-    st.markdown("Topic_1 (9%): Grabepigramme und Kunstgeschichte in der ptolemäischen Zeit bezogen auf Machtakteure wie Könige oder auf wichtige kulturelle Institutionen wie Religion/Recht")
-    st.markdown("Topic_2 (23%): Beschreibung von Riten (Priesterprozession, Kaiserkult, Tiere usw.) in Verbindung mit Machtakteuren an der Schnittstelle zwischen Macht und Religion/Recht; Bedeutung von Plutarch")
-    st.markdown("Topic_3 (13%): Verbindungen mit Kulten (wie etwa Opfer- und Gabenkulten) auch in Verbindung mit anderen Disziplinen wie Archeologie")
-    st.bar_chart(df_1[column])
+        st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Verteilung der Topics in der Zeit</h4>", unsafe_allow_html=True)
+        st.markdown("Topic_0 (55%): Schriftkulturen in Ägypten und Griechenland in der ptolemäischen Zeit; Wechselwirkungen und Vergleich mit Latein/Rom")
+        st.markdown("Topic_1 (9%): Grabepigramme und Kunstgeschichte in der ptolemäischen Zeit bezogen auf Machtakteure wie Könige oder auf wichtige kulturelle Institutionen wie Religion/Recht")
+        st.markdown("Topic_2 (23%): Beschreibung von Riten (Priesterprozession, Kaiserkult, Tiere usw.) in Verbindung mit Machtakteuren an der Schnittstelle zwischen Macht und Religion/Recht; Bedeutung von Plutarch")
+        st.markdown("Topic_3 (13%): Verbindungen mit Kulten (wie etwa Opfer- und Gabenkulten) auch in Verbindung mit anderen Disziplinen wie Archeologie")
+        st.bar_chart(df_1[column])
+
+    with col2:
+        st.markdown("Topics Altertumwissenschaft Gesamt")
+        labels = 'Topic_0', 'Topic_1', 'Topic_2', 'Topic_3'
+        sizes = [55, 9, 23, 13]
+        explode = (0, 0, 0, 0)  # only "explode" the 2nd slice (i.e. 'Hogs')
+        fig4, ax1 = plt.subplots()
+        ax1.pie(sizes, labels=labels, autopct='%1.1f%%', shadow=True, startangle=90)
+        ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+        st.pyplot(fig4)
 
     st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Kontexte um Transformation, Nachhaltigkeit, Digitalisierung, Wissen</h4>", unsafe_allow_html=True)
     st.markdown("Wandel: insb. Topic_0 und Topic_1")
