@@ -49,7 +49,7 @@ teilnehmer = {
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    st.header("Teilnehmer Gesamt PF-I")
+    st.text("Teilnehmer Gesamt PF-I")
     labels = 'Professoren', 'Mitarbeiter', 'NA-Profs', 'NA-Mit.'
     sizes = [27, 53, 4, 6]
     explode = (0, 0, 0, 0)  # only "explode" the 2nd slice (i.e. 'Hogs')
@@ -59,7 +59,7 @@ with col1:
     st.pyplot(fig1)
 
 with col1:
-    st.header("Professoren PF-I")
+    st.text("Professoren PF-I")
     labels = 'Professoren', 'NA'
     sizes = [88, 12]
     explode = (0, 0)  # only "explode" the 2nd slice (i.e. 'Hogs')
@@ -69,12 +69,12 @@ with col1:
     st.pyplot(fig2)
 
 with col1:
-    st.header("Post-Dok. und Mitarbeiter PF-I")
+    st.text("Post-Dok. und Mitarbeiter PF-I")
     labels = 'PD und Mit.', 'NA'
     sizes = [77, 23]
     explode = (0, 0)  # only "explode" the 2nd slice (i.e. 'Hogs')
     fig3, ax1 = plt.subplots()
-    ax1.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%',shadow=True, startangle=90)
+    ax1.pie(sizes, labels=labels, shadow=True, startangle=90)
     ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
     st.pyplot(fig3)
 #load data into a DataFrame object:
