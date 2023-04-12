@@ -550,10 +550,10 @@ elif button == 'Soziologie':
         df_1 = df_eng.rename(columns={'Jahr':'index'}).set_index('index') # notwendig damit Jahre in der x Achse erscheinen
         st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Verteilung der Topics in der Zeit</h4>", unsafe_allow_html=True)
 
-        st.markdown("Topic_0 (19%): Relationale Soziologie und Differenzierungstheorien bes. im Bereich der Kunst (bes. digitalen Kunst) und der Chancengleichheit vor (Hoch)Schulen im internationalen Vergleich")
-        st.markdown("Topic_1 (27%): Bildungsforschung zur Akademisierung und Hochschulexpansion bes. in Deutschland; Familien- und Gesundheitssoziologie mit Praxis- und Interventionsbezügen")
-        st.markdown("Topic_2 (17%): Institutionalisierungstheorien und Erziehungstheorien mit Brücken zwischen Ausbildungssystem und Arbeitsmarkt und mit Bezug auf Emotionen und Gefühlen")
-        st.markdown("Topic_3 (37%): Soziologie von kleineren Kontexten in sozialstrukturellen Perspektiven (Kommunen, Kreisen), Migrationssoziologie, Soziologie der digitalen Welt mit Bezug auf relationale Perspektiven")
+        st.markdown("Topic_0: Relationale Soziologie und Differenzierungstheorien bes. im Bereich der Kunst (bes. digitalen Kunst) und der Chancengleichheit vor (Hoch)Schulen im internationalen Vergleich")
+        st.markdown("Topic_1: Bildungsforschung zur Akademisierung und Hochschulexpansion bes. in Deutschland; Familien- und Gesundheitssoziologie mit Praxis- und Interventionsbezügen")
+        st.markdown("Topic_2: Institutionalisierungstheorien und Erziehungstheorien mit Brücken zwischen Ausbildungssystem und Arbeitsmarkt und mit Bezug auf Emotionen und Gefühlen")
+        st.markdown("Topic_3: Soziologie von kleineren Kontexten in sozialstrukturellen Perspektiven (Kommunen, Kreisen), Migrationssoziologie, Soziologie der digitalen Welt mit Bezug auf relationale Perspektiven")
 
         st.bar_chart(df_1[column])
 
