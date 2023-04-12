@@ -21,7 +21,7 @@ Was wird untersucht, wie, wozu und mit welchem Ergebnis?:
   - *Was?*: Abbildung der Themen aus den Veröffentlichungen der Mitglieder der PF-I nach Bereichen/Instituten für die Zeit 2013-2023.
   - *Wie?*: Topic-Modell-Analyse mit MTA-Software (https://cp.soziologie.uni-halle.de/MTA/doku.php).
   - *Wozu?*: Selbstbild der Themen in der PF-I, daran die Mitglieder der PF-I in den unterschiedlichen Bereich arbeiten. Bessere Position im Bezug auf die durchgeführte Diskussion zur inhaltlichen Profilierung der MLU und zu den Begriffen, die in diesem Zusammenhang kursieren (bes. Transformation, Nachhaltigkeit und Wissen -- unten wurde noch Digitalisierung hinzugefügt).
-  - *Ergebnis?*: hohe Teilnahme an der Untersuchung führt zur mehrheitlichen guten bis sehr guten Abbildung der Themen in der PF-I; trotzdem bleiben einige Bereiche (Kunstgeschichte, Orient, Politikwissenschaft) unzureichend belegt, weshalb dort die Analyse nur Themen von teilnehmenden Einzelakteuren abbildet.
+  - *Ergebnis?*: Hohe Teilnahme an der Untersuchung führt zur mehrheitlichen guten bis sehr guten Abbildung der Themen in der PF-I; trotzdem bleiben einige Bereiche (Kunstgeschichte, Orient, Politikwissenschaft) unzureichend belegt, weshalb dort die Analyse nur Themen von teilnehmenden Einzelakteuren abbildet.
 """)
 
 st.markdown("""*Grenzen*:
@@ -37,19 +37,50 @@ teilnehmer = {
 "Geschichte": [8, 33],
 "Kunstge.": [1, 0],
 "Orient.": [2, 0],
-"Philosophie": [2,4],
+"Philosophie": [3,4],
 "Politikw.": [1, 2],
 "Archeologie": [4, 9],
-"Psychologie": [7, 9],
+"Psychologie": [7, 10],
 "Soziologie": [4, 8],
-"PF Gesamt": [36, 72],
-"PF Gesamt (%)": [86, 76],
+"PF Gesamt": [37, 73],
+"PF Gesamt (%)": [88, 77],
 }
 
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.header("Teilnehmer Gesamt PF-I")
+    labels = 'Professoren', 'Mitarbeiter', 'NA-Profs', 'NA-Mit.'
+    sizes = [27, 53, 4, 6]
+    explode = (0, 0, 0, 0)  # only "explode" the 2nd slice (i.e. 'Hogs')
+    fig1, ax1 = plt.subplots()
+    ax1.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%',shadow=True, startangle=90)
+    ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+    st.pyplot(fig1)
+
+with col1:
+    st.header("Professoren PF-I")
+    labels = 'Professoren', 'NA'
+    sizes = [88, 12]
+    explode = (0, 0)  # only "explode" the 2nd slice (i.e. 'Hogs')
+    fig2, ax1 = plt.subplots()
+    ax1.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%',shadow=True, startangle=90)
+    ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+    st.pyplot(fig2)
+
+with col1:
+    st.header("Post-Dok. und Mitarbeiter PF-I")
+    labels = 'PD und Mit.', 'NA'
+    sizes = [77, 23]
+    explode = (0, 0)  # only "explode" the 2nd slice (i.e. 'Hogs')
+    fig3, ax1 = plt.subplots()
+    ax1.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%',shadow=True, startangle=90)
+    ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+    st.pyplot(fig3)
 #load data into a DataFrame object:
-df_teil = pd.DataFrame(teilnehmer, index = ["Professoren", "Mitarbeiter"])
+#df_teil = pd.DataFrame(teilnehmer, index = ["Professoren", "Mitarbeiter"])
 #df_teil2 = df_teil[["PF Gesamt","PF Gesamt (%)"]]
-st.bar_chart(df_teil["PF Gesamt (%)"])
+#st.bar_chart(df_teil["PF Gesamt (%)"])
 
 ### Title für die Seite und dataframe in der Sidebar zeigen
 
@@ -74,10 +105,10 @@ if button == 'Altertumwissenschaft':
     zeitungen = list(df_eng['Autor'].drop_duplicates())
 
     zeitungen_wahl = st.sidebar.multiselect('Autor auswählen:', zeitungen, default=zeitungen)
-    jahre_wahl = st.sidebar.slider('Jahre:', 2013, 2023, value=2015)
+    jahre_wahl = st.sidebar.slider('Jahre (slider links/rechts bewegen):', 2013, 2023, value=2015)
     df_eng = df_eng[df_eng['Jahr'] <= str(jahre_wahl)] # str is important, if not there, then you'll get an error
     df_eng = df_eng[df_eng['Autor'].isin(zeitungen_wahl)]
-    column = st.sidebar.multiselect('Topics auswählen', df_eng.columns[1:5])
+    column = st.sidebar.multiselect('Topics aus der Liste auswählen:', df_eng.columns[1:5])
     df_1 = df_eng.rename(columns={'Jahr':'index'}).set_index('index') # notwendig damit Jahre in der x Achse erscheinen
 
     st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Verteilung der Topics in der Zeit</h4>", unsafe_allow_html=True)
@@ -109,10 +140,10 @@ elif button == 'Ethnologie':
     zeitungen = list(df_eng['Autor'].drop_duplicates())
 
     zeitungen_wahl = st.sidebar.multiselect('Autor auswählen:', zeitungen, default=zeitungen)
-    jahre_wahl = st.sidebar.slider('Jahre:', 2013, 2023, value=2015)
+    jahre_wahl = st.sidebar.slider('Jahre (slider links/rechts bewegen):', 2013, 2023, value=2015)
     df_eng = df_eng[df_eng['Jahr'] <= str(jahre_wahl)] # str is important, if not there, then you'll get an error
     df_eng = df_eng[df_eng['Autor'].isin(zeitungen_wahl)]
-    column = st.sidebar.multiselect('Topics auswählen', df_eng.columns[1:6])
+    column = st.sidebar.multiselect('Topics aus der Liste auswählen:', df_eng.columns[1:6])
     df_1 = df_eng.rename(columns={'Jahr':'index'}).set_index('index') # notwendig damit Jahre in der x Achse erscheinen
 
     st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Verteilung der Topics in der Zeit</h4>", unsafe_allow_html=True)
@@ -146,10 +177,10 @@ elif button == 'Geschichte':
     zeitungen = list(df_eng['Autor'].drop_duplicates())
 
     zeitungen_wahl = st.sidebar.multiselect('Autor auswählen:', zeitungen, default=zeitungen)
-    jahre_wahl = st.sidebar.slider('Jahre:', 2013, 2023, value=2015)
+    jahre_wahl = st.sidebar.slider('Jahre (slider links/rechts bewegen):', 2013, 2023, value=2015)
     df_eng = df_eng[df_eng['Jahr'] <= str(jahre_wahl)] # str is important, if not there, then you'll get an error
     df_eng = df_eng[df_eng['Autor'].isin(zeitungen_wahl)]
-    column = st.sidebar.multiselect('Topics auswählen', df_eng.columns[1:6])
+    column = st.sidebar.multiselect('Topics aus der Liste auswählen:', df_eng.columns[1:6])
     df_1 = df_eng.rename(columns={'Jahr':'index'}).set_index('index') # notwendig damit Jahre in der x Achse erscheinen
 
     st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Verteilung der Topics in der Zeit</h4>", unsafe_allow_html=True)
@@ -184,10 +215,10 @@ elif button == 'Kunst':
     zeitungen = list(df_eng['Autor'].drop_duplicates())
 
     zeitungen_wahl = st.sidebar.multiselect('Autor auswählen:', zeitungen, default=zeitungen)
-    jahre_wahl = st.sidebar.slider('Jahre:', 2013, 2023, value=2015)
+    jahre_wahl = st.sidebar.slider('Jahre (slider links/rechts bewegen):', 2013, 2023, value=2015)
     df_eng = df_eng[df_eng['Jahr'] <= str(jahre_wahl)] # str is important, if not there, then you'll get an error
     df_eng = df_eng[df_eng['Autor'].isin(zeitungen_wahl)]
-    column = st.sidebar.multiselect('Topics auswählen', df_eng.columns[1:5])
+    column = st.sidebar.multiselect('Topics aus der Liste auswählen:', df_eng.columns[1:5])
     df_1 = df_eng.rename(columns={'Jahr':'index'}).set_index('index') # notwendig damit Jahre in der x Achse erscheinen
 
     st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Verteilung der Topics in der Zeit</h4>", unsafe_allow_html=True)
@@ -219,10 +250,10 @@ elif button == 'Orient':
     zeitungen = list(df_eng['Autor'].drop_duplicates())
 
     zeitungen_wahl = st.sidebar.multiselect('Autor auswählen:', zeitungen, default=zeitungen)
-    jahre_wahl = st.sidebar.slider('Jahre:', 2013, 2023, value=2015)
+    jahre_wahl = st.sidebar.slider('Jahre (slider links/rechts bewegen):', 2013, 2023, value=2015)
     df_eng = df_eng[df_eng['Jahr'] <= str(jahre_wahl)] # str is important, if not there, then you'll get an error
     df_eng = df_eng[df_eng['Autor'].isin(zeitungen_wahl)]
-    column = st.sidebar.multiselect('Topics auswählen', df_eng.columns[1:4])
+    column = st.sidebar.multiselect('Topics aus der Liste auswählen:', df_eng.columns[1:4])
     df_1 = df_eng.rename(columns={'Jahr':'index'}).set_index('index') # notwendig damit Jahre in der x Achse erscheinen
     st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Verteilung der Topics in der Zeit</h4>", unsafe_allow_html=True)
 
@@ -253,10 +284,10 @@ elif button == 'Philosophie':
     zeitungen = list(df_eng['Autor'].drop_duplicates())
 
     zeitungen_wahl = st.sidebar.multiselect('Autor auswählen:', zeitungen, default=zeitungen)
-    jahre_wahl = st.sidebar.slider('Jahre:', 2013, 2023, value=2015)
+    jahre_wahl = st.sidebar.slider('Jahre (slider links/rechts bewegen):', 2013, 2023, value=2015)
     df_eng = df_eng[df_eng['Jahr'] <= str(jahre_wahl)] # str is important, if not there, then you'll get an error
     df_eng = df_eng[df_eng['Autor'].isin(zeitungen_wahl)]
-    column = st.sidebar.multiselect('Topics auswählen', df_eng.columns[1:6])
+    column = st.sidebar.multiselect('Topics aus der Liste auswählen:', df_eng.columns[1:6])
     df_1 = df_eng.rename(columns={'Jahr':'index'}).set_index('index') # notwendig damit Jahre in der x Achse erscheinen
     st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Verteilung der Topics in der Zeit</h4>", unsafe_allow_html=True)
 
@@ -289,10 +320,10 @@ elif button == 'Politikwissenschaft':
     zeitungen = list(df_eng['Autor'].drop_duplicates())
 
     zeitungen_wahl = st.sidebar.multiselect('Autor auswählen:', zeitungen, default=zeitungen)
-    jahre_wahl = st.sidebar.slider('Jahre:', 2013, 2023, value=2015)
+    jahre_wahl = st.sidebar.slider('Jahre (slider links/rechts bewegen):', 2013, 2023, value=2015)
     df_eng = df_eng[df_eng['Jahr'] <= str(jahre_wahl)] # str is important, if not there, then you'll get an error
     df_eng = df_eng[df_eng['Autor'].isin(zeitungen_wahl)]
-    column = st.sidebar.multiselect('Topics auswählen', df_eng.columns[1:5])
+    column = st.sidebar.multiselect('Topics aus der Liste auswählen:', df_eng.columns[1:5])
     df_1 = df_eng.rename(columns={'Jahr':'index'}).set_index('index') # notwendig damit Jahre in der x Achse erscheinen
     st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Verteilung der Topics in der Zeit</h4>", unsafe_allow_html=True)
 
@@ -325,10 +356,10 @@ elif button == 'Archeologie':
     zeitungen = list(df_eng['Autor'].drop_duplicates())
 
     zeitungen_wahl = st.sidebar.multiselect('Autor auswählen:', zeitungen, default=zeitungen)
-    jahre_wahl = st.sidebar.slider('Jahre:', 2013, 2023, value=2015)
+    jahre_wahl = st.sidebar.slider('Jahre (slider links/rechts bewegen):', 2013, 2023, value=2015)
     df_eng = df_eng[df_eng['Jahr'] <= str(jahre_wahl)] # str is important, if not there, then you'll get an error
     df_eng = df_eng[df_eng['Autor'].isin(zeitungen_wahl)]
-    column = st.sidebar.multiselect('Topics auswählen', df_eng.columns[1:4])
+    column = st.sidebar.multiselect('Topics aus der Liste auswählen:', df_eng.columns[1:4])
     df_1 = df_eng.rename(columns={'Jahr':'index'}).set_index('index') # notwendig damit Jahre in der x Achse erscheinen
     st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Verteilung der Topics in der Zeit</h4>", unsafe_allow_html=True)
 
@@ -360,10 +391,10 @@ elif button == 'Psychologie':
     zeitungen = list(df_eng['Autor'].drop_duplicates())
 
     zeitungen_wahl = st.sidebar.multiselect('Autor auswählen:', zeitungen, default=zeitungen)
-    jahre_wahl = st.sidebar.slider('Jahre:', 2013, 2023, value=2015)
+    jahre_wahl = st.sidebar.slider('Jahre (slider links/rechts bewegen):', 2013, 2023, value=2015)
     df_eng = df_eng[df_eng['Jahr'] <= str(jahre_wahl)] # str is important, if not there, then you'll get an error
     df_eng = df_eng[df_eng['Autor'].isin(zeitungen_wahl)]
-    column = st.sidebar.multiselect('Topics auswählen', df_eng.columns[1:6])
+    column = st.sidebar.multiselect('Topics aus der Liste auswählen:', df_eng.columns[1:6])
     df_1 = df_eng.rename(columns={'Jahr':'index'}).set_index('index') # notwendig damit Jahre in der x Achse erscheinen
     st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Verteilung der Topics in der Zeit</h4>", unsafe_allow_html=True)
 
@@ -398,10 +429,10 @@ elif button == 'Soziologie':
     zeitungen = list(df_eng['Autor'].drop_duplicates())
 
     zeitungen_wahl = st.sidebar.multiselect('Autor auswählen:', zeitungen, default=zeitungen)
-    jahre_wahl = st.sidebar.slider('Jahre:', 2013, 2023, value=2015)
+    jahre_wahl = st.sidebar.slider('Jahre (slider links/rechts bewegen):', 2013, 2023, value=2015)
     df_eng = df_eng[df_eng['Jahr'] <= str(jahre_wahl)] # str is important, if not there, then you'll get an error
     df_eng = df_eng[df_eng['Autor'].isin(zeitungen_wahl)]
-    column = st.sidebar.multiselect('Topics auswählen', df_eng.columns[1:5])
+    column = st.sidebar.multiselect('Topics aus der Liste auswählen:', df_eng.columns[1:5])
     df_1 = df_eng.rename(columns={'Jahr':'index'}).set_index('index') # notwendig damit Jahre in der x Achse erscheinen
     st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Verteilung der Topics in der Zeit</h4>", unsafe_allow_html=True)
 
