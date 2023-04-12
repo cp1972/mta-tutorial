@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 import csv
 plt.rcParams['figure.figsize'] = [12, 8]
-
+plt.rcParams.update({'font.size': 14})
 ### Streamlit dashboard mit multipages -- hiermit benutzen wir radio buttons und if Bedingungen, um die Seiten zu simulieren
 
 st.set_page_config(layout="wide") # um die Webseite breiter zu machen
@@ -29,7 +29,7 @@ st.markdown("""*Grenzen*:
   - *Spezifisch*: Der Bezug auf Begriffe, die vom Rektorat im Rahmen der Profilierung der MLU verwendet werden, erfolgt oft mittelbar -- dabei wird bes. der Begriff Nachhaltigkeit wenig unterstützt (etwa mittelbar in der Psychologie und in der Soziologie). Deshalb werden auch Synonymen von Transformation, Nachhaltigkeit, Digitalisierung und Wissen auf Deutsch und Englisch verwendet (wie etwa Wandel, sustainability, digital, education usw.)
     """)
 
-st.markdown("<h4 style='text-align: left; color: OliveDrab;'>Folgende freiwillige Mitglieder der PF-I nehmen an dieser Umfrage teil</h4>", unsafe_allow_html=True)
+st.markdown("<h4 style='text-align: left; color: OliveDrab;'>Folgende freiwillige Mitglieder der PF-I nehmen an dieser Untersuchung teil</h4>", unsafe_allow_html=True)
 
 teilnehmer = {
 "Altertumw.": [3, 1],
@@ -74,7 +74,7 @@ with col3:
     sizes = [77, 23]
     explode = (0, 0)  # only "explode" the 2nd slice (i.e. 'Hogs')
     fig3, ax1 = plt.subplots()
-    ax1.pie(sizes, labels=labels, shadow=True, startangle=90)
+    ax1.pie(sizes, labels=labels, autopct='%1.1f%%', shadow=True, startangle=90)
     ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
     st.pyplot(fig3)
 #load data into a DataFrame object:
