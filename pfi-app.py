@@ -449,7 +449,7 @@ elif button == 'Archeologie':
         jahre_wahl = st.sidebar.slider('Jahre (slider links/rechts bewegen):', 2013, 2023, value=2015)
         df_eng = df_eng[df_eng['Jahr'] <= str(jahre_wahl)] # str is important, if not there, then you'll get an error
         df_eng = df_eng[df_eng['Autor'].isin(zeitungen_wahl)]
-        column = st.sidebar.multiselect('Topics aus der Liste auswählen:', df_eng.columns[1:4])
+        column = st.sidebar.multiselect('Topics aus der Liste auswählen:',df_eng.columns[1:5])
         df_1 = df_eng.rename(columns={'Jahr':'index'}).set_index('index') # notwendig damit Jahre in der x Achse erscheinen
         st.markdown("<h4 style='text-align: left; color: YellowGreen;'>Verteilung der Topics in der Zeit</h4>", unsafe_allow_html=True)
 
