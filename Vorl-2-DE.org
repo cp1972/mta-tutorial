@@ -1,0 +1,346 @@
+** Datengesteuerte Vorverarbeitung
+
+In dieser Vorlesung zeigen wir, wie Du Deine Textdaten verarbeiten kannst, und
+und wie man sie parsen kann, um den besten Input für die Themenmodellierung
+modellieren. Wie Sie lernen werden, gibt es automatische Wege, dies zu tun
+mit Hilfe einiger Low-Level-Programmierwerkzeuge, die - zumindest
+zumindest für den größten Teil von ihnen - nativ im Linux-Ökosystem implementiert
+Ökosystem implementiert sind und daher direkt von Ihrem USB-Stick aus verfügbar sind.
+
+Auch wenn diese Hilfsprogramme nützlich sind, ist es selten der Fall, dass sie
+erledigen, so dass bei schwierig zu parsenden Texten etwas Handarbeit erforderlich sein kann.
+Texten, die schwer zu analysieren sind. Nehmen Sie diese Werkzeuge als eine Möglichkeit zur Beschleunigung
+Ihre Arbeit bei der Vorverarbeitung von Texten zu beschleunigen, nicht mehr (aber auch nicht
+weniger).
+
+** Grundlagen
+
+Software für die Datenwissenschaft wie die MTA-Software, die wir in unserer
+Vorlesung verwenden werden, arbeiten meist auf der Basis von einfachen Textdateien (*.txt Daten),
+die leichtgewichtig sind und die man auf verschiedene Weise verändern kann. Die
+erste Herausforderung, die sich Ihnen stellt, wenn Sie Textdaten erhalten, ist die
+sie in *.txt-Daten zu konvertieren. Sie können Ihre Daten in den folgenden Formaten erhalten
+Formaten erhalten:
+
+- *Bilddaten und *.pdf-Bilddaten*: In diesem Fall müssen Sie die Daten
+  Daten mit Hilfe eines OCR-Programms, das den Text aus den Daten extrahiert. Unter
+  Linux-Ökosystem gibt es ein sehr leistungsfähiges Tool für diese Aufgabe, das
+  tesseract-ocr; mit dem Terminal unter Linux können Sie einfach
+  tesseract und seine Sprachdateien (für die Ocerisation in mehreren
+  mehreren Sprachen) mit folgendem Befehl installieren (vgl. unsere Vorlesung 2):
+
+sudo apt-get install tesseract-ocr tesseract-ocr-all
+
+Danach können Sie tesseract-ocr verwenden, um Ihre Daten zu ozerisieren - beachten Sie
+dass Sie ein Skript schreiben müssen, damit tesseract-ocr so funktioniert
+Sie ein Skript schreiben müssen, damit tesseract-ocr so funktioniert, wie Sie es wünschen (außerhalb dieses Tutorials), z.B. um Texte in
+mehreren Sprachen auf einmal, oder um Texte in mehreren Spalten auszudrucken
+Spalten gedruckt werden.
+
+- *Sandwich-PDF-Daten*: Diese sind ein spezieller Fall von PDF-Daten, die Sie
+  aus denen Sie den Text durch Kopieren/Einfügen extrahieren können; ich empfehle dies nicht,
+  denn Sie würden auch nicht sichtbare Elemente aus den PDF-Daten kopieren
+  kopieren, die Sie anschließend suchen und löschen müssten. Stattdessen können Sie
+  können Sie stattdessen ein leistungsstarkes Dienstprogramm namens pdftotext verwenden, um den Text aus
+  diesen Daten extrahieren. Sie können diese Software installieren, die Teil des
+  Paket poppler-utils ist, können Sie über die Kommandozeile wie folgt installieren:
+
+sudo apt-get install poppler-utils
+
+Nehmen wir eine Sandwich-PDF-Datei wie SandwichPDF.pdf, und konvertieren wir sie
+in txt:
+
+#+BEGIN_SRC python
+  #!pdftotext SandwichPDF.pdf # wird die Daten als SandwichPDF.txt speichern
+  # pdftotext SandwichPDF.pdf mytext.txt -- würde die Daten SandwichPDF.pdf als mytext.txt speichern
+#+END_SRC
+
+Wie Sie an den resultierenden Daten sehen können, haben wir aus diesem Sandwich
+pdf ist eine Textdatei ohne Layout -- und ich empfehle, es so zu machen,
+denn hier haben wir einen Text auf mehreren Spalten. Wenn Sie das Layout
+das Layout beibehalten möchten, können Sie das tun:
+
+#+BEGIN_SRC python
+  #!pdftotext -layout SandwichPDF.pdf
+#+END_SRC
+
+Sie würden eine Textdatei erhalten, die (mehr oder weniger) das Layout der
+Sandwich-PDFs beibehält - aber Sie würden große Schwierigkeiten mit Ihrer
+Analyse. Der Grund dafür ist der folgende. Sehen wir uns ein Beispiel an
+der resultierenden Textdaten mit dem Layout:
+
+#+BEGIN_EXAMPLE
+        D     ietrich Bonhoeffer ist umstritten.
+              Dieses Phänomen zieht sich als roter
+        Faden durch Leben und Rezeption des
+                                                        von akademischem, sondern auch von
+                                                        populärem Interesse.
+                                                            Dass Rezeption immer auch Deutung
+        Pfarrers, Theologen und Widerständlers.         im Sinne je eigener Auffassungen bis hin   <---- One line == one sentence
+        Man kann hier nicht nur an die Entfernung       zur Aneignung bedeuten kann, ist eine
+        Bonhoeffers aus dem Lehrkörper der Theo-        Binsenweisheit. Der amerikanische The-  <---- Next difficulty: dash to cut lines will remain
+        logischen Fakultät der Berliner Universität,    ologe Stephen R. Haynes hat in seinem
+        sondern auch an die problematische Stel-        sehr lesenswerten Buch The Bonhoeffer
+        lung im Umfeld der Bekennenden Kirche,          Phenomenon. Portraits of a Protestant Saint
+        die Beurteilung des Widerstands im Kon-         gezeigt, in welchem Maße die globale Re-
+        text der westdeutschen Nachkriegsgerichts-      zeption Bonhoeffers Elemente klassischer
+        barkeit, die umstandslose Vereinnahmung         Hagiografien aufnimmt, warum Bonhoef-
+        im Zusammenhang der offiziellen Theolo-         fers Biografie für diese Art der Deutung
+        gie der DDR oder den Streit um die liberale     offen ist und welche Chancen und Ge-
+        und konservative Deutung in den 1980er-         fahren damit verbunden sind. Zentral ist
+        und 1990er-Jahren des 20. Jahrhunderts          der religiös motivierte, entschiedene, bis
+        denken.                                         zum Verlust des eigenen Lebens gehende
+            Auch der Ansatz von Eric Metaxas,           Einsatz für etwas, das als richtig erkannt
+        der Bonhoeffer als Paradigma des kon-           worden ist und – wie im Fall des Wider-
+        servativen Evangelikalen zu skizzieren          stands gegen den Nationalsozialismus –
+        sucht, ist nicht ganz ohne Vorbilder, hat-      auch allgemein als richtig anerkannt wird.
+        te doch Georg Huntemann schon in den            Bedeutsam ist weiterhin der Kontrast zwi-
+        1990er-Jahren den „anderen Bonhoeffer“          schen glücklicher Kindheit, erfolgreicher
+        verkündet.                                      Jugend und dem konsequenten Dasein als
+            Was also ist neu an der Diskussion,         Märtyrer und Zeuge. Zentral ist aber auch
+        wer war er wirklich, und was lässt sich von     die Fragmentarität und damit Interpreta-
+        ihm für die Gegenwart lernen? Um diese          tionsoffenheit des hinterlassenen Werks.
+        Fragen beantworten zu können, lohnt –               Die Chance solcher Deutung liegt in
+        gerade angesichts des 75. Jahrestags seiner     der religiösen und moralischen Orientie-
+        staatlich angeordneten Ermordung – ein          rungsfunktion, die – weit über den akade-
+        Blick auf die Eigenart gegenwärtiger Bon-       mischen Kontext hinaus – gesellschaftlich
+        hoeffer-Rezeption und zentrale Aspekte
+        seiner theologischen Biografie.                         Gefängniszelle in Berlin-Tegel,
+            1. Der „protestantische Heilige“ und sei-      in der Bonhoeffer von 1943 bis 1944
+        ne gegenwärtige Rezeption: Es ist nicht zu                              inhaftiert war.
+#+END_EXAMPLE
+
+Wenn Sie diesen Text an ein Lernprogramm übergeben, liest dieses Programm die
+Daten Zeile für Zeile und interpretiert diese Zeilen als Sätze, auf
+interpretieren, aus denen es ein Modell für Sie berechnet. Das ist eindeutig etwas, das wir
+das wir hier nicht wollen, weil wir dann Sätze hätten, die nicht den Inhalt
+den Inhalt unseres Textes widerspiegeln. Verwenden Sie daher nicht die Layout-Option von
+pdftotext.
+
+Wir wissen, wie man mit pdf-Daten als Bild oder als Sandwich-PDF umgehen kann. Aber wir
+haben andere Datentypen, wie zum Beispiel:
+
+- *doc(x)* data;
+- *rtf* Daten;
+- *odt(s)* Daten;
+- *htm(l)* Daten;
+- *x(h)tml*-Daten.
+
+Um solche Daten zu konvertieren, können wir das LibreOffice --headless
+Flag verwenden, wie hier am Beispiel der CP-Abstracts.doc Daten:
+
+#+BEGIN_SRC python
+  #!soffice --headless --convert-to txt:Text CP-Abstracts.doc #<-- ersetzen Sie .doc durch .rtf oder .odt oder .html usw. für entsprechende Dateien
+#+END_SRC
+
+Mit diesen Hilfsprogrammen können Sie auf einfache Weise eine Vielzahl von
+verschiedenen Formaten in das *.txt-Format.
+
+** Mehrere Dateien
+
+Im realen Forschungsdesign hat man normalerweise nicht nur eine Datei zu
+konvertieren, sondern viele davon. Als Analytiker sollte deine Aufgabe immer darin bestehen
+eine kostengünstige Lösung zu finden, um diese Daten in kurzer Zeit in das
+und in das gewünschte Format zu konvertieren. In diesem Fall heißt diese Lösung *for
+Schleife*.
+
+*** Was ist eine for-Schleife?
+
+Eine for-Schleife ist ein Weg, um eine gleiche Operation oder einen gleichen Satz von
+Operationen auf eine definierte Anzahl von Daten automatisch nacheinander anzuwenden. In
+Linux sind wir es gewohnt, das Terminal für viele verschiedene Aufgaben zu benutzen, und
+auch um for-Schleifen auszuführen. Dies ist möglich, weil das
+Terminal den Zugriff auf die zugrunde liegenden Programme ermöglicht, die im
+Kernel des Linux-Betriebssystems gespeichert sind, und eines der Programme, das es Ihnen ermöglicht
+for-Schleifen ermöglicht, das direkt mit dem Kommandozeilen-Terminal verbunden ist, heißt
+heißt 'Shell'. Es gibt verschiedene Shells, aber konzentrieren wir uns auf die Shell
+die Sie auf Ihrem USB-Stick haben, nämlich die "bash". Mit dieser Shell (und auch mit
+andere Shells) ermöglicht es Ihnen, eine for-Schleife auszuführen, die normalerweise die folgenden
+folgende Ausdrücke:
+
+#+BEGIN_SRC python
+  # for a variable in my data; do a action with a program on this variable; done d.h. beende meine for-Anweisung und damit meine Schleife
+#+END_SRC
+
+Schauen wir uns also an, was hier passiert:
+
+1. Eine for-Schleife beginnt immer mit einer 'for'-Anweisung, die mit einem
+   Semikolon (;) endet;
+2. In der for-Anweisung definieren Sie immer eine Variable, die mit den
+   Daten, mit denen Sie etwas tun wollen;
+3. nach dem Semikolon, das die for-Anweisung abschließt, folgt immer eine do
+   Anweisung, die den Teil der Schleife eröffnet, in dem Sie ein
+   Programm etwas mit der definierten Variablen macht;
+4. Sie schließen die do-Anweisung immer mit einem Semikolon (;) ab;
+5. Sie müssen die Schleife mit einer 'done'-Anweisung abschließen, damit die
+   Schleife anhält und nicht erneut ausgeführt wird
+
+Übertragen wir dies auf ein praktisches Beispiel. Nehmen wir die Daten
+die wir in unserem Ordner haben ... und konstruieren wir eine Schleife, um sie zu konvertieren in
+* .txt-Daten umzuwandeln:
+
+1. Zuerst wechseln wir mit cd (Verzeichnis) in unseren Ordner:
+
+#+BEGIN_SRC python
+  # cd Ordner
+#+END_SRC
+
+2. Zweitens öffne die for-Schleife und definiere eine Variable 'i', die sich auf
+   auf alle unsere Dokumente in diesem Ordner bezieht:
+
+#+BEGIN_SRC python
+  # for i in *.doc;
+#+END_SRC
+
+3. Drittens, konvertieren Sie diese doc-Daten in txt-Daten mit LibreOffice headless:
+
+#+BEGIN_SRC python
+  # do !soffice --headless --convert-to txt:Text "$i"; # beachten Sie die Formulierung der Variable i mit '$' für 'Variable' und dem "" zum Schutz
+#+END_SRC
+
+4. Viertens, schließen Sie die Schleife mit der Anweisung done
+
+#+BEGIN_SRC python
+  # done
+#+END_SRC
+
+Alles zusammen ergibt die folgende for-Schleife:
+
+#+BEGIN_SRC python
+  # !for i in *.doc; do soffice --headless --convert-to txt:Text "$i"; done
+#+END_SRC
+
+** Sie sind dran
+
+Führe eine for-Schleife durch, um Sandwich-PDF-Daten in txt-Daten zu konvertieren.
+
+** Grundlegende Skripte
+
+Skripte sind in einem Texteditor geschriebene Programme, die es ermöglichen
+Daten zu automatisieren und gleichzeitig den Code zu behalten, den man zur Erstellung des
+Code, den du zur Erstellung deines Programms verwendet hast, zu behalten, was es dir ermöglicht
+wieder zu verwenden oder zu modifizieren, wenn du ähnliche Aufgaben erledigst. Skripte funktionieren
+genauso wie einfache Zeilen, die Sie in Ihr Terminal eingeben. Sie können sich
+Skripte als eine Sammlung von Zeilen, die Sie sonst in Ihr Terminal eingeben würden.
+Terminal eingeben würden.
+
+** Beispiel
+
+Nehmen wir Ihr obiges Beispiel der Konvertierung eines Ordners mit Dokumentendaten.
+Oftmals möchte man die Originaldokumente nicht verlieren und sie von den
+von den konvertierten txt-Daten trennen. Um dies zu tun, würden Sie folgendes tun
+wie folgt vor:
+
+1. Erstellen Sie ein Verzeichnis mit Ihren Dokumentdaten;
+2. konvertieren Sie Ihre doc-Daten in txt-Daten;
+3. erstellen Sie ein Verzeichnis für Ihre txt-Daten;
+4. Ihre txt-Daten in das txt-Verzeichnis speichern
+
+Ein Skript ermöglicht es Ihnen, diese vier Schritte zu automatisieren und sie
+nacheinander auszuführen. Lassen Sie uns ein solches Skript schreiben. Öffnen Sie einen Texteditor, und schreiben Sie
+zuerst den Befehl, um ein Verzeichnis für unsere Doc-Daten zu erstellen:
+
+#+BEGIN_SRC python
+  # mkdir docfolder
+#+END_SRC
+
+Lassen Sie uns nun unsere for-Schleife verwenden, um unsere doc-Daten in txt-Daten zu konvertieren:
+
+#+BEGIN_SRC python
+  # !for i in *.doc; do soffice --headless --convert-to txt:Text "$i"; done
+#+END_SRC
+
+Verschieben Sie Ihre doc-Daten in Ihren doc-Ordner:
+
+#+BEGIN_SRC python
+  # mv *.doc docfolder # der Stern bedeutet 'alle doc-Daten übernehmen'.
+#+END_SRC
+
+Erstellen Sie ein Verzeichnis für Ihre txt-Daten:
+
+#+BEGIN_SRC python
+  # mkdir txtfolder
+#+END_SRC
+
+Schließlich verschieben Sie Ihre txt-Daten in Ihren txt-Ordner
+
+#+BEGIN_SRC python
+  # mv *.txt txtfolder # der Stern bedeutet 'nimm alle txt-Daten'
+#+END_SRC
+
+Ihr Skript sollte nun wie folgt aussehen:
+
+#+BEGIN_SRC python
+  # mkdir docfolder
+  # !for i in *.doc; do soffice --headless --convert-to txt:Text "$i"; done
+  # mv *.doc docfolder
+  # mkdir txtfolder
+  # mv *.txt txtfolder
+#+END_SRC
+
+Sie haben den Inhalt Ihres Skripts, aber dies ist im Moment kein Skript
+Skript, sondern nur eine Textdatei mit einem Befehl, den Sie in die
+in die Shell eingeben möchten. Um es zu einem Skript zu machen, müssen Sie am Anfang der Datei folgendes schreiben
+der Datei das Folgende schreiben:
+
+#+BEGIN_SRC python
+  #!/bin/sh # Sie könnten auch #!/bin/bash -- sh eingeben, um sicherzustellen, dass Ihr Skript für sh- und bash-Shells funktioniert
+#+END_SRC
+
+Mit dieser Zeile am Anfang Ihres Skripts sorgen Sie dafür, dass es von Ihrer
+Shell. Der letzte Schritt besteht darin, das Skript ausführbar zu machen. Für
+müssen Sie zunächst Ihr Skript als Datei 'myscript.sh' speichern. Dann,
+öffnen Sie ein Terminal, in dem Sie Ihr Skript gespeichert haben, und geben Sie Folgendes ein
+Folgendes ein:
+
+#+BEGIN_SRC python
+  # sudo chmod +x myscript.sh
+#+END_SRC
+
+Ihr fertiges ausführbares Skript sollte nun wie folgt aussehen:
+
+#+BEGIN_SRC python
+  #!/bin/sh
+  # mkdir docfolder
+  # !for i in *.doc; do soffice --headless --convert-to txt:Text "$i"; done
+  # mv *.doc docfolder
+  # mkdir txtfolder
+  # mv *.txt txtfolder
+#+END_SRC
+
+Führen Sie nun das Skript mit dem folgenden Befehl in dem Ordner aus, in dem
+Sie Ihre doc-Dateien haben:
+
+#+BEGIN_SRC python
+  #./myscript.sh
+#+END_SRC
+
+** Sie sind dran
+
+Erstelle ein Skript, um die pdf-Daten in deinem Ordner zu konvertieren. Beachte: Du musst
+musst getrennte Ordner für die pdf-Daten und die resultierenden txt-Daten erstellen
+um die doc- und pdf-Daten und ihre entsprechenden Ergebnisse
+getrennt zu halten.
+
+** Nächster Schritt - Vorverarbeitung der Daten
+
+In dieser Vorlesung hast du die allerersten Schritte eines allgemeineren
+Arbeitsablaufs kennengelernt, der darauf zugeschnitten ist, deine Daten vorzuverarbeiten, und du hast mit grundlegenden
+Daten zu konvertieren, ein einfaches Skript zu erstellen, um die ursprünglichen
+Daten von den konvertierten Daten zu trennen. In der nächsten Vorlesung behandeln wir
+fortgeschrittene Methoden zur Vorverarbeitung Ihrer Daten, basierend auf dem, was wir in
+dieser Vorlesung. Wir werden Low-Level-Programmierwerkzeuge aus dem Linux
+Kernel verwenden, um unsere Daten so zu parsen, wie wir es wollen, um die besten Ergebnisse
+unserer Modellierung.
+
+#+BEGIN_SRC python
+  #script Dateien umbenennen
+  # for i in *.txt; do awk -F, 'NR==1{print $4}' "$i" >> date; done #save 4.th col of first line to date file
+  # sed -e 's/^ //' date | awk -F. ' {print $3"-"$2"-"$1} ' > date2 #Daten reformieren
+  # ls *.txt > new # alle Dateinamen der txt-Dateien in der neuen Datei speichern
+  # sed -i -e 's/^/mv /' new #schreibe mv an den Anfang jeder Zeile
+  # paste -d' ' neu date2 > newdate # neu und date2 einfügen
+  # ls *.txt > new2 # neue Datumsdatei
+  # paste -d'-' newdate new2 > final #paste filename to new named file
+  # final in final.sh umbenennen und #!bin/sh in die erste Zeile der Datei schreiben; ausführbar machen und auf den Daten ausführen, um Dateinamen zu ändern 
+#+END_SRC
