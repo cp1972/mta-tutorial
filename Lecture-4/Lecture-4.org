@@ -1,0 +1,437 @@
+** Parse your data the way you want
+   :PROPERTIES:
+   :CUSTOM_ID: parse-your-data-the-way-you-want
+   :END:
+
+Data parsing is a more advanced topic, and it is a very important step
+in the pre-processing of your data, because it enables you to clean up
+your data, i.e. to remove information that you don't need for you
+modeling from the content of the data, or that could impoverish the
+modeling of your data if you keep them. Let us come back to the theory
+of the modeling of qualitative data.
+
+The main difference between the computer-oriented modeling of
+qualitative data and other non computer-oriented interpretation
+techniques dealing with qualitative data regards the workflow that you
+have to organize in order to get instantly meaningful information out of
+your model. The focus is not the same. Non computer-oriented techniques
+are directly related to the content of the data that you have to
+organize in categories in order to give your data some dimensions. The
+computer-oriented techniques are directly related to the /structure/ of
+the data content, as well as to the /name/ of the data in order to
+organize (not the content but) the data themselves in /databases/. Let
+us define these terms more precisely:
+
+- the structure of the data content: you have to pay attention to the
+  different element of the text, and to where they are placed in the
+  text data; these element can be f.ex. the author of the text, the date
+  of the text, the journal/book in which the text has been published,
+  the text itself etc.
+- the name of the data: it is the filename of your data -- the goal is
+  here to rename your data with /tags/ in such a way that you save
+  meaningful information directly in the filename of the data in order
+  to use this information to sort your data afterwards
+- databases: think about your data as databases, i.e. as a batch of
+  information with their corresponding tags in the filename of your data
+  that you can store in folders on your computer.
+
+This way to organize your data supposes that you have to parse your
+data, which means that you have to take content information from your
+data, to use it as tags that you will write into the name of the data,
+and to save your data according to your research question in different
+folders. In this lecture, we introduce to this way of organizing your
+workflow in the preprocessing of your qualitative data.
+
+** Explore the structure of the data
+   :PROPERTIES:
+   :CUSTOM_ID: explore-the-structure-of-the-data
+   :END:
+
+Let us take a simple example of a text data -- the data 00001.txt --,
+which is an article of a newspaper already converted to * .txt looking
+like this:
+
+#+BEGIN_EXAMPLE
+  F.A.Z., Politik, Samstag, 27.02.2021, S. 4, Nr. 49
+
+  Meldungen in Kürze
+
+  Wichtiges in Kürze
+
+  Schlagabtausch zwischen Brüssel und Caracas
+
+  Die Europäische Union hat die bei ihr akkreditierte venezolanische
+  Botschafterin zur unerwünschten Person erklärt. Brüssel reagierte damit auf
+  die vorherige Ausweisung der Leiterin der EU-Delegation in Caracas; dieser
+  Schritt sei "vollkommen ungerechtfertigt" gewesen, teilte der Rat der EU
+  mit. Der diplomatische Schlagabtausch ist die Folge weiterer Sanktionen,
+  welche die EU am Montag gegen das Regime Maduros verhängt hatte.
+
+  T.G.
+
+
+  © Alle Rechte vorbehalten. Frankfurter Allgemeine Zeitung GmbH, Frankfurt.
+#+END_EXAMPLE
+
+Here are the following element which are important for us:
+
+- on the first line, you have the title of the newspaper (F.A.Z), the
+  rubric in which the article was published (Politik), the day of the
+  publication (Samstag), the complete date of the publication
+  (27.02.2021), the page (S. 4) and the number of the issue (Nr. 49).
+- on the two following lines, you have an information about the type of
+  the article (Meldungen, i.e. short article)
+- on the third line, you have the title of the article
+- on the following lines, you have the content of the article
+- on the line with T.G. you have the initials of the journalist having
+  written this article
+- on the last line, you have the copyright attached to this article
+
+If you have a lot of such articles, one of the information you want to
+have is the date of the publication of the article in order to model
+your data in time. This would be a tag to attach to the name of the data
+(which is now 00001). Another useful information is the title of the
+newspaper (F.A.Z.), enabling to filter your data by newspapers. Another
+important information could be the name of the author (T.G.). Let us
+take this three information as the tags that we would like to embed in
+the name of our article. How would you do that? One way to do it is to
+save these tags and to use them to label the filename of the data. For
+that task, we need the low level utilities included in your
+distribution, and especially for that case (as well as in general) three
+program: bash (your shell), awk and sed.
+
+** First case -- Title of the newspaper
+   :PROPERTIES:
+   :CUSTOM_ID: first-case-title-of-the-newspaper
+   :END:
+
+In order to get the title of the newspaper (F.A.Z), you should use awk
+which is a program enabling to retrieve information columnwise. How do
+we define a column here, when we look at the first line of our text? We
+can use the comma separator to identify columns, and in our case, if we
+say that columns are part of the text separated by a comma, than in the
+first line of our data, we have six columns.
+
+Now, let us tell awk to print for us the first column of the first line
+of our text:
+
+#+BEGIN_SRC python
+  #!awk -F, NR==1'{ print $1 }' 00001.txt
+#+END_SRC
+
+Let us explain our code:
+
+- first, call the awk program
+- indicate with -F that we want to take into account separators; in our
+  case, this is a comma, then -F,
+- NR means the number of the row to consider, which is the first row in
+  our case, i.e. the first line in the file; thus NR==1
+- '{ print $1 }' is what we want awk to do, i.e. print the first column
+- 00001.txt is our data
+
+In printing F.A.Z, we do not modify our data, we just output the name of
+the file on the terminal, which means that we can not use it afterwards.
+So, if we want to use this tag in order to label our data with it, we
+have to save the tag to a file. Let us do it:
+
+#+BEGIN_SRC python
+  #!awk -F, NR==1'{ print $1 }' 00001.txt > titletag.txt
+#+END_SRC
+
+We are using the '>' (redirect) operator in order to redirect the output
+to a file, instead of printing it on the terminal. This way, we can save
+the tag to file in order to use it later.
+
+** Your turn
+   :PROPERTIES:
+   :CUSTOM_ID: your-turn
+   :END:
+
+Use awk to save a tag informing about the rubric in which the article
+has been published
+
+** Second case -- Multiple tags and multiple files
+   :PROPERTIES:
+   :CUSTOM_ID: second-case-multiple-tags-and-multiple-files
+   :END:
+
+We don't need to pass the tag one after the other to awk, we can create
+them all together using a script as we have seen in our third lecture.
+Let us f.ex. take the columns of the title of the newspaper and the date
+of the newspaper, saving them in their tag-file:
+
+#+BEGIN_SRC python
+  #!/bin/sh
+  #awk -F, NR==1'{ print $1 }' 00001.txt > titletag.txt
+  #awk -F, NR==1'{ print $4 }' 00001.txt > datetag.txt
+#+END_SRC
+
+Don't forget to make the script executable, and run it (see our third
+lecture). Now you have two tag-files, the first one with the title of
+the newspaper, and the second one with the date of the newspaper. But
+what if we have several file? In our third lecture, we have seen that
+you could make a for loop in order to take the appropriate tags from all
+the files you have in your folder. Let us do it for the title and the
+date tags for our 00001.txt and our 00002.txt files:
+
+#+BEGIN_SRC python
+  #!/bin/sh
+  # for i in *.txt; do awk -F, NR==1'{ print $1 }' "$i" >> titletag.txt; done
+  # for i in *.txt; do awk -F, NR==1'{ print $4 }' "$i" >> datetag.txt; done
+#+END_SRC
+
+If you run this script, you will see that you get the following content:
+
+file titletag.txt:
+
+#+BEGIN_EXAMPLE
+  F.A.Z.
+  F.A.Z.
+#+END_EXAMPLE
+
+file datetag.txt:
+
+#+BEGIN_EXAMPLE
+   27.02.2021
+   27.02.2021
+#+END_EXAMPLE
+
+Your script has saved the tags in a column, the first line corresponding
+to our first file 00001.txt, the second line corresponding to our second
+file 00002.txt. You can also observe, that in the titletag.txt, the tags
+are against the left border of the document, whereas in the datetag.txt,
+the tags are separated with a blank space from the border of the
+document. This is an important observation, and we will see below why.
+
+** Your turn
+   :PROPERTIES:
+   :CUSTOM_ID: your-turn-1
+   :END:
+
+If you read our script carefully, you will see that instead of using one
+redirect operator, we are using here two redirect operators (>>). Why do
+we do so? In order to answer the question, remove one of the operator
+and see what is happening. Explain why you have this result.
+
+** Use your tags to label the filename of your data
+   :PROPERTIES:
+   :CUSTOM_ID: use-your-tags-to-label-the-filename-of-your-data
+   :END:
+
+A first important observation here is that we have the same tags for
+different files. Therefore, it is important to keep the original
+filename in the new filename we want to create with our tags.
+
+A second important observation regards the /order/ of the tags in our
+filename. For example, MTA enables longitudinal modeling of text data,
+and for that, MTA picks up the date if it is /at the very beginning/ of
+your filename. So, the date-tag has to placed before everything else in
+order for us later to be able to use our data for the modeling in time.
+
+A third important observation regards the /format/ of our tags. For
+example, MTA needs that your date-tag as the following format:
+Year-Month-Day. Here, the dash ('-') separator is important for MTA in
+order to recognize your date as it is.
+
+Therefore, we have first to rework our datetag.txt file in two ways:
+
+- first, change the order of the date
+- second, separate year, month, day with a dash
+
+*** Rework the datetag.txt file
+    :PROPERTIES:
+    :CUSTOM_ID: rework-the-datetag.txt-file
+    :END:
+
+For this operation, we can use awk again which is best at performing
+operations on columns. We would have three columns in our lines, namely
+day, month and year separated by a dot. We instruct awk to change this,
+at the moment only outputing its result on the terminal:
+
+#+BEGIN_SRC python
+  #!awk -F. '{ print $3"-"$2"-"$1 }' datetag.txt
+#+END_SRC
+
+If you run this program, you will see this result:
+
+#+BEGIN_EXAMPLE
+  2021-02- 27
+  2021-02- 27
+#+END_EXAMPLE
+
+As you can see, the blank space that we had between the left border of
+the file and our tag remains here. We have to delete it in order to have
+the date of the files as we wanted it. For this task, sed is a useful
+program because it acts on lines. With sed, we can use the following
+expression to get rid of the blank spaces -- at the moment without
+changing our datetag file:
+
+#+BEGIN_SRC python
+  #!sed 's/ //' datetag.txt
+#+END_SRC
+
+If you run this program, you will see this result:
+
+#+BEGIN_EXAMPLE
+  27.02.2021
+  27.02.2021
+#+END_EXAMPLE
+
+There is no space anymore between the left border of the file and the
+dates. With the expression '/ //', we have told sed to remove the blank
+spaces in the file, i.e. actually to replace blank spaces (the / /) with
+'no spaces at all' (the //) . We can then transform our datetag file
+using this two programs like this:
+
+#+BEGIN_SRC python
+  #!sed 's/ //' datetag.txt > datetag-sed.txt
+  #!awk -F. '{ print $3"-"$2"-"$1 }' datetag-sed.txt > datetag-2.txt
+#+END_SRC
+
+Now, if you look at the content of datetag-2.txt, you will see the
+following wanted result:
+
+#+BEGIN_EXAMPLE
+  2021-02-27
+  2021-02-27
+#+END_EXAMPLE
+
+In Linux, you even don't need to execute to run on the datetag-2.txt,
+one with awk, and the second run with sed. You can channel the program
+with a simple pipe ('|') like this:
+
+#+BEGIN_SRC python
+  #!sed 's/ //' datetag.txt | awk -F. '{ print $3"-"$2"-"$1 }' > datetag-2.txt
+#+END_SRC
+
+With this channel, you avoid to create a datetag-sed.txt file that you
+don't really need for your further operations.
+
+*** Tag your filenames
+    :PROPERTIES:
+    :CUSTOM_ID: tag-your-filenames
+    :END:
+
+We have now three types of files:
+
+- our data in original: 00001.txt and 00002.txt
+- our titletag.txt file to tag our original files with the title of the
+  newspapers
+- our datetag-2.txt file with our new correct dates to tag our original
+  files with the date of the publication
+
+The first thing to do here is to create a file containing the names of
+our original data (00001.txt and 00002.txt) that we want to change in
+order for them to be named like this:
+
+- 00001.txt: changed to 2021-02-27F.A.Z.00001.txt
+- 00002.txt: changed to 2021-02-27F.A.Z.00002.txt
+
+With these new names, we can always identify our original file, and we
+have provided two tags to differentiate them regarding their publication
+date, and the newspaper in which they have been published. Let us first
+create a third file containing the names of our original data. For that
+purpose, we are using the list function of our shell like this:
+
+#+BEGIN_SRC python
+  #! ls 0*.txt
+#+END_SRC
+
+If you run this command, you will get only the txt files beginning with
+a '0'. As our other files are not beginning with a '0', this is a safe
+mean to get all original data by their names in one file. You just add a
+redirect operator to that command and a new file name in order to get
+your result, like this:
+
+#+BEGIN_SRC python
+  #! ls 0*.txt > names.txt
+#+END_SRC
+
+If you open the new created file 'names.txt', then you will see the
+following content:
+
+#+BEGIN_EXAMPLE
+  00001.txt
+  00002.txt
+#+END_EXAMPLE
+
+That is what we want. Now, we can paste into this file the content of
+your tag-files with:
+
+1. at first the content of the datetag-2 file,
+2. second the content of our titletag file,
+3. third, again, the list of our original data.
+
+In order to do this, we use the 'paste' program and we redirect its
+output to a new file namesdate.txt, like this:
+
+#+BEGIN_SRC python
+  #!paste -d' ' names.txt datetag-2.txt > namesdate.txt
+#+END_SRC
+
+After this first paste, you will get this result:
+
+#+BEGIN_EXAMPLE
+  00001.txt 2021-02-27
+  00002.txt 2021-02-27
+#+END_EXAMPLE
+
+Now let us add the title of the newspaper:
+
+#+BEGIN_SRC python
+  #!paste -d'-' namesdate.txt titletag.txt > namesdatetitle.txt
+#+END_SRC
+
+Finally, let us add again the names of our original file:
+
+#+BEGIN_SRC python
+  #!paste -d'-' namesdatetitle.txt names.txt > almostfinal.txt
+#+END_SRC
+
+We are almost ready with the renaming of our original data with our
+tags, we only have to actually do the rename of our original data into
+the taged data. In order to do that, we need the shell 'mv' utility
+which enable to rename files. 'mv' has to be placed before each lines of
+your file -- because we are working on lines, we know from this lecture
+that we have to use the sed program in order to do this. The structure
+of the program follows these rules:
+
+- sed 's/^/mv /' almostfinal.txt -- or in detail:
+
+  1. call sed
+  2. tell sed to focuse the beginning of each line: /^/
+  3. tell sed to replace the beginning of each line with the mv command:
+     /^/mv/
+  4. tell sed to make a blank space after mv: /^/mv /
+  5. tell sed to operate on our almostfinal.txt file: /^/mv /
+     almostfinal.txt
+
+Now, we run our sed command to perform the renaming of our original
+files, and we redirect its output to a new file final.txt:
+
+#+BEGIN_SRC python
+  #!sed 's/^/mv /' almostfinal.txt > final.txt
+#+END_SRC
+
+In you new final.txt file, you have all you need to rename all your
+original files into tagged files, with useful information for sorting
+the results of your modeling. This is also useful if you have f.ex.
+different newspaper -- you could save the file corresponding to the
+newspapers in different directories and model them separately to compare
+the models that you would get. You can do the same for specific times --
+f.ex. for given years.
+
+In other words, tags help you to design your methodology, and your
+methodology in its design directly depend on the way you organize your
+data into databases.
+
+** Your turn
+   :PROPERTIES:
+   :CUSTOM_ID: your-turn-2
+   :END:
+
+If you remember our third lecture, at the moment the file final.txt is
+only a text file, and not a script. In order to perform the renaming of
+your file, you need to make this text file a script. Look at our third
+lecture and make it a script. Then, run this script to get the wanted
+results.
