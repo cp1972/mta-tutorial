@@ -1,16 +1,11 @@
 ** Structure of the lecture on modeling qualitative data with MTA (MQD)
-   :PROPERTIES:
-   :CUSTOM_ID: structure-of-the-lecture-on-modeling-qualitative-data-with-mta-mqd
-   :END:
 
-In this lecture, we are learning how to modeling qualitative data based on texts. The lecture covers the most important steps, beginning with the installation of the software needed for the lecture
-and ending with the publication of the results in several forms.
+In this lecture, we are learning how to modeling qualitative data based on texts. The lecture covers the most important steps, beginning with the installation of the software needed for the lecture and ending with the publication of the results in several forms.
 
 The lecture's structure develops along the following key steps:
 
-1. Lecture 1: theoretical background: what is the modeling of qualitative data and which software
-   why will be used in the lecture
-2. Lecture 2: install the software (Anaconda; Linux on a usb-key -- install and postinstall --, python3)
+1. Lecture 1 - Theoretical background: what is the modeling of qualitative?
+2. Lecture 2 - The software: Anaconda, i.e. python3 and related packages for text processing
 3. Lecture 3 and 4: data driven preprocessing -- gathering text data and basic conversion; parsing text data in several format (pdf, doc·x/odt/rtf, x·htm·l, txt etc.) using low level programming
    utilities
 4. Lecture 5: using MTA to model your data -- the topic modelling way, basic requirements and first analysis
