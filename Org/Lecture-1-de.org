@@ -1,0 +1,268 @@
+* Einführung in das Modul /Modellierung Qualitativer Daten/ (MQD)
+
+In diesem Modul lernen wir, wie qualitative Daten auf der Grundlage von Texten modelliert werden können. Zu diesem Zweck verwenden wir die folgenden Werkzeuge:
+
+- MTA als Anwendung für die Modellierung der Daten;
+- Python (3.x), um MTA zu installieren und durchzuführen;
+- Emacs als Textverarbeitungsprogramm und als Anwendung für die Automatisierung von /workflows/ (optional);
+- tgpt als Anwendung zur Befragung einer KI, um Vorschläge zur Deutung der Ergebnisse zu erhalten.
+
+* Inhalte des Moduls
+
+Wir beschäftigen uns mit den folgenden Inhalten:
+
+- /Methoden und Techniken der Modellierung von qualitativen Daten/: es sind viele Ansätze zum Umgang mit qualitativen Daten (Texte, Ton, Bilder), die auf der Ebene der theoretischen Annahmen, der Methoden und Techniken unterschiedlich sind, selbst wenn sie zu gemeinsamen Zielen konvergieren; in diesem Modul werden wir uns damit beschäftigen, um zu wissen, wieso es heute Sinn macht, sich mit automatisierten Methoden der Deutung von qualitativen Daten zu beschäftigen.
+- /MTA/ -- was ist das?: wir verwenden eine Anwendung mit vielen Algorithmen zur Schätzung der besten Modellen für unsere Daten; Algorithmen sind Klassifikationsmuster, die Daten unterschiedlich klassifizieren. Deshalb müssen wir uns mit der Art und Weise der Klassifikation vertraut machen, die solche Algorithmen vornehmen, und dies machen wir in Bezug auf die Algorithmen, die MTA verwendet.
+- /Praktische Beispiele/: wir verwenden Datensätze vom unterschiedlichen Umfang, die wir zusammen im Rahmen der Sitzungen auswerten. Somit kann besser verstanden werden, wie der analytische Prozess funktioniert und je nach Datensatz angepasst werden muss.
+- /Ergebnisse darstellen und kommunizieren/: im Rahmen von unseren Analysen generieren wir Abbildungen von den Ergebnissen. Wir lernen, wie wir diese Abbildungen verbessern können, damit analytische Ergebnisse vereinfacht für ein breites Publikum verstanden werden können.
+- /Workflows/ (optional): wir zeigen ebenfalls, wie der analytische Prozess als /workflow/ geschrieben werden kann. Dies dient speziell der Transparenz und der Reproduzierbarkeit der Analyse.
+
+* Voraussetzungen
+
+Dieses Modul setzt eine bestimmte Vertrautheit mit der Informatik, mit Anwendungen und Programmiersprachen und mit der Statistik.
+
+Es setzt ebenfalls eine Bereitschaft, unterschiedliche Werkzeuge zu experimentieren und sich in eine unbekannte Landschaft zu trauen.
+
+
+** Was sind qualitative Daten und wie modelliert man sie?
+   :PROPERTIES:
+   :CUSTOM_ID: was-sind-qualitative-daten-und-wie-modelliert-man-sie
+   :END:
+
+1. Qualitative Daten: meist textbasierte Daten verschiedener Art (nicht
+   ausschließlich, z. B. auch Bilder)
+
+   - Postkarten, Vignetten, Kurztexte (z. B. Tweets)
+   - Zeitungsartikel
+   - Wissenschaftliche Artikel
+   - Bücher
+   - Korpora = Sammlungen von Textdaten, d. h. große (qualitative) Datenmengen
+
+2. Modellierungstechniken: Techniken zum Verständnis des Informationsgehalts
+   Ihres Datensatzes
+
+#+BEGIN_HTML
+  <!-- #region slideshow={„slide_type“: „slide“} -->
+#+END_HTML
+
+** Verschiedene Modellierungstechniken – Ausschließlich menschenzentrierte Techniken
+   :PROPERTIES:
+   :CUSTOM_ID: verschiedene-modellierungstechniken-ausschliesslich-menschenzentrierte-techniken
+   :END:
+
+1. Menschenzentrierte Techniken:
+
+   - basieren auf dem Lesen und Interpretieren des Datensatzes
+   - Kategorisierung des Informationsgehalts im Datensatz
+   - Strukturierung der Kategorien auf der Grundlage der Interpretation des
+     Datensatzes
+   - Ergebnis: Analyse dieser Struktur = Ausgabe der verborgenen/latenten
+     Struktur des Datensatzes
+
+     - Vorteile:
+
+       - basiert auf dem menschlichen Verständnis von Texten = bessere Kontrolle über
+         die Interpretation von Texten
+       - sensibel für die polysemische Bedeutung von Wörtern/Texten
+
+     - Nachteile:
+
+       - Schwierigkeit, die Ergebnisse auf die Gesamtmenge des
+         untersuchten Materials zu skalieren – Hauptergebnisse gelten oft nur für 10–15 % des
+         untersuchten Materials\\
+       - Schwierigkeit, die Ergebnisse aus dem gegebenen Datensatz zu verallgemeinern
+       - Schwierigkeit, die Ergebnisse zu reproduzieren
+       - Schwierigkeit, die Ergebnisse mit anderen Forschern zu teilen
+       - Schwierigkeit, die Ergebnisse auf andere Quellen/Akteure zu verallgemeinern
+         , aus denen der Datensatz stammt
+       - Mögliche Interpretationsverzerrung
+       - Zeitaufwändig --> oft Begrenzung des Umfangs der Daten, die
+         in einer bestimmten Zeit untersucht werden können
+       - Vollständig quantitativ orientierte Forschungsdesigns, aber nicht
+         mit diesen kompatibel = parallele Wege
+
+#+BEGIN_HTML
+  <!-- #region slideshow={„slide_type“: „slide“} -->
+#+END_HTML
+
+** Verschiedene Modellierungstechniken – meist menschenzentrierte Techniken
+   :PROPERTIES:
+   :CUSTOM_ID: verschiedene-modellierungstechniken-meist-menschenzentrierte-techniken
+   :END:
+
+2. Meist menschenzentrierte Techniken mit Hilfe grundlegender Computertechnik:
+
+   - basierend auf dem Lesen und Interpretieren des Datensatzes
+   - Kategorisierung des Informationsgehalts im Datensatz –
+     computergesteuert
+   - grundlegende Statistik (hauptsächlich Häufigkeit des Vorkommens von Wörtern und
+     Verteilung von Wörtern)
+   - Strukturierung der Kategorien basierend auf der Interpretation des
+     Datensatzes – computergesteuert
+   - grundlegende Strukturierungswerkzeuge (z. B. MAXQDA, NLP-Techniken)
+   - Ergebnis: Analyse dieser Struktur = Ausgabe der verborgenen/latenten
+     Struktur des Datensatzes
+
+     - Vorteile:
+
+       - basierend auf dem menschlichen Verständnis von Texten, ergänzt durch computergesteuerte
+         Funktionen
+       - sensibel für die polysemische Bedeutung von Wörtern/Texten
+       - besser geeignet für die Verallgemeinerung der Ergebnisse aus dem gegebenen Datensatz
+         als ausschließlich menschenzentrierte Techniken
+       - weniger zeitaufwendig als menschenzentrierte Techniken
+
+     - Nachteile:
+
+       - Schwierigkeit, die Ergebnisse auf die Gesamtmenge des
+         untersuchten Materials zu skalieren – Hauptergebnisse gelten oft nur für 10–15 % des
+         untersuchten Materials\\
+       - Schwierigkeit, die Ergebnisse zu reproduzieren
+       - Schwierigkeit, die Ergebnisse mit anderen Forschern zu teilen
+       - Schwierigkeit, die Ergebnisse auf andere Quellen/Akteure zu verallgemeinern
+         , aus denen der Datensatz stammt
+       - Mögliche Interpretationsverzerrung
+       - Vollständig quantitativ ausgerichtete Forschungsdesigns, aber nicht
+         mit diesen kompatibel = parallele Wege
+
+#+BEGIN_HTML
+  <!-- #region slideshow={„slide_type“: „slide“} -->
+#+END_HTML
+
+** Verschiedene Modellierungstechniken – Teilweise menschenzentrierte Techniken
+   :PROPERTIES:
+   :CUSTOM_ID: mehrere-Modellierungstechniken-teilweise-menschenzentrierte-Techniken
+   :END:
+
+3. teilweise menschenzentrierte Techniken, teilweise computergesteuert:
+
+   - Lesen und Verarbeiten des Datensatzes erfolgt computergesteuert
+   - Kategorisierung des Informationsgehalts im Datensatz --
+     computergesteuert
+   - Fortgeschrittene Analysen unter Verwendung statistischer oder mathematischer Modellierungsmethoden
+   - Strukturierung der Kategorien auf der Grundlage der Modellierungsmethoden
+   - Fortgeschrittene Strukturierungswerkzeuge (z. B. R, Python)
+   - Ergebnis: Analyse dieser Struktur = Ausgabe der verborgenen/latenten
+     Struktur des Datensatzes --> beruht auf menschlicher Arbeit
+
+     - Vorteile:
+
+       - Basierend auf dem menschlichen Verständnis von Texten, Hinzufügen fortschrittlicher Datenanalyse
+         -
+       - Bessere Skalierung der Ergebnisse --> Anwendung auf die Gesamtmenge des
+         untersuchten Materials
+       - Bessere Verallgemeinerung der Ergebnisse aus dem gegebenen Datensatz
+         als bei anderen menschenzentrierten Techniken
+       - Weniger zeitaufwendig als andere menschenzentrierte Techniken
+       - Ergebnisse können leicht reproduziert werden
+       - Ergebnisse können leicht mit anderen Forschern geteilt werden
+       - Bessere Verallgemeinerung der Ergebnisse auf andere Quellen/Akteure,
+         aus denen der Datensatz stammt
+       - Bessere Sammlung weiterer Daten zur Anreicherung des Datensatzes
+       - Besserer Vergleich gleichartiger Daten in verschiedenen Sprachen
+       - Reduzierung der Interpretationsverzerrung
+       - Bessere Kompatibilität mit quantitativ orientierten Forschungsdesigns
+         = konvergierende Wege
+
+     - Nachteile:
+
+ - weniger sensibel für die polysemische Bedeutung von Wörtern/Texten (selbst in KI-
+        Frameworks)
+       - Wissensintensiv --> Programmierkenntnisse erforderlich (was
+         zeitaufwändig sein kann)
+
+
+Warum Python und nicht R? – Beide sind ausgezeichnete Software- und Programmierumgebungen
+mit einer langen Geschichte und einer großartigen Community. – Beide haben eine
+Lernkurve. – R – wird hauptsächlich für Statistiken verwendet. – Python – eher
+allgemeiner Ansatz für Datenwissenschaft. – R – Sie nutzen die Flexibilität der R-Bibliotheken.
+– Python – Sie können Ihre Anwendung von Grund auf neu schreiben. – R –
+läuft lokal – Python – bessere Integration mit Apps und bessere
+Bereitstellung
+
+Python ist oft die erste und naheliegende Wahl, wenn es um das Design von Frameworks für maschinelles
+Lernen geht – Support und Material für Ihre Arbeit sind leicht zu finden.
+
+
+** Warum Themenmodellierung und nicht die übliche Netzwerkanalyse
+   :PROPERTIES:
+   :CUSTOM_ID: warum-themenmodellierung-und-nicht-die-übliche-netzwerkanalyse
+   :END:
+
+Themenmodellierungstechniken sind konzeptionell den Netzwerkanalysetechniken ähnlich,
+ da sie darauf abzielen, Netzwerke von
+Beziehungen zwischen Daten zu beschreiben. Der große Unterschied besteht darin, dass die Netzwerkanalyse
+jedes relationale Ereignis als Analyseobjekt betrachtet. Themenmodellierungstechniken
+versuchen, diese Komplexität auf eine Reihe von
+Clustern zu reduzieren, die möglicherweise die zugrunde liegenden Strukturen der Daten erklären.
+In diesem Sinne versucht die Themenanalyse, eine Grundlage für die
+Interpretation relationaler Ereignisse in einem allgemeineren Rahmen zu liefern, der geeignet ist,
+zu erklären, was die Daten miteinander verbindet.
+
+In gewisser Weise liegt das Themenmodellieren zwischen einem statistischen Ansatz für Daten,
+der versucht, Dimensionen auf einige wichtige zu reduzieren, und der Netzwerkanalyse,
+die versucht, das kohärente Ausmaß relationaler
+Ereignisse zu messen. Es handelt sich um eine Kompromisslösung zwischen diesen beiden Ansätzen,
+da sie relationale Ereignisse auf wichtige Dimensionen reduzieren kann,
+die sie strukturieren, und gleichzeitig die Möglichkeit bietet,
+diese Dimensionen zu erweitern (auf Kosten weniger scharf
+differenzierter Themen oder weniger kohärenter Themen).
+
+Themenmodellierung ist sowohl als Faktor im Rahmen einer
+quantitativen Studie als auch als Werkzeug zur Neugestaltung von Netzwerkanalyseergebnissen
+sinnvoll. Aus Sicht der Sozialwissenschaften passt die Themenmodellierung
+am besten zu theoretischen Rahmenbedingungen im Bereich relationaler
+Ansätze für gesellschaftliche Fragen, bei denen die analytische Einheit die
+Beziehung zwischen Daten ist, aus der man die Bedeutung dieser Daten ableiten würde
+.
+
+Das Topic Modeling ist offen für zukünftige Entwicklungen und integriert weitere KI-Tools
+(wie z. B. BERT-Tools als Lösung für semantische Einbettungen auf Wort- oder
+Wort-zu-Dokument-Ebene), auch wenn dies manchmal auf Kosten der
+Computerressourcen geht. Mit MTA haben wir einen Einstiegspunkt in solche
+Frameworks, da MTA word2vec als Low-Level-KI-Tool zur
+Modellierung von Wort- und Wort-zu-Dokument-Einbettungen verwendet. Derzeit integriert MTA jedoch
+keine fortgeschritteneren KI-Tools, um hinsichtlich der Rechenkosten kosteneffizient zu bleiben
+und weil solche Tools noch experimentell sind
+und weiterentwickelt werden müssen, bevor sie in einen
+Workflow wie den von MTA vorgeschlagenen integriert werden können.
+
+Die Themenanalyse ist eine explorative Methode – sie ermöglicht Ihnen robuste
+Einblicke in die Daten und unterstützt eine möglicherweise bessere Interpretation
+der Daten aus der Perspektive ihrer Beziehungen. Die Ergebnisse, die
+Sie mit der Themenanalyse erzielen, hängen daher weiterhin davon ab, wie Sie
+Ihre Daten anpassen und wie Sie Ihre Analyse durchführen. In diesen Vorlesungen
+schlagen wir einen Arbeitsablauf vor, mit dem Sie die besten Ergebnisse aus
+Ihren Daten erzielen können – wir bieten eine Art überwachten Arbeitsablauf zur Analyse
+unüberwachter Daten.
+
+** Über diese Vorlesungen
+   :PROPERTIES:
+   :CUSTOM_ID: about-these-lectures
+   :END:
+
+Diese Vorlesungen werden in Form eines Notizbuchs angeboten, das Sie
+auf Ihrem Computer ausführen und mit Ihren eigenen Notizen aktualisieren können.
+
+Um dieser Vorlesung folgen und den Code ausführen zu können, empfehlen wir
+die Verwendung von Jupyter Lab. Sie können Jupyter Lab ganz einfach
+mit Ihrer Python-Distribution installieren und privat in einem Browserfenster ausführen.
+Mit Anaconda können Sie Jupyter Lab über den Anaconda-Paketmanager
+oder in einem (Basis-)Terminal installieren, indem Sie Folgendes eingeben:
+
+#+BEGIN_EXAMPLE
+    pip install jupyterlab
+#+END_EXAMPLE
+
+Unter Linux öffnen Sie ein Terminal und geben Folgendes ein:
+
+#+BEGIN_EXAMPLE
+    pip3 install jupyterlab
+#+END_EXAMPLE
+
+Einige der in diesem Notebook bereitgestellten Codeausschnitte sind mit Kommentaren versehen,
+d. h., ihnen ist das Zeichen „#” vorangestellt, das Jupyter anweist,
+diese Zeile nicht auszuführen. Sie können diese Zeilen auskommentieren, d. h. Sie können das Zeichen „#” entfernen,
+um zu sehen, was der Code in der Praxis bewirkt. Entfernen Sie nicht
+das Ausrufezeichen vor den Code-Schnipseln, wenn Sie eines sehen,
+ da Jupyter es benötigt, um Ihren Code auszuführen.
