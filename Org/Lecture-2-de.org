@@ -1,0 +1,127 @@
+* Methoden und Techniken der Modellierung von qualitativen Daten
+
+Qualitative Daten sind Daten verschiedener Art. Es können Texte sein, es können auch weitere Daten wie Bilder oder Töne sein. Im Rahmen von unserem Modul beschäftigen wir uns mit Texten, die ebenfalls verschiedenen sein können, wie etwa:
+
+   - Postkarten, Vignetten, Kurztexte (z. B. Tweets)
+   - Zeitungsartikel
+   - Wissenschaftliche Artikel
+   - Bücher
+   - Korpora = Sammlungen von Textdaten, Gesamtausgaben -- hier sprechen wir von Texten, die häufig in Datenbanken gespeichert werden und nach dem Ansatz der /big data/ analysiert werden.
+
+Um solche Texte zu analysieren, gibt es in der Soziologie verschiedene Methoden und Techniken, die wir im Folgenden darstellen und vergleichen werden. Die erste Kategorie von Methoden und Techniken setzt den Menschen im Herz des analytischen Verfahrens.
+
+* Ausschließlich menschenzentrierte Techniken
+
+Die ausschließlich menschenzentrierte Methoden und Techniken (wie etwa die objektive Hermeneutik nach Oevermann)
+
+   - basieren auf dem menschlichen Lesen und der menschlichen Deutung von Texten
+   - ein Mensch kategorisiert den Informationsgehalt der Texte
+   - ein Mensch strukturiert die Kategorien auf der Grundlage seiner Interpretation der Texte
+   - das Ergebnis ist eine menschliche Analyse von einer solchen Struktur, die darauf abzielt, die verborgenen/latenten Strukturen der gesamten Texten abzubilden und zu erklären
+
+** Vorteile:
+
+ - die Analyse basiert auf dem menschlichen Verständnis von Texten = bessere Kontrolle über die Interpretation von Texten
+ - die Analyse kann mit der polysemischen Bedeutung von Wörtern/Texten sehr gut umgehen
+
+** Nachteile:
+
+ - Schwierigkeit, die Ergebnisse auf die Gesamtmenge des untersuchten Materials zu skalieren – Hauptergebnisse gelten oft nur für 10–15 % des untersuchten Materials
+ - Schwierigkeit, die Ergebnisse aus dem gegebenen Datensatz zu verallgemeinern
+ - Schwierigkeit, die Ergebnisse zu reproduzieren
+ - Schwierigkeit, die Ergebnisse mit anderen Forschern zu teilen
+ - Schwierigkeit, die Ergebnisse auf andere Quellen/Akteure zu reproduzieren
+ - Mögliche Interpretationsverzerrung durch subjektiven Bias
+ - Zeitaufwändig --> oft Begrenzung des Umfangs der Daten, die in einer bestimmten Zeit untersucht werden können
+ - mit quantitativen Forschungsdesign wenig kompatible -- die Analyse bietet eine komplementäre Sicht im Bezug auf quantitative Forschungsdesign
+
+* Meist menschenzentrierte Techniken
+
+Die meist menschenzentrierte Techniken (wie etwa die qualitative Datenauswertung nach Mayring) setzen auf die Wichtigkeit der menschlichen Deutung von Texten, die mit Hilfe grundlegender Computertechnik gestärkt wird. Sie
+
+   - basieren auf dem menschlichen  Lesen und der menschlichen Deutung der Texte
+   - die Kategorisierung des Informationsgehalts in den Texten wird mit Hilfe von Rechentechniken geleistet
+   - grundlegende Statistiken werden zur Auswertung dieser Kategorisierung verwendet (etwa die Berechnung der Häufigkeit des Vorkommens von Wörtern und deren Verteilung in Texten)
+   - die Strukturierung der Kategorien ruht einerseits auf der menschliche Interpretation der Texte und sie wird andererseits mit Hilfe von Software präzisiert (MAXQDA, NLP-Techniken)
+   - das Ergebnis ist eine menschliche Analyse dieser Kategorienstruktur, die darauf abzielt, die verborgenen/latenten Strukturen der gesamten Texten abzubilden und zu erklären; die Ergebnisse, die mit Hilfe von Rechnern und Software erhalten wurden, erlauben, die Dichte bzw. Homogenität von Kategorien zu evaluieren und Schlussfolgerungen zur Positionen von Akteuren in Bezug auf diese Kategorien zu ziehen.
+
+** Vorteile:
+
+ - gutes Verständnis von der polysemischen Bedeutung der Wörter in den Texten
+ - besser geeignet für die Verallgemeinerung der Ergebnisse als ausschließlich menschenzentrierte Techniken
+ - weniger zeitaufwendig als menschenzentrierte Techniken
+
+** Nachteile:
+
+Alle Nachteile, die für die ausschließlich menchenzentrierten Techniken gelten, gelten hier auch. Es muss jedoch hinzugefügt werden, dass die Verwendung von Rechnern in Unterstützung des analytischen Verfahrens die subjektiven Bias vermindert und die Transparenz und Reproduktion der Analyse verbessert.
+
+* Weniger menschenzentrierte Techniken
+
+Weniger menschenzentrierte Techniken sind analytische Verfahren, die mit der Hilfe von Rechnern und Anwendungen semi-automatisiert werden. Dies bedeutet Folgendes:
+
+   - das Lesen und die Verarbeitung von Texten erfolgt computergesteuert
+   - die Kategorisierung des Informationsgehalts der Texte erfolgt ebenfalls computergesteuert
+   - die Akzentsetzung ist auf die Verwendung statistischer oder mathematischer Modellierungsmethoden
+   - die Kategorien werden auf der Grundlage dieser Modellierungsmethoden strukturiert und gegenseitig gewichtet
+   - das Ergebnis ist eine menschliche Analyse dieser Kategorienstruktur, die darauf abzielt, die verborgenen/latenten Strukturen der gesamten Texten abzubilden und zu erklären; diese Analyse hängt maßgeblich von der Beherrschung der statistischen bzw. mathematischen Grundlagen der Modelle, die in diesem Zusammenhang die Analyse stützen
+
+** Vorteile:
+
+Im Vergleich zu den anderen Methoden werden hier die folgenden Aspekten des analytischen Verfahrens verbessert:
+
+ - Bessere Skalierung der Ergebnisse: die Ergebnisse bilden 100% des Inhalts der Texte ab
+ - Die Ergebnisse können besser kommuniziert und reproduziert werden bzw. sie können besser kontrolliert und korrigiert werden
+ - Die Ergebnisse können besser verallgemeinert werden (auf mehr Daten von der selben Art oder im Vergleich zu anderen Daten)
+ - Die Analyse verbraucht insgesamt Weniger Zeit -- was in manchen menschenzentrierten Verfahren Wochen bis Monaten dauern kann, wird in diesem Zusammenhang innerhalb von Stunden bis Tagen erreicht
+ - Kulturelle Komponente -- analytische Ergebnisse können transversal für alle mögliche Sprachen erhalten werden, was einen Vergleich zwischen Sprachen und zwischen Kulturen erlaubt
+ - Die Ergebnisse harmonieren besser mit quantitativen Forschungsdesign
+
+** Nachteile:
+
+ - die polysemische Bedeutung von Wörtern/Texten kann vergleichsweise nicht immer gut aufgefangen werden -- Verzerrung von Ergebnissen durch die willkürliche Zuschreibung von Inhalten zu Begriffen, die von einer Anwendung vorgenommen wird (Halluzination)
+ - solche Methoden und Techniken sind Wissensintensiv; Programmierkenntnisse und im Allgemeinen ein informierter Umgang mit Rechentechniken ist erforderlich (was zeitaufwändig sein kann)
+ - solche Methoden bleiben -- trotz der statistischen bzw. mathematischen Grundlage -- explorative Methoden der latenten Strukturen von Texten; die Modellierung ist an sich kein Kriterium der "Objektivität" der Analyse, sondern eine andere und möglicherweise vertiefende Abbildung der Ergebnisse im Vergleich zu den Ergebnissen, die menschlichzentrierten Verfahren liefern.
+
+* Vollständige automatisierte Techniken bzw. KI-zentrierte Techniken
+
+KI-Verfahren bieten heute die Möglichkeit an, Textsammlung von einer KI interpretieren zu lassen -- es sind sog. RAG (für Retrieval-Augmented Generation) Methoden, die erlauben, Large Language Models (LLM) auf eine private Sammlung von Texten (und im Allgemeinen von Daten) anzuwenden, um sie zu segmentieren, zu vektorisieren und entsprechend zu klassifizieren. Man kann sich das Verfahren als eine Umwandlung von Daten in ein semantisches Netzwerk vorstellen, in dem die Daten durch deren Inhalt miteinander gewichtet verbunden werden.
+
+Solche Modelle können dann verwendet werden, um bestimmte Lösungen zu Fragen/Problemen anzubieten. Ein Beispiel: Man hat eine Literatur zum Thema "Anomie" bei Emile Durkheim gesammelt. Die Dokumente kommen aus dem Internet und aus der Arbeit an Büchern und Artikeln, die wir geleistet haben, daraus wir Notizen mit Zitaten aus der Literatur und eigenen Überlegungen hergestellt haben. Wir machen daraus ein RAG-Modell, das wir anhand von Prompts mit dem Ziel befragen, die KI dazu zu bringen, uns einen Bericht zu dieser Sammlung zu erstellen -- etwa zum Thema/zu der Frage: Hält die Aussage von Durkheim stand, wenn er behauptet, dass Selbstmordraten steigen, wenn sich die wirtschaftliche Lage in der Gesellschaft verbessert?
+
+** Vorteile:
+
+Mit solchen RAG-Modellen ist es möglich, die Strukturierung des analytischen Verfahrens an die KI vollständig zu delegieren, was die Zeit zur Herstellung von Berichten deutlich verkürzt. Solche RAG-Modellen können auch dabei helfen, über das gesammelte Material zu reflektieren und Fragen zu formulieren, zu denen der Wissenschaftler ohne ein solches Modell vielleicht nicht gekommen wäre. Hier fungiert das Modell als Assistenz in der Arbeit an der gesammelten Literatur.
+
+Ein weiterer Vorteil von RAG-Modellen besteht darin, dass solche Modellen nichts kosten und auf dem privaten Rechner heruntergeladen werden können. Damit ist der Benutzer nicht von einem Anbieter verbunden, und er braucht keinen API-Key, um RAG-Modelle zu modellieren und Prompts an das Modell zu adressieren.
+
+** Nachteile:
+
+Die Nachteile, die wir im Rahmen von weniger menschenzentrierten Techniken erwähnt haben, verbleiben. Häufig müssen solche Berichte aus RAG-Modellen überprüft werden, was Zeit für die Kontrolle der Aussagen der KI und für die Suche von einer Literatur, die diese Kontrolle unterstützt, verbraucht. Aber dieser Nachteil kann auch als Vorteil gesehen werden, weil damit die Überlegung zu den Texten und den Themen in diesen Texten gefördert werden kann.
+
+Ein zusätzlicher Nachteil von RAG-Modellen besteht in der Rechenleistung durch GPU, die solche Modelle erfordern, um wirklich nützlich zu sein -- im Moment können nur kleine LLM auf privaten Rechner verwendet werden, die, weil sie klein sind, schlechtere Ergebnisse als größere Modelle liefern. Dies erfordert deshalb an der Seite des Benutzers mehr Investition in die Überarbeitung und in die Kontrolle der Ergebnisse.
+
+Ein anderer Nachteil ist mit der Delegation von Texten an KI-Agenten verbunden, die die Kontrolle der Klassifikationsoperationen der KI und die möglichen Halluzinationen, die daraus entstehen können, erschwert -- KI-Agenten funktionieren auf der Grundlage von Millionen von Parametern (in der Zukunft wahrscheinlich noch mehr), die durch Menschen nicht mehr kontrolliert werden können. Dies erschwert den Umgang mit Verzerrungen, wenn es ihn nicht unmöglich macht. Wenn es hinzugefügt wird, dass KI-Agenten immer mehr in Netzwerken funktionieren werden, dann stellt sich das Problem der Kontrolle von Abweichungen bei Klassifikationsoperationen noch deutlicher. Dieses Problem betrifft die Zuverlässigkeit von Ergebnissen aus RAG-Modellen -- hier werden die subjektiven Bias zwar ausgeräumt, aber technische Bias nehmen zu. Eine Folge daraus ist die mögliche Einschränkung der Sammlung von Texten, die an die KI-Agenten delegiert werden, damit die Ergebnisse der Analyse kontrollierbar bleiben (was zumindest im wissenschaftlichen Kontext erforderlich ist). Aber wenn Sammlungen von Texten eingeschränkt werden müssen, dann stellt sich die Frage, ob eine vollständige automatisierte Auswertung von qualitativen Daten im Vergleich zu semi-automatisierten Verfahren Sinn macht.
+
+Solche Modelle stellen auch weitere Fragen, die über die Forschungspraxis in der Wissenschaft hinaus gehen, und Themen wie etwa den Umgang mit Energiequellen und Energieressourcen betreffen -- solche Modelle verbrauchen viel Strom, und wenn Sie auf einem Server von einem privaten Anbieter verwendet, ist der Energieverbrauch von solchen Modellen noch größer. Dies stellt die Frage der gesellschaftlichen Verantwortung der Forschungspraxis.
+
+* Topic-Modelle als Art der weniger menschenzentrierten Techniken
+
+Topic-Modelle sind konzeptionell den Netzwerkanalysetechniken ähnlich, da sie darauf abzielen, Beziehungen zwischen Daten in Gruppen zu klassifizieren und die Bedeutung dieser Gruppen zu erklären. Der große Unterschied besteht darin, dass die Netzwerkanalyse jedes relationale Ereignis als Gegenstand der Untersuchung betrachtet. Topic-Modelle versuchen, diese Komplexität auf Gruppen bzw. Clustern zu reduzieren. Diese Gruppen hält die Topic-Modell-Analyse für die latenten Strukturen der Daten -- in diesem Sinne zielt diese Analyse wie andere Verfahren der qualitativen Forschung auf die Erklärung von latenten Strukturen, und sie bleibt ebenfalls eine explorative Methode.
+
+** Topic-Modell-Analyse und quantitative Verfahren
+
+Die Topic-Modell-Analyse kann bis zu einer Grenze mit Faktor-Analysen oder mit multivariaten Datenanalysen im Bereich von quantitativen Verfahren verglichen werden. Daten werden auf der Grundlage ihrer semantischen Ähnlichkeiten in Verbindung gesetzt, und diese Pakete an Verbindungen voneinander relationiert bzw. gewichtet und in Verbindung miteinander gesetzt. Jedoch wo quantitative Verfahren einem Ansatz der Reduktion der Komplexität verfolgen, verfolgt die TM-Analyse einen Ansatz der Strukturierung von Komplexität zur Generierung von Interpretationen über diese Komplexität. Deshalb sind TM-Analyse eher nah an Cluster-Analysen.
+
+Ergebnisse von TM-Analysen können in der Form von "Faktoren" in quantitativen Verfahren (eben Faktoranalysen, oder auch etwa Regressionsmodellen) integriert werden, wenn und wo es Sinn macht. Cluster von Dokumenten werden in Cluster von Gewichten (also: von Zahlen) übersetzt werden, die dann quantitativ in Verbindung mit Indikatoren ausgewertet werden können.
+
+** Topic-Modell als low-level-KI
+
+TM-Analysen lassen sich mit KI-Agenten verbinden, und an sich können sie wie low-level-KI verstanden werden -- sie operieren auf der selben Grundlage, obwohl sie nicht auf der Grundlage von LLM sondern von persönlichen Sammlungen von Texten entwickelt werden.
+
+TM-Analyse gehen nicht ohne Verifikation von den Clustern selbst. Im MTA Anwendung bedeutet es, dass Algorithmen für die Modellierung von Topics auf der Grundlage von anderen Analyse entwickelt werden, die erlauben, diese Modellierung zu kontrollieren und entsprechend besser zu steuern, damit Ergebnisse optimiert werden können. TM-Analyse brauchen deshalb eine Kontrolle durch Kreuzvalidierungsmethoden, und im Fall von MTA erfolgt diese Kontrolle auf der Grundlage von Cluster-Analyse und der Berechnung von Koeffizienten, die die Entsprechung zwischen Ergebnisse der Modellierung und originalen Daten messen.
+
+TM-Analyse skalieren besser als KI-Agenten in der Praxis, was bedeutet, dass weniger Rechnerkapazität verwendet werden, um TM-Analysen durchzuführen.
+
+* Nächster Schritt
+
+Im nächsten Schritt beschäftigen wir uns mit den [[./Lecture-3-de.org][MTA]]. Dabei werden wir den Ansatz der /workflow/ einführen.
