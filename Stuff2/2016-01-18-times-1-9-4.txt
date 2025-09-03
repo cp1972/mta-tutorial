@@ -1,0 +1,26 @@
+Body
+
+
+Tens of thousands of cancer patients stand to avoid gruelling side-effects following a discovery that could dramatically cut chemotherapy doses.
+Scientists have found a way of making a common treatment for lung, breast and ovarian cancers up to 50 times more powerful, potentially sparing patients nausea, hair loss, tiredness and other effects of the damage the drug causes to healthy tissue.
+The "invisibility cloak" technology even killed drug-resistant cancer cells that had previously been impossible to knock out with chemotherapy. Experts hailed an entirely new concept that could transform cancer treatment, although up until now it has only been demonstrated in mice and may not be so powerful in humans.
+More than 100,000 people a year in the UK are diagnosed with cancers that can be treated with paclitaxel, also known as taxol, which is usually pumped into the body inside hundreds of thousands of microscopic plastic spheres.
+However, the plastic vessels are spotted by the body's immune system, which is prompted to attack, destroying most of the compound in the blood. This means that doctors have to use heavy doses that can induce serious side-effects.
+The new method, developed at the University of North Carolina in the US, smuggles the drug past these defences inside casings harvested from the patient's own white blood cells, which are not seen as intruders by the immune system. In mice, this stratagem allowed scientists to treat cancers with significantly smaller doses.
+"We can use 50 times less of the drug and still get the same results," Elena Batrakova, who led the study, said. "That matters because we may eventually be able to treat patients with smaller and more accurate doses of powerful chemotherapy drugs resulting in more effective treatment with fewer and milder side-effects."
+Although the researchers are yet to translate their findings into humans, they hope that this new approach to drug delivery could be revolutionary.
+Dr Batrakova said that the cell vehicles, known as exosomes, seemed to be perfect for the job.
+"Exosomes are engineered by nature to be the perfect delivery vehicles," she said. "By using exosomes from white blood cells, we wrap the medicine in an invisibility cloak that hides it from the immune system."
+Gerhardt Attard, a clinician scientist at the Institute of Cancer Research in London, said that the results were encouraging, but stressed that further research would be needed before the technique could be tested in humans.
+"This use of exosomes for targeted drug delivery is an entirely new concept and it is certainly very promising," he said. "This greatly increased level of cytotoxicity really increases what we call the 'therapeutic window' and could potentially be very effective in killing cancer cells."
+Because of the similarities between mouse and human genetics many medical treatments are first developed in the animals before getting to clinical trials. Toxicity and safety studies will need to be carried out to assess the method's suitability in humans.
+Clinical trials, which would begin with the administration of a very conservative dose of about one tenth of the taxol level known to induce side-effects, could begin within 18 months. The researchers also demonstrated that exosomes could be a powerful tool in cancer diagnosis. They loaded them with a dye, which allowed them to track the spheres through the body to the precise location of the cancer.
+The research is published in the journal Nanomedicine.
+Inquiry into drug trial, page 33 Analysis If every headline proclaiming a miracle cancer treatment was true, the disease would have been consigned to the pages of history many years ago (Chris Somers and Oliver Moody write).
+Occasionally, however, genuinely promising research is published and in these instances it is especially important not to overegg the pudding. The discovery that natural vehicles taken from a patient's immune system can be used to deliver common chemotherapy drugs to tumours is a perfect example of this need for caution.
+Paclitaxel, listed by the World Health Organisation as an essential medicine, is invaluable. But the heavy doses mean that the drug is associated with a range of unpleasant side-effects including hair loss, muscle pain and diarrhoea.
+It is understandable, then, that the findings of this study have provoked excitement, with initial tests showing that the drug's ability to kill cancerous cells is increased by 50 times when delivered in biological vessels.
+It is impossible to ignore the potential for applying this development to vastly improve treatment. However, it will be at least 18 months before human trials can begin and outcomes in human subJects might be vastly different from what has been seen in mice for as yet unseen reasons.
+However, scientists could be forgiven for feeling excitement as they discuss a breakthrough which appears to be a bold step in the right direction.
+
+Load-Date: January 18, 2016

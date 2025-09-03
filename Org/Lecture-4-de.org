@@ -1,0 +1,143 @@
+* Modellierung von qualitativen Daten mit MTA. Erste Schritte
+
+In dieser Sitzung führen wir verschiedene Elemente ein, die zeigen, wie wir MTA verwenden können, um erste Schritte in die Modellierung von qualitativen Daten zu machen. Aber bevor wir dazu kommen, müssen wir zur den zwei Arten sprechen, wie MTA verwendet werden kann.
+
+** Interaktive Verwendung von MTA
+
+MTA kann interaktiv verwendet werden bzw. von einem Terminal. Dies entspricht eine gelegentliche Verwendung von MTA -- wir brauchen das Programm nur für eine kurze Analyse. In diesem Fall starten wir MTA einfach mit dem folgenden Befehl:
+
+~python3 MTA.py~
+
+Dann beantworten wir die unterschiedlichen Fragen zur Vorbereitung der Dateien innerhalb von MTA, und wir gelangen zum MTA Menu. Es ist aber auch möglich, MTA programmatisch zu verwenden, und das kommt besonders in Frage, wenn Modellierung mehrmals durchgeführt werden sollen oder an unterschiedlichen Texten durchgeführt werden sollen.
+
+** Programmatische Verwendung von MTA
+
+Dabei handelt es sich darum, dass man die unterschiedlichen Fragen, die MTA stellt, im voraus in einem *.txt Dokument speichert und diese Datei an MTA sendet. Ein Beispiel davon wollen wir hier in der Form von einem /workflow/ liefern
+
+Dieses /workflow/ kann wie eine Anwendung verwendet werden. Erforderlich dafür ist die Installation vom Texteditor Emacs mit Org-mode (ab emacs-28 ist Org-mode mit dem Texteditor geliefert und muss nicht separat installiert werden). Dieses /workflow/ kann auf der Kommandozeile mit dem folgenden Skript 'tm-rech.sh' ausgeführt werden. Ein solcher Skript wird im Arbeitsordner hergestellt, den wir mit dem folgenden Code-Block definieren (Pfad anpassen):
+
+#+begin_src shell :var user="/home/cpsoz" :results silent
+  mkdir $user/TM-WS-25
+#+end_src
+
+#+name: user-path
+#+begin_src shell :var user="/home/cpsoz/TM-WS-25" :results silent
+  mkdir $user/TM-Analyse
+#+end_src
+
+Unsere Analyse wird in diesem Ordner 'TM-Analyse' stattfinden. Dort stellen wir einen Ordner 'TM-Skripten' für die Skripten, die wir im Rahmen von diesem /workflow/ schreiben, und wir definieren den vollständigen Pfad zum Ordner 'TM-Analyse' als neuen Benutzerpfad (Pfad anpassen):
+
+#+name: nuser
+#+begin_src shell :var nuserpath="/home/cpsoz/TM-WS-25/TM-Analyse" :results silent
+  echo $nuserpath
+#+end_src
+
+#+name: tm-skripten
+#+begin_src shell :var userpath=nuser :results silent
+  mkdir $userpath/TM-Skripten
+#+end_src
+
+Dann schreiben wir den 'tm-rech.sh' Skript wie folgt:
+
+#+begin_src shell :results silent :var user=nuser
+  touch $user/tm-rech.sh
+  echo "#!/bin/bash" >> $user/tm-rech.sh
+  echo "emacs /home/cpsoz/Gitub/mta-tutorial/Org/Lecture-4-de.org --batch -l /home/cpsoz/.emacs.d/init.el --eval \"(setq org-confirm-babel-evaluate nil)\" --eval \"(org-babel-execute-buffer)\"" >> $user/tm-rech.sh
+  chmod +x $user/tm-rech.sh
+#+end_src
+
+Dieser Skript führt alle Code-Blöcke in diesem /workflow/ aus. Er kann entsprechend mit bash verwendet werden, wie etwa: bash tm-rech.sh oder ./tm-rech.sh. Ohne Skript kann dieses /worflow/ von einem Terminal mit
+
+~emacs /home/cpsoz/Gitub/mta-tutorial/Org/Lecture-4-de.org --batch -l /home/cpsoz/.emacs.d/init.el --eval "(setq org-confirm-babel-evaluate nil)" --eval "(org-babel-execute-buffer)"~
+
+ausgeführt werden. MTA kopieren wir dann zu unserem TM-Skripten Ordner, um die Analyse durchzuführen.
+
+#+name: mta-copy
+#+begin_src shell :var mtap="/home/cpsoz/Github/mta-app" :var user=nuser :results silent
+  cp $mtap/MTA.py $user/TM-Skripten
+#+end_src
+
+* TM-Analyse. Training der Modelle
+
+Im Rahmen von Topic-Modell-Analysen müssen wir zuerst wissen, wie viele Themen für einen bestimmten Datensatz sinnvoll zu modellieren sind. Deshalb müssen wir in einem ersten Schritt MTA auf die Dateien trainieren, die wir in einem Ordner 'Stuff2' gespeichert haben. Wir schreiben einen ersten Code-Block, um den Ordner 'Stuff2' als Variable in den nachfolgenden Blöcken zu definieren (Pfad anpassen):
+
+#+name: rechpfad
+#+begin_src shell :var rechpath="/home/cpsoz/Github/mta-tutorial/Stuff2" :results silent
+  echo $rechpath
+#+end_src
+
+Wir müssen auch bedenken, dass wir für MTA eine Stopwords-Liste brauchen (im Ordner 'Stopwords'). Es sind Stop-Wörter, die in unserem Fall englische Wörter sind und sich im folgenden Ordner befinden (Pfad anpassen):
+
+#+name: stops
+#+begin_src shell :var stopwords="/home/cpsoz/Github/mta-tutorial/Stopwords" :results silent
+  echo $stopwords
+#+end_src
+
+Wir [[https://github.com/cp1972/mta-app/blob/main/automate.md][automatisieren]] die Ausführung von MTA mit der folgenden 'mta-train.txt'-Datei, die wir in unserem 'TM-Skripten' Ordner speichern:
+
+#+name: autotrain-01
+#+begin_src shell :var user=nuser :var rech=rechpfad :var stopw=stops :results silent
+  touch $user/TM-Skripten/mta-train.txt
+  echo $rech"/*" >> $user/TM-Skripten/mta-train.txt
+  echo "y" >> $user/TM-Skripten/mta-train.txt
+  echo $stopw"/en.txt" >> $user/TM-Skripten/mta-train.txt
+  echo "5" >> $user/TM-Skripten/mta-train.txt
+  echo "n" >> $user/TM-Skripten/mta-train.txt
+  echo "de" >> $user/TM-Skripten/mta-train.txt
+  echo "a" >> $user/TM-Skripten/mta-train.txt
+  echo "1" >> $user/TM-Skripten/mta-train.txt
+  echo "y" >> $user/TM-Skripten/mta-train.txt
+  echo "10" >> $user/TM-Skripten/mta-train.txt
+  echo "7" >> $user/TM-Skripten/mta-train.txt
+  echo "n" >> $user/TM-Skripten/mta-train.txt
+  echo "0" >> $user/TM-Skripten/mta-train.txt
+#+end_src
+
+Diese Datei trainiert MTA mit Modellen, die von 2 bis 10 Topics reichen. Entsprechend führen wir MTA mit dem folgenden Code-Block aus:
+
+#+name: trainmta
+#+begin_src shell :var user=nuser :results none
+  cat $user/TM-Skripten/mta-train.txt | python3 $user/TM-Skripten/MTA.py
+#+end_src
+
+Aus den Ergebnissen von MTA in der Datei 'Summary*.log' übernehmen wir die relevanten Informationen zur optimalen Anzahl der Topics je Kreuzvalidierungsmethode, die MTA verwendet. Wir übernehmen auch die Information zu der besten Anzahl der Topics nach dem Cophenet Korrelationskoeffizient. Wir speichern diese Informationen in einer Datei 'TM-train-scores.txt'.
+
+#+name: trainscores
+#+begin_src shell :var mtadir="/home/cpsoz/Github/mta-tutorial/Org" :var user=nuser :results silent
+  echo " " >> $user/TM-train-scores.txt
+  cat $mtadir/MTA-Results*/Summary*.log | sed -n '/Elbow /,/Correlation values LDA/p' | awk 'NF' | awk '{$1=$1;print}' >> $user/TM-train-scores.txt
+  echo "------" >> $user/TM-train-scores.txt
+  echo " " >> $user/TM-train-scores.txt
+  #find $mtadir -type d -name "MTA-Results*" -exec rm -r {} +
+#+end_src
+
+Wir drucken in dieser Datei alle Ergebnisse aus der Datei 'TM-train-scores.txt' mit dem folgenden Code-Block.
+
+#+name: mta-scores
+#+begin_src shell :var user=nuser :results drawer
+    cat $user/TM-train-scores.txt
+#+end_src
+
+Wir können jetzt die Dateien mit der optimalen Topics-Anzahl modellieren.
+
+* Modellierung
+
+Dafür stellen wir eine veränderte Version von unserem Code-Block 'autotrain-01', die wir 'autotest-01' umbenennen und anpassen:
+
+#+name: autotest-01
+#+begin_src shell :var user=nuser :var rech=rechpfad :var stopw=stops :results silent
+  touch $user/TM-Skripten/mta-test.txt
+  echo $rech"/*" >> $user/TM-Skripten/mta-test.txt
+  echo "y" >> $user/TM-Skripten/mta-test.txt
+  echo $stopw"/en.txt" >> $user/TM-Skripten/mta-test.txt
+  echo "5" >> $user/TM-Skripten/mta-test.txt
+  echo "n" >> $user/TM-Skripten/mta-test.txt
+  echo "de" >> $user/TM-Skripten/mta-test.txt
+  echo "a" >> $user/TM-Skripten/mta-test.txt
+  echo "1" >> $user/TM-Skripten/mta-test.txt
+  echo "n" >> $user/TM-Skripten/mta-test.txt
+  echo "6" >> $user/TM-Skripten/mta-test.txt
+  echo "0" >> $user/TM-Skripten/mta-test.txt
+#+end_src
+
+Wir können jetzt die Ergebnisse interpretieren.

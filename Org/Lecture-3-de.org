@@ -2,10 +2,10 @@
 
 TM-Analysen können mit unterschiedlichen Software konzipiert werden, wie etwa:
 
-- Mallet
-- R von der CRAN Gruppe
+- [[https://mimno.github.io/Mallet/topics.html][Mallet]]
+- [[https://cran.r-project.org/][R]] vom CRAN-Projekt
 - KI-Agenten
-- Scikit-learn mit der Programmiersprache Python
+- [[https://scikit-learn.org/stable/][Scikit-learn]] mit der Programmiersprache Python
 
 Verschiedene Techniken der Analysen von qualitativen Daten wurden in Bash mit Mallet getestet, dann in R systematisiert und in Python mit Scikit-learn weiter entwickelt. Der Grund für die Auswahl von Python und Scikit-learn als Grundlage von MTA ergibt sich daraus, dass es in diesem Zusammenhang leichter war, verschiedene Algorithmen zur TM-Analyse miteinander zu verbinden, und weil Python erlaubt hat, MTA besser je nach den unterschiedlichen Bedürfnissen von Testern zu personalisieren. Ein Vorteil ist auch, das MTA auf MacOS, Windows und Unixes Systeme läuft.
 
@@ -59,19 +59,19 @@ Hiermit einige Beispiele zur Umwandlung von verschiedenen Dateien:
 
   Für PDF-Dateien:
 
-  #+begin_src shell :results drawer
-  pdftotext SandwichPDF.pdf
+  #+begin_src shell :var convpath="/home/cpsoz/Github/mta-tutorial/DOC-Convert" :results drawer
+  pdftotext $convpath/SandwichPDF.pdf
   #+end_src
 
   Für DOC-Dateien -- und auch DOCX, RTF, HTML, ODT usw.
 
-  #+begin_src shell :results drawer
-  soffice --headless --convert-to txt:Text CP-Abstracts.doc
+  #+begin_src shell :var convpath="/home/cpsoz/Github/mta-tutorial/DOC-Convert" :results drawer
+  soffice --headless --convert-to txt:Text $convpath/CP-Abstracts.doc
   #+end_src
 
 Hiermit ein Beispiel für eine Stopwords-Liste
 
-  #+begin_src shell :results drawer :var stopath="/home/cpsoz/Stopwords"
+  #+begin_src shell :results drawer :var stopath="/home/cpsoz/Github/mta-tutorial/Stopwords"
   cat $stopath/de.txt | head
   #+end_src
 
@@ -89,9 +89,17 @@ Hier muss man auf das Folgende aufmerksam sein:
 
 Wenn dies gemacht wurde, ergibt MTA ein Beispiel der max. drei ersten Dokumente im Ordner, in dem sich die Dokumente befinden, und MTA fragt, ob diese Dokumente die richtigen sind. Der Benutzer bestätigt dies mit 'y' oder 'yes' für ja (bzw. 'n' oder 'no' für nein).
 
+#+begin_src shell :results drawer :var mtapath="/home/cpsoz/Github/mta-app"
+  sed -n -e 158p -e 161p -e 166p $mtapath/MTA.py
+#+end_src
+
 *** Stopwords-Liste angeben
 
 Wenn die richtigen Dokumente angegeben werden, muss anschließend eine Stopwords-Liste angegeben werden; hier auch muss der vollständigen Pfad zu dieser Liste angegeben werden, ansonsten wird MTA nochmal fragen, wo sich die Liste befindet.
+
+#+begin_src shell :results drawer :var mtapath="/home/cpsoz/Github/mta-app"
+  sed -n 184p $mtapath/MTA.py
+#+end_src
 
 *** Minimale Anzahl an Buchstaben zur Aufnahme von Begriffen in den Dokumenten
 
@@ -103,25 +111,37 @@ Es ist nicht sinnvoll, alle Begriffe zu berücksichtigen, weil nicht alle Wörte
 
 Entsprechend sagt man MTA, dass er Begriffe, die weniger als diese Anzahl an Buchstaben enthalten, nicht berücksichtigen muss.
 
-*** Fenster für die Berechnung der Verbindungen zwischen Wörtern
-
-Auch ein Teil von der "BOW" Methode betrifft das Fenster, das wir bestimmen möchten, um die Verbindungen zwischen den Begriffen in den Dokumenten zu berechnen. Ein Beispiel: wenn wir drei Wörter nacheinander A B C haben, dann macht es Sinn, die Verbindungen zwischen A-B, B-C und A-C zu berechnen, um zu sehen, wie oft eine solche Verbindungen in Sätzen, Absätzen von Dokumenten und in diesen Dokumenten auftauchen.
-
-In Dokumenten haben wir aber Sätze, die mehr als nur drei Wörter enthalten. Deshalb ist es sinnvoll, ein Fenster mit mehr als nur drei Verbindungen zu berechnen. Wenn wir aber ein Fenster mit sehr vielen Verbindungen angibt, dann sinkt die Wahrscheinlichkeit, dass solche Verbindungen häufig in Sätzen, Absätzen und Dokumenten wieder gefunden werden.
-
-In der Praxis zeigt sich ein Fenster von 4 bis 7 Wörter häufig als optimal für die Ergebnisse der Analyse. Wenn etwa ganze Bücher analysiert werden oder viele Artikeln/Tweets usw., dann kann es Sinn machen, dieses Fenster leicht nach oben oder nach unten anzupassen.
+#+begin_src shell :results drawer :var mtapath="/home/cpsoz/Github/mta-app"
+  sed -n 194p $mtapath/MTA.py
+#+end_src
 
 *** Fine tuning
 
-Wir haben die Wörterlänge und das Fenster für die Berechnung der Verbindungen zwischen Wörtern angepasst. Jetzt können wir die Modellierung bestimmen. Dafür benutzen wir zwei Parametern, um Wörter aus der Analyse auszuschließen. Es sind zwei Arten von Wörtern:
+Wir haben die Wörterlänge für die Berechnung der Verbindungen zwischen Wörtern angepasst. Jetzt können wir die Modellierung bestimmen. Dafür benutzen wir zwei Parametern, um Wörter aus der Analyse auszuschließen. Es sind zwei Arten von Wörtern:
 
 - Wörter, die sehr häufig auftauchen: weil diese Wörter sehr häufig auftauchen, werden sie die Analyse verzerren, weil sie den Eindruck geben, dass sie sehr wichtig sind; das ist nicht unbedingt der Fall, deshalb kann man sagen, dass wir solche Wörter nicht in der Analyse nehmen;
 - Wörter, die sehr selten sind: aus dem selben Grund wie hier oben können wir solche Wörter aus der Analyse ausschließen, weil wenn sie sehr selten auftauchen, sind sie für das gesamte Verständnis von den Texten nicht wichtig.
 
 Damit normalisieren wir die Verteilung der Wörter in den Dokumenten, und diese Normalisierung ist deshalb vorteilhaft, weil sie den Wortschatz in den Dokument nach einer Gauss-Kurve organisiert. Wir haben einerseits eine Minderheit von Wörtern, die weniger häufig bzw. sehr häufig auftauchen in den Dokumenten, ohne das wir extrem seltene oder extrem häufig auftauchende Wörter mitnehmen. Andererseits haben wir eine Mehrheit von Wörter, die mehr oder weniger oft in den Dokumenten auftauchen.
 
+#+begin_src shell :results drawer :var mtapath="/home/cpsoz/Github/mta-app"
+  sed -n 317,321p $mtapath/MTA.py
+#+end_src
+
 *** Schriftart und Sprache
 
 Die interne Vorbereitung der Dokumente ist erfolgt. MTA gibt noch die Möglichkeit, die Schriftart und die Sprache für die Abbildungen auszuwählen, die wir in der Analyse generieren. Die Schriftarten müssen zuerst auf dem Rechner sein, damit sie MTA verwenden kann.
 
+#+begin_src shell :results drawer :var mtapath="/home/cpsoz/Github/mta-app"
+  sed -n 385,389p $mtapath/MTA.py
+#+end_src
+
+#+begin_src shell :results drawer :var mtapath="/home/cpsoz/Github/mta-app"
+  sed -n 393,403p $mtapath/MTA.py
+#+end_src
+
 Damit können wir in die TM-Analyse starten.
+
+* Nächster Schritt
+
+Im nächsten Schritt beschäftigen wir uns mit der [[./Lecture-4-de.org][Modellierung von Daten mit MTA]].

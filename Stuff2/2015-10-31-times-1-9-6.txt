@@ -1,0 +1,10 @@
+Body
+
+
+It may seem drastic, but researchers say that drug-packed "grenades" could be used to help cancer patients.
+Scientists have developed tiny bubble-like structures called liposomes, built of cell membrane, that can be filled with cancer drugs and fitted with heat-activated "triggers". This means that if the temperature of a tumour can be raised above that of the rest of the body, the payload is delivered directly to cancer cells, sparing healthy tissue.
+Kostas Kostarelos, one of the study authors and a professor of nanomedicine at the University of Manchester, said: "Liposomes have the potential to travel safely around the body while carrying your cancer drug.
+"Although this work has only been done in the lab so far, there are a number of ways we could potentially heat cancer cells in patients."
+The research is being presented at the National Cancer Research Institute conference in Liverpool next week. Charles Swanton, its chairman, said: "Using [liposomes] to deliver cancer medicines has been a holy grail of nanomedicine, but finding ways to direct the liposomes towards tumours accurately has been a major challenge."
+
+Load-Date: October 31, 2015

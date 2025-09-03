@@ -124,4 +124,4 @@ TM-Analyse skalieren besser als KI-Agenten in der Praxis, was bedeutet, dass wen
 
 * Nächster Schritt
 
-Im nächsten Schritt beschäftigen wir uns mit den [[./Lecture-3-de.org][MTA]]. Dabei werden wir den Ansatz der /workflow/ einführen.
+Im nächsten Schritt beschäftigen wir uns mit den [[./Lecture-3-de.org][MTA]].

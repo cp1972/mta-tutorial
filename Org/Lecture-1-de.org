@@ -2,10 +2,10 @@
 
 In diesem Modul lernen wir, wie qualitative Daten auf der Grundlage von Texten modelliert werden können. Zu diesem Zweck verwenden wir die folgenden Werkzeuge:
 
-- MTA als Anwendung für die Modellierung der Daten;
+- [[https://github.com/cp1972/mta-app][MTA]] als Anwendung für die Modellierung der Daten;
 - Python (3.x), um MTA zu installieren und durchzuführen;
 - Emacs als Textverarbeitungsprogramm und als Anwendung für die Automatisierung von /workflows/ (optional);
-- tgpt als Anwendung zur Befragung einer KI, um Vorschläge zur Deutung der Ergebnisse zu erhalten.
+- [[https://github.com/aandrew-me/tgpt][tgpt]] als Anwendung zur Befragung einer KI, um Vorschläge zur Deutung der Ergebnisse zu erhalten.
 
 * Inhalte des Moduls
 
