@@ -5,7 +5,8 @@ In diesem Modul lernen wir, wie qualitative Daten auf der Grundlage von Texten m
 - [[https://github.com/cp1972/mta-app][MTA]] als Anwendung für die Modellierung der Daten;
 - Python (3.x), um MTA zu installieren und durchzuführen;
 - Emacs als Textverarbeitungsprogramm und als Anwendung für die Automatisierung von /workflows/ (optional);
-- [[https://github.com/aandrew-me/tgpt][tgpt]] als Anwendung zur Befragung einer KI, um Vorschläge zur Deutung der Ergebnisse zu erhalten.
+- [[https://github.com/aandrew-me/tgpt][tgpt]] als Anwendung zur Befragung einer KI, um Vorschläge zur Deutung der Ergebnisse zu erhalten;
+- Anwendungen für die Zerschneidung und das Parsen von Dateien (grep, awk, sed, bash).
 
 * Inhalte des Moduls
 
@@ -19,9 +20,35 @@ Wir beschäftigen uns mit den folgenden Inhalten:
 
 * Voraussetzungen
 
-Dieses Modul setzt eine bestimmte Vertrautheit mit der Informatik, mit Anwendungen und Programmiersprachen und mit der Statistik.
+Dieses Modul setzt eine bestimmte Vertrautheit mit der Informatik, mit Anwendungen und Programmiersprachen und mit der Statistik voraus.
 
-Es setzt ebenfalls eine Bereitschaft, unterschiedliche Werkzeuge zu experimentieren und sich in eine unbekannte Landschaft zu trauen.
+Es setzt ebenfalls eine Bereitschaft voraus, unterschiedliche Werkzeuge zu experimentieren und sich in eine unbekannte Landschaft zu trauen.
+
+* Vorbereitung
+
+Für dieses Modul müssen Windows und MacOS Benutzer ihren Rechner wie folgt vorbereiten.
+
+** Windows Benutzer
+
+Unter Windows können Benutzer das virtualiserte System WSL2 installieren. WSL2 erlaubt die Installation von einem Linux-Betriebssystem innerhalb von Windows. Damit können alle Funktionen von Linux in Windows verwendet werden, und Python 3.x sowie spezielle Linux-Anwendung für die Zerschneidung und das Parson von Dateien kommen mit dem Linux-Betriebssystem vorinstalliert
+
+Eine ausführliche Einleitung zur Installation von WSL2 unter Windows 10 (gilt auch für Windows 11) befindet sich [[https://contabo.com/blog/de/wsl-2-unter-windows-10-installieren/][hier]]. Empfohlen wird das Linux-Betriebsystem Ubuntu (die letzte Version; aktuelle ist es Ubuntu 22.4).
+
+** MacOS
+
+Vielleicht ist Python 3.x schon vorhanden; um es zu wissen, muss man einen Terminal eröffnen und den folgenden Befehl im Terminal eintippen: python --version. Wenn der Terminal eine Version 3 von Python zeigt (etwa python3.8), dann muss man nichts weiteres machen.
+
+Unter MacOS kann Python 3.x unmittelbar von den Python-Seiten heruntergeladen und installiert werden (eine Einleitung auf Englisch befindet sich [[https://docs.python.org/3/using/mac.html][hier]], von dem Anfang der Seite bis Punkt 5.1.2 inklusive).
+
+Python 3.x kann auch via Homebrew installiert werden -- wenn Homebrew nicht auf dem System installiert wurde, muss es dann auch installiert werden. [[https://pythonbuch.maeurer.dev/python/macos_installation.html][Diese Seite]] ist eine Einleitung, wie man Python 3.x mit Homebrew inklusive die Installation von Homebrew auf dem Mac installiert bekommt.
+
+** Anaconda als Anwendung für Windows und MacOS
+
+Anaconda kann auf Windows und MacOS installiert werden, um Python und nützliche Bibliotheken von Python installiert zu bekommen. Auf den Seiten von [[https://github.com/cp1972/mta-app/blob/main/install.md][MTA]] gibt es eine Einleitung diesbezüglich. Mit Anaconda können weitere Linux-Anwendungen installiert werden, selbst wenn Anaconda nicht unbedingt alle mögliche Linux-Anwendungen anbietet, die wir benutzen möchten. Deshalb sollten am liebsten die davor dargestellten Methoden verwendet werden und Anaconda als letzte Möglichkeit benutzt werden, wenn die anderen Methoden nicht funktioniert haben.
+
+** Wissen, wo man sich selbst und wo sich die Daten befinden
+
+Eine wichtige Kompetenz, die man entwickeln muss, bezieht sich auf Pfade im eigenen Rechner wie etwa den Pfad zum gespeicherten Benutzer. Wir werden Dateien herstellen und speichern, und deshalb müssen wir wissen, wo wir uns im Rechner befinden, damit wir die Pfade zu den Dateien erkennen können, mit denen wir arbeiten werden. Es empfiehlt sich deshalb, im Internet nach Hilfsmittel zu recherchieren, um zu wissen, wie man es macht, um Pfade zu erkennen und sie in Dateien zu kopieren bzw aus Dateien zu entnehmen. Dies werden wir auch im Rahmen dieser Lehrveranstaltung üben.
 
 * Nächster Schritt
 

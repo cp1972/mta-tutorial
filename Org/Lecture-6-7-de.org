@@ -1,0 +1,805 @@
+* Workflow Autobiography of working class
+
+In der Praxis ist man regelmäßig mit Daten konfrontiert, die überarbeitet werden müssen, damit sinnvolle Ergebnisse aus den Daten gezogen werden können. Dieses /workflow/ ist ein Beispiel für eine realistische bzw. etwas komplizierte Behandlung von einem Datensatz zu Autobiographien von Mitgliedern der Arbeiterklasse in Großbritanien. Die Zeitspanne geht vom Ende des 18. Jahrhundert bis um die Jahre 1980. In diesem Zusammenhang interessiert uns insbesondere die berufliche Mobilität von solchen Mitgliedern der Arbeiterklasse.
+
+Die Dokumente sind Text-Dateien aus den drei Bänden /The Autobiography of the working class/. Inhaltlich liefern diese Dokumente unterschiedliche Informationen zu Personen aus der Arbeiterklasse, die eine Autobiographie geschrieben haben.
+
+Die betreffenden Personen sind Künstler und Akteuren aus der Medienbranche.
+
+Neu in diesem /workflow/ ist die Heranziehung der KI zur Unterstützung bei der Interpretation der Topics. Zu diesem Zweck verwenden wir tgpt, das uns erlaubt, eine KI ohne API programmatisch zu befragen.
+
+** Vorgehen
+
+Die Quelldateien sind im TXT Format. In diesem /workflow/ verwenden wir gewöhnliche Anwendungen (grep, sed, awk, csplit) und die Syntax-Elemente der Bash-Programmiersprache, um die Dateien umzubenennen, zu sortieren und zu zerlegen.
+
+** Dieses Workflow als Anwendung benutzen
+
+Wie unsere anderen /workflow/ kann dieses /workflow/ als Anwendung benutzt werden. Erforderlich dafür ist die Installation vom Texteditor Emacs mit Org-mode (ab emacs-28 ist Org-mode mit dem Texteditor geliefert und muss nicht separat installiert werden).
+
+Pfade müssen ggfs. vom Benutzer des Workflows angepasst werden.
+
+Dieses Workflow kann auf der Kommandozeile mit dem folgenden Skript 'run-dat.sh' ausgeführt werden. Zuerst stellen wir einen Arbeitsordner her, in dem wir die Dateien kopieren, die wir im Rahmen von diesem /workflow/ verwenden:
+
+#+name: user-path
+#+begin_src shell :var user="/home/cpsoz/TM-WS-25" :results silent
+  mkdir $user/TM-Analyse-3
+#+end_src
+
+Unsere Analyse wird in diesem Ordner 'TM-Analyse-3' stattfinden. Dort stellen wir einen Ordner 'TM-Skripten' für die Skripten, die wir im Rahmen von diesem /workflow/ schreiben, und wir definieren den vollständigen Pfad zum Ordner 'TM-Analyse-3' als neuen Benutzerpfad (Pfad anpassen):
+
+#+name: nuser
+#+begin_src shell :var nuserpath="/home/cpsoz/TM-WS-25/TM-Analyse-3" :results silent
+  echo $nuserpath
+#+end_src
+
+#+name: tm-skripten
+#+begin_src shell :var userpath=nuser :results silent
+  mkdir $userpath/TM-Skripten
+#+end_src
+
+Dann schreiben wir den 'run-dat.sh' Skript wie folgt:
+
+#+begin_src shell :results silent :var user=nuser
+  touch $user/run-dat.sh
+  echo "#!/bin/bash" >> $user/run-dat.sh
+  echo "emacs /home/cpsoz/Gitub/mta-tutorial/Org/Lecture-6-7-de.org --batch -l /home/cpsoz/.emacs.d/init.el --eval \"(setq org-confirm-babel-evaluate nil)\" --eval \"(org-babel-execute-buffer)\"" >> $user/run-dat.sh
+  chmod +x $user/run-dat.sh
+#+end_src
+
+Dieser Skript führt alle Code-Blöcke in diesem /workflow/ aus. Er kann entsprechend mit bash verwendet werden, wie etwa: bash run-dat.sh oder ./run-dat.sh. Ohne Skript kann dieses /worflow/ von einem Terminal mit
+
+~emacs /home/cpsoz/Gitub/mta-tutorial/Org/Lecture-6-7-de.org --batch -l /home/cpsoz/.emacs.d/init.el --eval "(setq org-confirm-babel-evaluate nil)" --eval "(org-babel-execute-buffer)"~
+
+ausgeführt werden. MTA kopieren wir dann zu unserem TM-Skripten Ordner, um die Analyse durchzuführen.
+
+#+name: mta-copy
+#+begin_src shell :var mtap="/home/cpsoz/Github/mta-app" :var user=nuser :results silent
+  cp $mtap/MTA.py $user/TM-Skripten
+#+end_src
+
+Wir kopieren dann die Datensätze der Künstler und Akteure der Medienbranche zu diesem Ordner
+
+#+name: copy-data
+#+begin_src shell :var data="/home/cpsoz/Github/mta-tutorial/Stuff4/Datensätze" :var user=nuser :results silent
+  cp -r $data $user
+#+end_src
+
+* Dateien zerlegen
+
+Wir zerlegen die Dateien in den zwei Ordner zu den Künstlern und zu den Akteuren der Medienbranche nach den folgenden Stufen:
+
+  - zuerst wählen wir die Zeile in jeder Datei aus, die wir behandeln wollen; wir behandeln fünf Zeilen, und zwar:
+
+    - die Zeile 1, die die Autobiographie betrifft, die die Person schreibt;
+    - die Zeile 3, die Information zur Erziehung und Schulzeit der Person betrifft;
+    - die Zeile 5, die Information zur beruflichen Tätigkeit der Person betrifft;
+    - die Zeile 7, die weitere nicht beruflichen Tätigkeiten, die der Person entwickelt hat;
+    - die Zeitle 9, die eine Zusammenfassung der Autobiographie der Person liefert.
+
+  - wir verwenden einen Code für jede Zeile, den wir im entsprechenden Dateinamen speichern, damit wir dann die Dateien nach diesem Code sortieren bzw. behandeln können:
+
+    - Zeile 1 und Zeile 9: BIO-T (T für Titel) und BIO-I (I für Inhalt);
+    - Zeile 3: ERZ;
+    - Zeile 5: JOB;
+    - Zeile 7: N-JOB.
+
+Wir fangen mit den Zeilen 1 und 9 an.
+
+** Autobiographie: Künstler
+
+Wir gehen zuerst zu dem Ordner der Künstler
+
+#+name: kfolder
+#+begin_src shell :results silent :var user=nuser
+  echo $user/Datensätze/Akteure_Kunst_1745-1974_Vol.1/
+#+end_src
+
+Wir korrigieren die Dateinamen, die falsch sind:
+
+#+name: korrdn
+#+begin_src shell :results silent :var user=nuser :var folder=kfolder
+  cd $folder
+  for i in *.txt; do rename 's/\s*\(//' "$i"; done
+  for i in *.txt; do rename 's/\s*\)//' "$i"; done
+  for i in *.txt; do mv -v "$i" "${i/\'/}"; done
+  for i in *.txt; do rename 's/ /_/g' "$i"; done
+#+end_src
+
+Wir zerlegen die erste Zeile jeder Datei je nach den Jahreszahlen, die wir in dieser Zeile finden; daraus machen wir entsprechende neue Dateien mit den Tags, die wir vorgesehen haben:
+
+#+name: kbio-t
+#+begin_src shell :results silent :var user=nuser :var folder=kfolder
+  cd $folder
+  for i in *.txt; do sed '1!d' "$i" | sed -E '/17|18|19/i bla/' > "${i%%,*}"_z.txt; done
+  for i in *_z.txt; do csplit -sf "${i%.*}" --suppress-matched --suffix-format _%03d.txt "$i" /bla\// {*}; done
+  rm *_z.txt && rm *_z_000.txt
+  grep -Eo '[0-9]{4}' *_z_*.txt >> years
+  awk -F: '{ print $1 }' years >> fname
+  awk -F: '{ print $2"_"$1 }' years >> yf
+  sed -i 's/^/mv /g' fname
+  paste -d ' ' fname yf > final.sh && chmod +x final.sh
+  sed -i 's/(/-/g' final.sh && sed -i 's/)/-/g' final.sh && sed -i "s/'/-/g" final.sh
+  sh final.sh
+  rename  's/\.txt_z/_BIOT/' *.txt_z*.txt
+  rm years fname yf final.sh
+#+end_src
+
+#+name: kbio-i
+#+begin_src shell :results silent :var user=nuser :var folder=kfolder
+  cd $folder
+  for i in *.txt; do sed '9!d' "$i" | sed -E '/17|18|19/i bla/' > "${i%%,*}"_z.txt; done
+  for i in *_z.txt; do csplit -sf "${i%.*}" --suppress-matched --suffix-format _%03d.txt "$i" /bla\// {*}; done
+  rm *_z.txt && rm *_z_000.txt
+  grep -Eo '[0-9]{4}' *_z_*.txt >> years
+  awk -F: '{ print $1 }' years >> fname
+  awk -F: '{ print $2"_"$1 }' years >> yf
+  sed -i 's/^/mv /g' fname
+  paste -d ' ' fname yf > final.sh && chmod +x final.sh
+  sed -i 's/(/-/g' final.sh && sed -i 's/)/-/g' final.sh && sed -i "s/'/-/g" final.sh
+  sh final.sh
+  rename  's/\.txt_z/_BIOI/' *.txt_z*.txt
+  rm years fname yf final.sh
+#+end_src
+
+#+name: kerz
+#+begin_src shell :results silent :var user=nuser :var folder=kfolder
+   cd $folder
+   for i in *.txt; do sed '3!d' "$i" | tr ";." "\n" | sed -E '/17|18|19/i bla/' > "${i%,*}"_z.txt; done
+   for i in *_z.txt; do csplit -sf "${i%.*}" --suppress-matched --suffix-format _%03d.txt "$i" /bla\// {*}; done
+   rm *_z.txt && rm *_z_000.txt
+   grep -Eo '[0-9]{4}' *_z_*.txt >> years
+   awk -F: '{ print $1 }' years >> fname
+   awk -F: '{ print $2"_"$1 }' years >> yf
+   sed -i 's/^/mv /g' fname
+   paste -d ' ' fname yf > final.sh && chmod +x final.sh
+   sed -i 's/(/-/g' final.sh && sed -i 's/)/-/g' final.sh && sed -i "s/'/-/g" final.sh
+   sh final.sh
+   rename  's/\.txt_z/_ERZ/' *.txt_z*.txt
+   rm years fname yf final.sh
+#+end_src
+
+#+name: kjob
+#+begin_src shell :results silent :var user=nuser :var folder=kfolder
+  cd $folder
+  for i in *.txt; do sed '5!d' "$i" | tr ";" "\n" | sed -E '/17|18|19/i bla/' > "${i%,*}"_z.txt; done
+  for i in *_z.txt; do csplit -sf "${i%.*}" --suppress-matched --suffix-format _%03d.txt "$i" /bla\// {*}; done
+  rm *_z.txt && rm *_z_000.txt
+  grep -Eo '[0-9]{4}' *_z_*.txt >> years
+  awk -F: '{ print $1 }' years >> fname
+  awk -F: '{ print $2"_"$1 }' years >> yf
+  sed -i 's/^/mv /g' fname
+  paste -d ' ' fname yf > final.sh && chmod +x final.sh
+  sed -i 's/(/-/g' final.sh && sed -i 's/)/-/g' final.sh && sed -i "s/'/-/g" final.sh
+  sh final.sh
+  rename  's/\.txt_z/_JOB/' *.txt_z*.txt
+  rm years fname yf final.sh
+#+end_src
+
+#+name: knjob
+#+begin_src shell :results silent :var user=nuser :var folder=kfolder
+  cd $folder
+  for i in *.txt; do sed '7!d' "$i" | tr ";" "\n" | sed -E '/17|18|19/i bla/' > "${i%,*}"_z.txt; done
+  for i in *_z.txt; do csplit -sf "${i%.*}" --suppress-matched --suffix-format _%03d.txt "$i" /bla\// {*}; done
+  rm *_z.txt && rm *_z_000.txt
+  grep -Eo '[0-9]{4}' *_z_*.txt >> years
+  awk -F: '{ print $1 }' years >> fname
+  awk -F: '{ print $2"_"$1 }' years >> yf
+  sed -i 's/^/mv /g' fname
+  paste -d ' ' fname yf > final.sh && chmod +x final.sh
+  sed -i 's/(/-/g' final.sh && sed -i 's/)/-/g' final.sh && sed -i "s/'/-/g" final.sh
+  sh final.sh
+  rename  's/\.txt_z/_NJOB/' *.txt_z*.txt
+  rm years fname yf final.sh
+#+end_src
+
+Wir speichern die Ergebnisse in einem anderen Ordner 'K-Data' für die Künstler:
+
+#+name: kdata
+#+begin_src shell :results silent :var user=nuser :var folder=kfolder
+  cd $user && mkdir K-Data
+  cd $folder
+  cp *BIO* $user/K-Data
+  cp *ERZ* $user/K-Data
+  cp *JOB* $user/K-Data
+#+end_src
+
+Einige der Dateien im Ordner 'K-Data' haben Zahlen, die keine Jahreszahlen sind, weshalb wir sie nicht berücksichtigen werden. In diesem Ordner betrifft es 15 der 924 Dateien.
+
+#+name: krmfiles
+#+begin_src shell :results silent :var user=nuser :var folder=kfolder
+  cd $user/K-Data
+  ls *.txt > $user/K-Data/filelist && cat $user/K-Data/filelist | awk -F_ NF=5 FS="_" OFS="_" | grep "txt" > $user/K-Data/filerm.sh
+  grep '^..._' $user/K-Data/filelist >> $user/K-Data/filerm.sh
+  grep '^.._' $user/K-Data/filelist >> $user/K-Data/filerm.sh
+  grep '^._' $user/M-Data/filelist >> $user/M-Data/filerm.sh
+  sed -i 's/^/rm /g' $user/K-Data/filerm.sh
+  chmod +x $user/K-Data/filerm.sh
+  sh $user/K-Data/filerm.sh
+  rm $user/K-Data/filelist
+  rm $user/K-Data/filerm.sh
+#+end_src
+
+Wir tun dasselbe für die Medien-Akteure.
+
+** Autobiographie: Medien-Akteure
+
+Wir stellen den Ergebnis-Ordner für die Dateien der Medien-Akteure:
+
+#+name: mfolder
+#+begin_src shell :results silent :var user=nuser
+  echo $user/Datensätze/Akteure_Medienrelationsstruktur_1745-1983_Vol.1/
+#+end_src
+
+Wir korrigieren die Dateinamen, die falsch sind:
+
+#+name: morrdn
+#+begin_src shell :results silent :var user=nuser :var folder=mfolder :noweb yes
+<<korrdn>>
+#+end_src
+
+#+name: mbio-t
+#+begin_src shell :results silent :var user=nuser :var folder=mfolder :noweb yes
+<<kbio-t>>
+#+end_src
+
+#+name: mbio-i
+#+begin_src shell :results silent :var user=nuser :var folder=mfolder :noweb yes
+<<kbio-i>>
+#+end_src
+
+#+name: merz
+#+begin_src shell :results silent :var user=nuser :var folder=mfolder :noweb yes
+<<kerz>>
+#+end_src
+
+#+name: mjob
+#+begin_src shell :results silent :var user=nuser :var folder=mfolder :noweb yes
+<<kjob>>
+#+end_src
+
+#+name: mnjob
+#+begin_src shell :results silent :var user=nuser :var folder=mfolder :noweb yes
+<<knjob>>
+#+end_src
+
+#+name: mdata
+#+begin_src shell :results silent :var user=nuser :var folder=mfolder
+  cd $user && mkdir M-Data
+  cd $folder
+  cp *BIO* $user/M-Data
+  cp *ERZ* $user/M-Data
+  cp *JOB* $user/M-Data
+#+end_src
+
+Einige der Dateien im Ordner 'M-Data' enthalten Zahlen, die keine Jahreszahlen sind, weshalb wir sie nicht berücksichtigen werden. In diesem Ordner betrifft es 27 der 1844 Dateien.
+
+#+name: mrmfiles
+#+begin_src shell :results silent :var user=nuser :var folder=kfolder
+  cd $user/M-Data
+  ls *.txt > $user/M-Data/filelist && cat $user/M-Data/filelist | awk -F_ NF=5 FS="_" OFS="_" | grep "txt" > $user/M-Data/filerm.sh
+  grep '^..._' $user/M-Data/filelist >> $user/M-Data/filerm.sh
+  grep '^.._' $user/M-Data/filelist >> $user/M-Data/filerm.sh
+  grep '^._' $user/M-Data/filelist >> $user/M-Data/filerm.sh
+  sed -i 's/^/rm /g' $user/M-Data/filerm.sh
+  chmod +x $user/M-Data/filerm.sh
+  sh $user/M-Data/filerm.sh
+  rm $user/M-Data/filelist
+  rm $user/M-Data/filerm.sh
+#+end_src
+
+Wir können jetzt diese Dateien modellieren. Wir fangen mit der Dateien 'ERZ' und 'JOB' an.
+
+* Modellierung
+
+Im Rahmen von Topic-Modell-Analysen müssen wir zuerst wissen, wie viele Themen für einen bestimmten Datensatz sinnvoll zu modellieren sind. Deshalb müssen wir in einem ersten Schritt MTA auf die Dateien trainieren, die wir in den Unterordnern vom Ordner 'K-Data' bzw 'M-Data' gespeichert haben. Wir stellen diese Unterordner her, und wir kopieren die relevanten Dateien zu diesen Ordnern:
+
+#+name: kmpfade
+#+begin_src shell :var user=nuser :results silent
+  cd $user/K-Data && mkdir ERZ && cp $user/K-Data/*_ERZ_*.txt $user/K-Data/ERZ
+  cd $user/K-Data && mkdir JOB && cp $user/K-Data/*_JOB_*.txt $user/K-Data/JOB
+  cd $user/M-Data && mkdir ERZ && cp $user/M-Data/*_ERZ_*.txt $user/M-Data/ERZ
+  cd $user/M-Data && mkdir JOB && cp $user/M-Data/*_JOB_*.txt $user/M-Data/JOB
+#+end_src
+
+Wir müssen auch bedenken, dass MTA eine Liste von Wörtern (ein Wort je Zeile) braucht, die für die Analyse sehr wenig bis nicht relevant sind und deshalb nicht berücksichtigt werden müssen. Es sind Stop-Wörter, die in unserem Fall englische Wörter sind und sich im folgenden Ordner befinden:
+
+#+name: stops
+#+begin_src shell :var stopwords="/home/cpsoz/Github/mta-tutorial/Stopwords" :results silent
+  echo $stopwords
+#+end_src
+
+** Künstler JOB
+
+Wir [[https://github.com/cp1972/mta-app/blob/main/automate.md][automatisieren]] MTA mit der folgenden 'jobmta-train.txt'-Datei, die wir in unserem 'Skripten-WK' Ordner speichern:
+
+#+name: autotrain-01
+#+begin_src shell :var user=nuser :var stopw=stops :results silent
+  touch $user/TM-Skripten/jobmta-train.txt
+  echo $user"/K-Data/JOB/*" >> $user/TM-Skripten/jobmta-train.txt
+  echo "y" >> $user/TM-Skripten/jobmta-train.txt
+  echo $stopw"/en.txt" >> $user/TM-Skripten/jobmta-train.txt
+  echo "5" >> $user/TM-Skripten/jobmta-train.txt
+  echo "n" >> $user/TM-Skripten/jobmta-train.txt
+  echo "de" >> $user/TM-Skripten/jobmta-train.txt
+  echo "a" >> $user/TM-Skripten/jobmta-train.txt
+  echo "1" >> $user/TM-Skripten/jobmta-train.txt
+  echo "y" >> $user/TM-Skripten/jobmta-train.txt
+  echo "15" >> $user/TM-Skripten/jobmta-train.txt
+  echo "4" >> $user/TM-Skripten/jobmta-train.txt
+  echo "n" >> $user/TM-Skripten/jobmta-train.txt
+  echo "0" >> $user/TM-Skripten/jobmta-train.txt
+#+end_src
+
+Diese Datei trainiert MTA mit Modellen, die von 2 bis 15 Topics reichen. Wir führen MTA mit dieser Datei im folgenden Code-Block aus:
+
+#+name: trainmta
+#+begin_src shell :var user=nuser :results none
+  cat $user/TM-Skripten/jobmta-train.txt | python3 $user/TM-Skripten/MTA.py
+#+end_src
+
+Aus den Ergebnissen von MTA nehmen wir aus der Datei 'Summary*.log' die relevanten Informationen zu den optimalen Zahlen der Topics je Kreuzvalidierungsmethode, die MTA verwendet. Wir übernehmen auch die Information zu der besten Anzahl der Topics nach Cophenet Korrelationskoeffizient. Wir speichern diese Informationen in einer Datei 'TM-train-scores.txt'.
+
+#+name: trainscores
+#+begin_src shell :var mtadir="/home/cpsoz/Github/mta-tutorial/Org" :var user=nuser :results silent
+  echo " " >> $user/TM-train-scores.txt
+  cat $mtadir/MTA-Results*/Summary*.log | sed -n '/Elbow /,/Correlation values LDA/p' | awk 'NF' | awk '{$1=$1;print}' >> $user/TM-train-scores.txt
+  echo "------" >> $user/TM-train-scores.txt
+  echo " " >> $user/TM-train-scores.txt
+  find $mtadir -type d -name "MTA-Results*" -exec rm -r {} +
+#+end_src
+
+Wir können dann alle Ergebnisse aus der Datei 'TM-train-scores.txt' mit dem folgenden Code-Block lesen.
+
+#+name: mta-scores
+#+begin_src shell :var user=nuser :results drawer
+    cat $user/TM-train-scores.txt
+#+end_src
+
+Wir können jetzt die Dateien mit dem optimalen Anzahl an Topics -- hier sieht es mit 4 besser aus -- modellieren.
+
+Dafür stellen wir eine veränderte Version von unserem Code-Block 'autotrain-01', die wir 'autotest-01' benennen:
+
+#+name: autotest-01
+#+begin_src shell :var user=nuser :var stopw=stops :results silent
+  touch $user/TM-Skripten/jobmta-test.txt
+  echo $user"/K-Data/JOB/*" >> $user/TM-Skripten/jobmta-test.txt
+  echo "y" >> $user/TM-Skripten/jobmta-test.txt
+  echo $stopw"/de.txt" >> $user/TM-Skripten/jobmta-test.txt
+  echo "5" >> $user/TM-Skripten/jobmta-test.txt
+  echo "n" >> $user/TM-Skripten/jobmta-test.txt
+  echo "de" >> $user/TM-Skripten/jobmta-test.txt
+  echo "a" >> $user/TM-Skripten/jobmta-test.txt
+  echo "1" >> $user/TM-Skripten/jobmta-test.txt
+  echo "n" >> $user/TM-Skripten/jobmta-test.txt
+  echo "4" >> $user/TM-Skripten/jobmta-test.txt
+  echo "n" >> $user/TM-Skripten/jobmta-test.txt
+  echo "2" >> $user/TM-Skripten/jobmta-test.txt
+  echo "30" >> $user/TM-Skripten/jobmta-test.txt
+  echo "y" >> $user/TM-Skripten/jobmta-test.txt
+  echo "0" >> $user/TM-Skripten/jobmta-test.txt
+#+end_src
+
+Dann modellieren wir den ersten Ordner:
+
+#+name: testmta
+#+begin_src shell :var user=nuser :results none
+  cat $user/TM-Skripten/jobmta-test.txt | python3 $user/TM-Skripten/MTA.py
+#+end_src
+
+** Interpretation der Ergebnisse
+
+Wir automatisieren die Interpretation der Ergebnisse mit einer KI. Dafür haben wir die [[https://github.com/aandrew-me/tgpt][Anwendung tgpt]] installiert, die wir programmatisch verwenden können. In einem ersten Schritt stellen wir den Ordner 'MTA-KI-JOB' her, in dem wir die Ergebnisse von unserer Interpretation der Topic-Modell-Analyse speichern werden:
+
+#+name: mta-ki-results
+#+begin_src shell :var user=nuser :results none
+  mkdir $user/MTA-KI-JOB
+#+end_src
+
+Wir gehen dann in den jeweiligen Ordner mit den Ergebnissen aus der Topic-Modell-Analyse, wir zerlegen die Datei 'Top_Words_NMF_Topics_*.csv' so, dass wir ein Dokument mit ".out" Endung je Säule der Datei 'Top_Words_NMF_Topics_*.csv' herstellen. Dann passen wir den Inhalt von diesen ".out"-Dateien zur KI und wir speichern die Deutung der KI in einem Dokument.
+
+Zuerst schreiben wir den Skript, um die Ergebnisse von MTA zur KI zu senden und die Antworten der KI in eine Datei 'MTA-KI-JOB' zu schreiben:
+
+#+name: mta-ki-interpret
+#+begin_src shell :var mtadir="/home/cpsoz/Github/mta-tutorial/Org" :var user=nuser :var mtaint="JOB-MTA-KI.txt" :var mtcut="JOB-MTA-KI-" :results none
+  cd $mtadir/MTA-Results*
+  cp Top_Words_NMF_Topics_*.csv TW.txt
+  sed -i '1d' TW.txt
+  awk -F, '{for (i=1;i<=NF;i++) print $i > i".out"}' TW.txt
+  for x in *.out; do echo -e "\nTOPIC '${x%.*}'\n" >> MTA-KI-JOB.txt && awk 'BEGIN { ORS = " " } { print }' "$x" | tgpt -q "welche thematischen Gemeinsamkeiten erkennst du zwischen diesen Wörtern" >> MTA-KI-JOB.txt; done
+  rm TW.txt *.out
+  mv MTA-KI-JOB.txt $user/MTA-KI-JOB/ && cd $user/MTA-KI-JOB/ && mv MTA-KI-JOB.txt $mtaint
+  csplit $mtaint /TOPIC/ '{*}' --prefix $mtcut -b "%02d.txt" && rm $mtaint && rm *-KI-00.txt
+#+end_src
+
+Einmal die Kontrolle der Berichte erfolgt, bilden wir die Entwicklung der Topics in der Zeit bzw. je Dekade ab. Wir kopieren zuerst die Datei 'Dominant_Topic_NMF' zur Wurzel von unserem Arbeitsordner:
+
+#+name: copy-dt
+#+begin_src shell :var mtadir="/home/cpsoz/Github/mta-tutorial/Org" :var user=nuser :results silent
+  cd $mtadir/MTA-Results*
+  cp Dominant_Topics_NMF_*.csv $user/JOBDT.csv
+#+end_src
+
+Wir bilden die Entwicklung der Topics in der Zeit ab. Wir fügen dann die Daten zur Mobilität der Akteure zwischen diesen Topics je nachdem hinzu, welchen Topic die Akteure im Laufe der Zeit am meisten unterstützt haben. Die Graphik zeigt somit, wie die Arbeitsklassen, die die Topic darstellen, in der Zeit entwickelt wurden, und wie die Akteure zwischen diesen Arbeitsklassen zirkuliert sind:
+
+#+name: groupy2_dt
+#+begin_src python :var dt="/home/cpsoz/TM-WS-25/TM-Analyse-3/JOBDT.csv" :var saveplot="/home/cpsoz/TM-WS-25/TM-Analyse-3/TopicsLine.pdf" :results TopicsLine.pdf file
+  import matplotlib.pyplot as plt
+  import matplotlib.patches as mpatches
+  import numpy as np
+  import seaborn as sns
+  import pandas as pd
+  import csv
+  from matplotlib import rc
+
+  # Schrift
+  #rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+  rc('font',**{'family':'serif','serif':['Times'],'size':9})
+  rc('text', usetex=True)
+
+  path = dt
+  pathplot = saveplot
+  df = pd.read_csv(path)
+  df.rename(columns={ df.columns[0]: "Dokumente" }, inplace = True)
+  #df.drop('Dominant_Topic_NMF', axis=1, inplace=True)
+  df['Jahr'] = df['Dokumente']
+  df['Proto'] = df['Dokumente']
+  df['Jahr']= df['Jahr'].map(lambda x: str(x)[0:4])
+  df['Jahr'].astype(int)
+  df['Proto']= df['Proto'].map(lambda x: str(x)[6:14])
+  df_trends = df.sort_values(by='Jahr',ascending=True)
+  df_trends['Jahr'] = pd.to_numeric(df_trends['Jahr'])
+  group = df_trends['Jahr']//5*5
+
+  # Dataframes zu den Topics
+
+  df_trends_0 = df_trends.groupby([group])['0'].mean()
+  df_trends_1 = df_trends.groupby([group])['1'].mean()
+  df_trends_2 = df_trends.groupby([group])['2'].mean()
+  df_trends_3 = df_trends.groupby([group])['3'].mean()
+  df_concat = pd.concat([df_trends_0, df_trends_1, df_trends_2, df_trends_3], axis=1)
+  df_concat['Max'] = df_concat[['0', '1', '2', '3']].max(axis=1)
+
+  df_concat['Schriftst./Edit./Journ.'] = df_concat['0'].rolling(5).mean()
+  df_concat['Schule/Arbeiter/Buchhandl.'] = df_concat['1'].rolling(5).mean()
+  df_concat['Handel/Gewerbe/Ing.'] = df_concat['2'].rolling(5).mean()
+  df_concat['Pol./Medien'] = df_concat['3'].rolling(5).mean()
+  df_concat['Mobilität'] = df_concat['Max'].rolling(5).mean()
+
+  # Graphiken zu den Topics
+
+  sns.lineplot(x="Jahr",y="Schriftst./Edit./Journ.",
+           label="Schriftst./Edit./Journ.(HIGH)", data=df_concat,
+           errorbar=None, color='#d62828')
+  sns.lineplot(x="Jahr",y="Handel/Gewerbe/Ing.",
+           label="Handel/Gewerbe/Ing.(MID)", data=df_concat,
+           errorbar=None, color='#f77f00')
+  sns.lineplot(x="Jahr",y="Schule/Arbeiter/Buchhandl.",
+           label="Schule/Arbeiter/Buchhandl.(LOW)", data=df_concat,
+           errorbar=None, color='#fcbf49')
+  sns.lineplot(x="Jahr",y="Pol./Medien",
+           label="Pol./Medien", data=df_concat,
+           errorbar=None, color='#003049')
+  sns.lineplot(x="Jahr",y="Mobilität",
+           label="Mobilitätstrend", data=df_concat,
+           errorbar=None, color='#0077b6')
+
+  plt.legend(loc=2, prop={'size':14}, bbox_to_anchor=(1,1),ncol=1)
+  plt.ylabel('Rollender Durchschnitt')
+  plt.xlabel('Jahre')
+  plt.xticks(rotation=45, ha="right")
+
+  plt.savefig(pathplot, dpi=300, bbox_inches='tight')
+#+end_src
+
+#+RESULTS: groupy2_dt
+[[file:None]]
+
+Wir können ebenfalls einen Dataframe herstellen, wenn wir die Mobilität auf der Ebene von den Einzelakteuren untersuchen möchten. Zuerst müssen wir die Datei 'Dominant_Topic_NMF' mit awk parsen, damit wir am Ende einen Datensatz mit Namen der Personen, Jahre und Dominant Topic erhalten:
+
+#+name: awktopic
+#+begin_src shell :var user=nuser :results none
+  cd $user
+  awk -F_ '{ print $3, $1, $0}' JOBDT.csv | sort -nk1 > awk1.csv
+  awk -F, '{ print $1, $NF}' awk1.csv | sed 's/ /,/g' | sed '/,3$/d' | sed 's/0$/3/g' | sed '/^NMF/d' > awk2.csv
+#+end_src
+
+Dann können wir einen Dataframe mit awk2.csv machen und mit dem catplot von seaborn die Einzelfälle auf der Y-Axe und die Jahre auf der X-Axe darstellen. Dort sieht man, wie oft die Akteure den Beruf gewechselt haben und ob dieser Wechsel zum Aufstieg, Abstieg oder Stillstand im Beruf geführt hat:
+
+#+name: awkdataframe
+#+begin_src python :var dt="/home/cpsoz/TM-WS-25/TM-Analyse-3/awk2.csv" :var saveplot="/home/cpsoz/TM-WS-25/TM-Analyse-3/TopicsJOB-Einzelfall.pdf" :results TopicsJOB-Einzelfall.pdf file
+  import matplotlib.pyplot as plt
+  import matplotlib.patches as mpatches
+  import numpy as np
+  import seaborn as sns
+  import pandas as pd
+  import csv
+  from matplotlib import rc
+
+  # Schrift
+  #rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+  rc('font',**{'family':'serif','serif':['Times'],'size':6})
+  rc('text', usetex=True)
+
+  path = dt
+  pathplot = saveplot
+  df = pd.read_csv(path, na_values='.')
+  df.rename(columns={ df.columns[0]: "Name" }, inplace = True)
+  df.rename(columns={ df.columns[1]: "Jahr" }, inplace = True)
+  df.rename(columns={ df.columns[2]: "File" }, inplace = True)
+  df.rename(columns={ df.columns[3]: "DT" }, inplace = True)
+  df['Jahr'] = pd.to_numeric(df['Jahr'])
+  df["Jahr"] = df["Jahr"].fillna(0.0).astype(int)
+  df["DT"] = df["DT"].fillna(0.0).astype(int)
+  df_trends = df.sort_values(by='Jahr',ascending=True)
+  df_trends['Jahr'] = pd.to_numeric(df_trends['Jahr'])
+
+
+  sns.catplot(x='Jahr', y='Name', hue='DT', legend=True, s=10, data=df_trends)
+
+  #plt.legend(loc=2, prop={'size':14}, bbox_to_anchor=(1,1),ncol=1)
+  plt.ylabel('Mobilität Einzelfälle')
+  plt.xlabel('Jahre')
+  plt.xticks(rotation=45, ha="right")
+
+  plt.savefig(pathplot, dpi=300, bbox_inches='tight')
+
+#+end_src
+
+#+RESULTS: awkdataframe
+[[file:None]]
+
+Am Ende der Untersuchung speichern wir alle Daten in einem 'JOB-Results'-Ordner:
+
+#+name: savejob
+#+begin_src shell :var mtadir="/home/cpsoz/Github/mta-tutorial/Org" :var user=nuser :results none
+  mkdir $user/JOB-Results
+  mv $mtadir/MTA-Results* $user/JOB-Results
+  mv $user/*.txt $user/JOB-Results
+  mv $user/*.csv $user/JOB-Results
+  mv $user/*.pdf $user/JOB-Results
+#+end_src
+
+* Problem
+
+Das Problem haben wir mit den Datensätzen selbst, die nicht gut getrennt sind. Hiermit der Beleg dafür:
+
+#+name: datesets
+#+begin_src shell :results output :var user=nuser :var folder="/home/cpsoz/Github/mta-tutorial/Stuff4/Datensätze"
+    cd $user
+    diff -q $folder/Akteure_Kunst_1745-1974_Vol.1 $folder/Akteure_Medienrelationsstruktur_1745-1983_Vol.1 > bla
+    grep "Akteure_Medien" bla | wc -l
+    grep "Akteure_Kunst" bla | wc -l
+#+end_src
+
+Im Datensatz zu den Künstler gibt es eigentlich nur 16 Biographien, die nicht im Datensatz Medien sind. Deshalb wenn wir die Künstler modellieren, modellieren wir eigentlich fast alle Akteure. Um es zu vermeiden, sollte man die 16 Künstler getrennt von den 83 Medienakteure modellieren. Hiermit die Liste von Dokumenten in beiden Fällen
+
+#+name: dateset-kunst
+#+begin_src shell :results drawer :var user=nuser
+  grep "Akteure_Kunst" $user/bla | awk -F: '{print $2}' | sed '/^$/d'
+#+end_src
+
+#+name: dateset-medien
+#+begin_src shell :results drawer :var user=nuser
+  grep "Akteure_Medien" $user/bla | awk -F: '{print $2}' | sed '/^$/d'
+#+end_src
+
+Wenn man annimmt, dass die Künstler die selben JOB-Topics wie die Medienakteure unterstützen, dann kann man sehen, ob die Künstler eine andere Mobilität zwischen den Topics als die Medienakteure haben:
+
+#+name: group_kunst_med
+#+begin_src python :var dt="/home/cpsoz/TM-WS-25/TM-Analyse-3/JOB-Results/JOBDT.csv" :var saveplot="/home/cpsoz/TM-WS-25/TM-Analyse-3/Vergl_M_K.pdf" :results Vergl_M_K.pdf file
+
+  import matplotlib.pyplot as plt
+  import matplotlib.patches as mpatches
+  import numpy as np
+  import seaborn as sns
+  import pandas as pd
+  import csv
+  from matplotlib import rc
+
+  # Schrift
+  #rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+  rc('font',**{'family':'serif','serif':['Times'],'size':9})
+  rc('text', usetex=True)
+
+  path = dt
+  pathplot = saveplot
+  df = pd.read_csv(path)
+  df.rename(columns={ df.columns[0]: "Dokumente" }, inplace = True)
+  #df.drop('Dominant_Topic_NMF', axis=1, inplace=True)
+  df['Jahr'] = df['Dokumente']
+  df['Proto'] = df['Dokumente']
+  df['Jahr']= df['Jahr'].map(lambda x: str(x)[0:4])
+  df['Jahr'].astype(int)
+  df['Proto']= df['Proto'].map(lambda x: str(x)[6:14])
+  df_trends = df.sort_values(by='Jahr',ascending=True)
+
+  # Dataframe für die Künstler
+
+  df_name0 = df[df['Dokumente'].str.contains("_172_")]
+  df_name1 = df[df['Dokumente'].str.contains("_178_")]
+  df_name2 = df[df['Dokumente'].str.contains("_202_")]
+  df_name3 = df[df['Dokumente'].str.contains("_278_")]
+  df_name4 = df[df['Dokumente'].str.contains("_304_")]
+  df_name5 = df[df['Dokumente'].str.contains("_337_")]
+  df_name6 = df[df['Dokumente'].str.contains("_467_")]
+  df_name7 = df[df['Dokumente'].str.contains("_582_")]
+  df_name8 = df[df['Dokumente'].str.contains("_62_")]
+  df_name9 = df[df['Dokumente'].str.contains("_637_")]
+  df_name10 = df[df['Dokumente'].str.contains("_73_")]
+  df_name11 = df[df['Dokumente'].str.contains("_762_")]
+  df_name12 = df[df['Dokumente'].str.contains("_82_")]
+  df_name13 = df[df['Dokumente'].str.contains("_84_")]
+  df_name14 = df[df['Dokumente'].str.contains("_86_")]
+  df_name15 = df[df['Dokumente'].str.contains("_91_")]
+
+  df_concat_n = pd.concat([df_name0, df_name1, df_name2, df_name3, df_name4, df_name5, df_name6, df_name7, df_name8, df_name9, df_name10, df_name11, df_name12, df_name13, df_name14, df_name15])
+  df_concat_nj = df_concat_n.sort_values(by='Jahr', ascending=True)
+
+  duplicates = pd.concat([df_trends, df_concat_nj])
+
+  # Wir löschen die Künstler vom df_trends, um nur die Medienakteure zu behalten
+  df_trends = duplicates.drop_duplicates()
+  df_trends['Jahr'] = pd.to_numeric(df_trends['Jahr'])
+  group = df_trends['Jahr']//5*5
+
+  # Dataframes für die Medienakteure
+
+  df_trends_0 = df_trends.groupby([group])['0'].mean()
+  df_trends_1 = df_trends.groupby([group])['1'].mean()
+  df_trends_2 = df_trends.groupby([group])['2'].mean()
+  df_trends_3 = df_trends.groupby([group])['3'].mean()
+  df_concat = pd.concat([df_trends_0, df_trends_1, df_trends_2, df_trends_3], axis=1)
+  df_concat['Max'] = df_concat[['0', '1', '2', '3']].max(axis=1)
+
+  # Dataframes für die Künstler
+
+  df_concat_nj_0 = df_concat_nj.groupby([group])['0'].mean()
+  df_concat_nj_1 = df_concat_nj.groupby([group])['1'].mean()
+  df_concat_nj_2 = df_concat_nj.groupby([group])['2'].mean()
+  df_concat_nj_3 = df_concat_nj.groupby([group])['3'].mean()
+  df_concat_njt = pd.concat([df_concat_nj_0, df_concat_nj_1, df_concat_nj_2, df_concat_nj_3], axis=1)
+  df_concat_njt['Max_K'] = df_concat_njt[['0', '1', '2', '3']].max(axis=1)
+
+  # Beschreibung der Kategorien
+
+  df_concat['Schriftst./Edit./Journ.'] = df_concat['0'].rolling(5).mean()
+  df_concat['Schule/Arbeiter/Buchhandl.'] = df_concat['1'].rolling(5).mean()
+  df_concat['Handel/Gewerbe/Ing.'] = df_concat['2'].rolling(5).mean()
+  df_concat['Pol./Medien'] = df_concat['3'].rolling(5).mean()
+  df_concat['Mobilität'] = df_concat['Max'].rolling(5).mean()
+  df_concat_njt['Mobilität_K'] = df_concat_njt['Max_K'].rolling(5).mean()
+
+  # Wir herstellen die Graphik
+
+  sns.lineplot(x="Jahr",y="Schriftst./Edit./Journ.",
+           label="Schriftst./Edit./Journ.(HIGH)", data=df_concat,
+           errorbar=None, color='#d62828')
+  sns.lineplot(x="Jahr",y="Handel/Gewerbe/Ing.",
+           label="Handel/Gewerbe/Ing.(MID)", data=df_concat,
+           errorbar=None, color='#f77f00')
+  sns.lineplot(x="Jahr",y="Schule/Arbeiter/Buchhandl.",
+           label="Schule/Arbeiter/Buchhandl.(LOW)", data=df_concat,
+           errorbar=None, color='#fcbf49')
+  sns.lineplot(x="Jahr",y="Pol./Medien",
+           label="Pol./Medien", data=df_concat,
+           errorbar=None, color='#003049')
+  sns.lineplot(x="Jahr",y="Mobilität",
+           label="Mobilitätstrend", data=df_concat,
+           errorbar=None, color='#0077b6')
+  sns.lineplot(x="Jahr",y="Mobilität_K",
+           label="Mobilitätstrend Künstler", data=df_concat_njt,
+           errorbar=None, color='#718200')
+
+  plt.legend(loc=2, prop={'size':14}, bbox_to_anchor=(1,1),ncol=1)
+  plt.ylabel('Rollender Durchschnitt')
+  plt.xlabel('Jahre')
+  plt.xticks(rotation=45, ha="right")
+
+  plt.savefig(pathplot, dpi=300, bbox_inches='tight')
+#+end_src
+
+#+RESULTS: group_kunst_med
+[[file:None]]
+
+* Ist die Mobilität in den jeweiligen Berufsklassen signifikant unterschiedlich in der Zeit?
+
+Wir sehen Variationen der Mobilität von den Akteuren jeder Berufsklasse in der Zeit. Aber sind sie immer statistisch signifikant? Dies wollen wir im Folgenden für die jeweiligen Berufsklassen prüfen.
+
+Wir brauchen eine Einteilung der gesamten Zeit in Zeitspannen. Hier würden wir als Beispiel die folgenden Zeitspannen berücksichtigen:
+
+- die Zeit vor 1800 (1730-1799)
+- die Zeit nach 1800 bis 1849
+- die Zeit von 1850 bis 1899
+- die Zeit ab 1900
+
+Auf der Grundlage von unserer Datei JOBDT.csv wollen wir dann entsprechende vier Dateien generieren, die nur die Zeitspannen enthalten, die uns interessieren.
+
+#+begin_src shell :var user=nuser :results silent
+  awk -F, '{$NF=""}1' $user/JOB-Results/JOBDT.csv | sed -e 's/ /,/g' -e 's/.$//' | sort | sed -n '/1730/,/1799/p' > $user/JOB-Results/JOB-1730-1799.csv
+  awk -F, '{$NF=""}1' $user/JOB-Results/JOBDT.csv | sed -e 's/ /,/g' -e 's/.$//' | sort | sed -n '/1805/,/1849/p' > $user/JOB-Results/JOB-1805-1849.csv
+  awk -F, '{$NF=""}1' $user/JOB-Results/JOBDT.csv | sed -e 's/ /,/g' -e 's/.$//' | sort | sed -n '/1850/,/1899/p' > $user/JOB-Results/JOB-1850-1899.csv
+  awk -F, '{$NF=""}1' $user/JOB-Results/JOBDT.csv | sed -e 's/ /,/g' -e 's/.$//' | sort | sed -n '/1900/,/1955/p' > $user/JOB-Results/JOB-1900-1955.csv
+#+end_src
+
+Auf der Grundlage dieser Daten können wir einen T-Test berechnen, um zu wissen, ob sich die Mobilität in der Zeit Z+1 signifikant von der Mobilität in der Zeit Z-1 verändert. Dies machen wir für jede Berufsklasse, und auf der Grundlage unserer vorherigen Untersuchung gehen wir davon aus, dass die Mobilität nicht identisch in den verschiedenen Zeitperioden variiert.
+
+Wir konvertieren die Dateien in entsprechenden Dataframes und wir führen die T-Tests durch:
+
+#+begin_src python :results output
+  import scipy.stats as stats
+  import numpy as np
+  import csv
+  import pandas as pd
+
+  df_173099 = pd.read_csv('/home/cpsoz/TM-WS-25/TM-Analyse-3/JOB-Results/JOB-1730-1799.csv', header=None)
+  df_180549 = pd.read_csv('/home/cpsoz/TM-WS-25/TM-Analyse-3/JOB-Results/JOB-1805-1849.csv', header=None)
+  df_185099 = pd.read_csv('/home/cpsoz/TM-WS-25/TM-Analyse-3/JOB-Results/JOB-1850-1899.csv', header=None)
+  df_190055 = pd.read_csv('/home/cpsoz/TM-WS-25/TM-Analyse-3/JOB-Results/JOB-1900-1955.csv', header=None)
+
+  t_1 = pd.DataFrame([df_173099[1], df_180549[1], df_185099[1], df_190055[1]]).transpose().fillna(0)
+  t_2 = pd.DataFrame([df_173099[2], df_180549[2], df_185099[2], df_190055[2]]).transpose().fillna(0)
+  t_3 = pd.DataFrame([df_173099[3], df_180549[3], df_185099[3], df_190055[3]]).transpose().fillna(0)
+  t_4 = pd.DataFrame([df_173099[4], df_180549[4], df_185099[4], df_190055[4]]).transpose().fillna(0)
+
+  a = t_1.iloc[:, [0]].to_numpy()
+  b = t_1.iloc[:, [1]].to_numpy()
+  t1_12 = stats.ttest_ind(a=b, b=a, equal_var=False)
+
+  a = t_1.iloc[:, [1]].to_numpy()
+  b = t_1.iloc[:, [2]].to_numpy()
+  t1_23 = stats.ttest_ind(a=b, b=a, equal_var=False)
+
+  a = t_1.iloc[:, [2]].to_numpy()
+  b = t_1.iloc[:, [3]].to_numpy()
+  t1_34 = stats.ttest_ind(a=b, b=a, equal_var=False)
+  print("Unterscheidung in der HIGH-Klasse")
+  print("~~~~~")
+  print(t1_12)
+  print(t1_23)
+  print(t1_34)
+  print("~~~~~")
+
+  a = t_2.iloc[:, [0]].to_numpy()
+  b = t_2.iloc[:, [1]].to_numpy()
+  t2_12 = stats.ttest_ind(a=b, b=a, equal_var=False)
+
+  a = t_2.iloc[:, [1]].to_numpy()
+  b = t_2.iloc[:, [2]].to_numpy()
+  t2_23 = stats.ttest_ind(a=b, b=a, equal_var=False)
+
+  a = t_2.iloc[:, [2]].to_numpy()
+  b = t_2.iloc[:, [3]].to_numpy()
+  t2_34 = stats.ttest_ind(a=b, b=a, equal_var=False)
+  print("Unterscheidung in der MID-Klasse")
+  print("~~~~~")
+  print(t2_12)
+  print(t2_23)
+  print(t2_34)
+  print("~~~~~")
+
+  a = t_3.iloc[:, [0]].to_numpy()
+  b = t_3.iloc[:, [1]].to_numpy()
+  t3_12 = stats.ttest_ind(a=b, b=a, equal_var=False)
+
+  a = t_3.iloc[:, [1]].to_numpy()
+  b = t_3.iloc[:, [2]].to_numpy()
+  t3_23 = stats.ttest_ind(a=b, b=a, equal_var=False)
+
+  a = t_3.iloc[:, [2]].to_numpy()
+  b = t_3.iloc[:, [3]].to_numpy()
+  t3_34 = stats.ttest_ind(a=b, b=a, equal_var=False)
+  print("Unterscheidung in der LOW-Klasse")
+  print("~~~~~")
+  print(t3_12)
+  print(t3_23)
+  print(t3_34)
+  print("~~~~~")
+#+end_src
+
+Wir beobachten die folgenden signifikanten Unterscheidungen:
+
+- für die Mitglieder der HIGH-Klasse: In der Zeit sind die Unterscheidung der Mobilität am meisten zwischen den Zeiten  1733/99 und 1805/49 sowie zwischen den Zeiten 1805/49 und 1850/99; dann unterscheidet sich die Mobilität in dieser Klasse zwischen 1850/99 und nach 1900 nicht mehr;
+- für die Mitglieder der MID-Klasse: die Mobilität unterscheidet sich zwischen allen definierten Zeitperioden;
+- für die Mitglieder der LOW-Klasse: die Mobilität unterscheidet sich nur zwischen den Zeiten  1733/99 und 1805/49, aber dann nicht mehr.
+
+Die Mobilität der HIGH-Klasse variiert dann besonders stark bis zum Ende des 19. Jh. Die Mobilität der MID-Klasse variiert am meisten in der ganzen Zeit. Die Mobilität der LOW-Klasse variiert ab der Mitte des 19. Jh. nicht mehr in einer signifikanten Art und Weise.

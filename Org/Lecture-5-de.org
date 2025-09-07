@@ -9,7 +9,7 @@ Dieses /workflow/ kann wie eine Anwendung verwendet werden. Erforderlich dafür 
   mkdir $user/TM-Analyse-2
 #+end_src
 
-Unsere Analyse wird in diesem Ordner 'TM-Analyse' stattfinden. Dort stellen wir einen Ordner 'TM-Skripten' für die Skripten, die wir im Rahmen von diesem /workflow/ schreiben, und wir definieren den vollständigen Pfad zum Ordner 'TM-Analyse' als neuen Benutzerpfad (Pfad anpassen):
+Unsere Analyse wird in diesem Ordner 'TM-Analyse-2' stattfinden. Dort stellen wir einen Ordner 'TM-Skripten' für die Skripten, die wir im Rahmen von diesem /workflow/ schreiben, und wir definieren den vollständigen Pfad zum Ordner 'TM-Analyse' als neuen Benutzerpfad (Pfad anpassen):
 
 #+name: nuser
 #+begin_src shell :var nuserpath="/home/cpsoz/TM-WS-25/TM-Analyse-2" :results silent
@@ -32,7 +32,7 @@ Dann schreiben wir den 'tm-cov.sh' Skript wie folgt:
 
 Dieser Skript führt alle Code-Blöcke in diesem /workflow/ aus. Er kann entsprechend mit bash verwendet werden, wie etwa: bash tm-cov.sh oder ./tm-cov.sh. Ohne Skript kann dieses /worflow/ von einem Terminal mit
 
-~emacs /home/cpsoz/Gitub/mta-tutorial/Org/Lecture-4-de.org --batch -l /home/cpsoz/.emacs.d/init.el --eval "(setq org-confirm-babel-evaluate nil)" --eval "(org-babel-execute-buffer)"~
+~emacs /home/cpsoz/Gitub/mta-tutorial/Org/Lecture-5-de.org --batch -l /home/cpsoz/.emacs.d/init.el --eval "(setq org-confirm-babel-evaluate nil)" --eval "(org-babel-execute-buffer)"~
 
 ausgeführt werden. MTA kopieren wir dann zu unserem TM-Skripten Ordner, um die Analyse durchzuführen.
 
@@ -50,7 +50,7 @@ Wir trainieren MTA auf die Dateien, die wir in einem Ordner 'Stuff3' gespeichert
   echo $rechpath
 #+end_src
 
-Wir müssen auch bedenken, dass wir für MTA eine Stopwords-Liste brauchen (im Ordner 'Stopwords'). Es sind Stop-Wörter, die in unserem Fall englische Wörter sind und sich im folgenden Ordner befinden (Pfad anpassen):
+Wir müssen auch bedenken, dass wir für MTA eine Stopwords-Liste brauchen (im Ordner 'Stopwords'). Es sind Stop-Wörter, die in unserem Fall deutsche Wörter sind und sich im folgenden Ordner befinden (Pfad anpassen):
 
 #+name: stops
 #+begin_src shell :var stopwords="/home/cpsoz/Github/mta-tutorial/Stopwords" :results silent
@@ -102,11 +102,26 @@ Wir drucken in dieser Datei alle Ergebnisse aus der Datei 'TM-train-scores.txt' 
     cat $user/TM-train-scores.txt
 #+end_src
 
+#+RESULTS: mta-scores
+:results:
+
+Elbow | No optimal topic
+Silhouette | Optimal topics, better to worst: 5 6 8 10 11 12 13
+Calinski Harabasz | No optimal topic
+Davies Bouldin | Optimal topics, better to worst: 3 5 7 8 9 10 11 12 13 14
+NMF-Cophenet | Optimal topics, better to worst: 4 5 7 8 9
+Correlation values NMF-Cophenet: (0.716109566486473, 0.6179506131579492, 0.6902732151002392, 0.6583955693271775, 0.7208821961680739)
+LDA-Cophenet | Optimal topics, better to worst: 3 5 6 7 8 9 10 12 14
+Correlation values LDA-Cophenet: (0.9274421873051646, 0.937363992468951, 0.9191851504436633, 0.9591411056925253, 0.9563689757438678, 0.9640684092895591, 0.9143581342924882, 0.9520142005555593, 0.9286992531527984)
+------
+
+:end:
+
 Wir können jetzt die Dateien mit der optimalen Topics-Anzahl modellieren.
 
 * Modellierung
 
-Dafür stellen wir eine veränderte Version von unserem Code-Block 'autotrain-01', die wir 'autotest-01' umbenennen und anpassen:
+Dafür stellen wir eine veränderte Version von unserem Code-Block 'autotrain-01', die wir 'autotest-01' umbenennen und anpassen. Im Vergleich zu unserem letzten /workflow/ werden wir in dieser Datei Zeile addieren, die auf zwei weitere Optionen von MTA verbunden sind. Die erste Option bieten an, die Entwicklung der Topics in der Zeit zu beobachten. Die zweite Option bietet an, eine Rekonstruktion der semantischen Kontexte, in denen ausgewählte Begriffe eingebettet sind. In diesem letzten Fall interessiert uns, ob die vier Begriffe Covid, Corona, Virus und China in Bezug auf selbe semantischen Kontexte verwendet werden, oder ob sie auf unterschiedliche semantische Kontexte verweisen. Damit erhalten wir auch eine visuelle Darstellung von diesen Kontexten, die über die Größe und Dichte von solchen Kontexten informiert.
 
 #+name: autotest-01
 #+begin_src shell :var user=nuser :var rech=rechpfad :var stopw=stops :results silent
@@ -120,7 +135,16 @@ Dafür stellen wir eine veränderte Version von unserem Code-Block 'autotrain-01
   echo "a" >> $user/TM-Skripten/mta-test.txt
   echo "1" >> $user/TM-Skripten/mta-test.txt
   echo "n" >> $user/TM-Skripten/mta-test.txt
+  echo "7" >> $user/TM-Skripten/mta-test.txt
+  echo "n" >> $user/TM-Skripten/mta-test.txt
+  echo "2" >> $user/TM-Skripten/mta-test.txt
+  echo "22" >> $user/TM-Skripten/mta-test.txt
+  echo "y" >> $user/TM-Skripten/mta-test.txt
   echo "4" >> $user/TM-Skripten/mta-test.txt
+  echo "covid corona virus china" >> $user/TM-Skripten/mta-test.txt
+  echo "n" >> $user/TM-Skripten/mta-test.txt
+  echo "5" >> $user/TM-Skripten/mta-test.txt
+  echo "n" >> $user/TM-Skripten/mta-test.txt
   echo "n" >> $user/TM-Skripten/mta-test.txt
   echo "0" >> $user/TM-Skripten/mta-test.txt
 #+end_src
