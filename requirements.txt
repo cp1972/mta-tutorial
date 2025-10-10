@@ -5,7 +5,7 @@ numpy==1.22.4
 pandas==2.0.3
 plotly==5.5.0
 cufflinks==0.17.3
-jupyterlab==4.2.5
+jupyterlab==4.4.8
 jupyterlab-pygments==0.1.2
 jupyterlab-server==2.27.2
 jupyterlab-widgets==3.0.11
