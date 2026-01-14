@@ -57,14 +57,16 @@ ausgeführt werden. MTA kopieren wir dann zu unserem TM-Skripten Ordner, um die 
   cp $mtap/MTA.py $user/TM-Skripten
 #+end_src
 
-Wir kopieren dann die Datensätze der Künstler und Akteure der Medienbranche zu diesem Ordner
+* Optionale Schritte, wenn wir die Dateien nicht schon zerlegt haben
+
+Wir kopieren die Datensätze der Künstler und Akteure der Medienbranche zu unserem TM-Analyse-3 Ordner
 
 #+name: copy-data
 #+begin_src shell :var data="/home/cpsoz/Github/mta-tutorial/Stuff4/Datensätze" :var user=nuser :results silent
   cp -r $data $user
 #+end_src
 
-* Dateien zerlegen
+** Dateien zerlegen
 
 Wir zerlegen die Dateien in den zwei Ordner zu den Künstlern und zu den Akteuren der Medienbranche nach den folgenden Stufen:
 
@@ -289,7 +291,7 @@ Einige der Dateien im Ordner 'M-Data' enthalten Zahlen, die keine Jahreszahlen s
 
 Wir können jetzt diese Dateien modellieren. Wir fangen mit der Dateien 'ERZ' und 'JOB' an.
 
-* Modellierung
+** Relevante Dateien zu neuen kategoriellen Ordnern kopieren
 
 Im Rahmen von Topic-Modell-Analysen müssen wir zuerst wissen, wie viele Themen für einen bestimmten Datensatz sinnvoll zu modellieren sind. Deshalb müssen wir in einem ersten Schritt MTA auf die Dateien trainieren, die wir in den Unterordnern vom Ordner 'K-Data' bzw 'M-Data' gespeichert haben. Wir stellen diese Unterordner her, und wir kopieren die relevanten Dateien zu diesen Ordnern:
 
@@ -308,9 +310,9 @@ Wir müssen auch bedenken, dass MTA eine Liste von Wörtern (ein Wort je Zeile) 
   echo $stopwords
 #+end_src
 
-** Künstler JOB
+* Modellierung von JOB-Dateien für die Künstler
 
-Wir [[https://github.com/cp1972/mta-app/blob/main/automate.md][automatisieren]] MTA mit der folgenden 'jobmta-train.txt'-Datei, die wir in unserem 'Skripten-WK' Ordner speichern:
+Wir [[https://github.com/cp1972/mta-app/blob/main/automate.md][automatisieren]] MTA mit der folgenden 'jobmta-train.txt'-Datei, die wir in unserem 'TM-Skripten' Ordner speichern:
 
 #+name: autotrain-01
 #+begin_src shell :var user=nuser :var stopw=stops :results silent
