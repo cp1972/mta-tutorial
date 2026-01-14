@@ -153,6 +153,7 @@ Mit dieser Datei führen wir MTA aus mit dem folgenden Code-Block:
 
 #+name: testmta
 #+begin_src shell :var user=nuser :results none
+  source .venv/bin/activate
   cat $user/TM-Skripten/mta-test.txt | python3 $user/TM-Skripten/MTA.py
 #+end_src
 

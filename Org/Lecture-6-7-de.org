@@ -57,6 +57,11 @@ ausgeführt werden. MTA kopieren wir dann zu unserem TM-Skripten Ordner, um die 
   cp $mtap/MTA.py $user/TM-Skripten
 #+end_src
 
+#+begin_src emacs-lisp :session venv :results none
+  (pyvenv-activate "~/TM-WS-25/.venv")
+#+end_src
+
+
 * Optionale Schritte, wenn wir die Dateien nicht schon zerlegt haben
 
 Wir kopieren die Datensätze der Künstler und Akteure der Medienbranche zu unserem TM-Analyse-3 Ordner
@@ -332,10 +337,25 @@ Wir [[https://github.com/cp1972/mta-app/blob/main/automate.md][automatisieren]] 
   echo "0" >> $user/TM-Skripten/jobmta-train.txt
 #+end_src
 
+Wenn wir die optionalen Schritte übersprungen haben, dann müssen wir den ordner K-Data/JOB zu unserem user-Ordner kopieren:
+
+#+name: copy-data2
+#+begin_src shell :var data="/home/cpsoz/Github/mta-tutorial/Stuff4/K-Data" :var user=nuser :results silent
+  cp -r $data $user
+#+end_src
+
+Ebenfalls müssen wir den Pfad zu den Stopwords wieder angeben:
+
+#+name: stops
+#+begin_src shell :var stopwords="/home/cpsoz/Github/mta-tutorial/Stopwords" :results silent
+  echo $stopwords
+#+end_src
+
 Diese Datei trainiert MTA mit Modellen, die von 2 bis 15 Topics reichen. Wir führen MTA mit dieser Datei im folgenden Code-Block aus:
 
 #+name: trainmta
 #+begin_src shell :var user=nuser :results none
+  source /home/cpsoz/TM-WS-25/.venv/bin/activate
   cat $user/TM-Skripten/jobmta-train.txt | python3 $user/TM-Skripten/MTA.py
 #+end_src
 
@@ -356,6 +376,21 @@ Wir können dann alle Ergebnisse aus der Datei 'TM-train-scores.txt' mit dem fol
 #+begin_src shell :var user=nuser :results drawer
     cat $user/TM-train-scores.txt
 #+end_src
+
+#+RESULTS: mta-scores
+:results:
+
+Elbow | No optimal topic
+Silhouette | Optimal topics, better to worst: 3 4 7 8 13
+Calinski Harabasz | Optimal topics, better to worst: 4 5 6 7 8 10 11 13
+Davies Bouldin | Optimal topics, better to worst: 3 4 7 8
+NMF-Cophenet | Optimal topics, better to worst: 4 5 9 10 11 13 14
+Correlation values NMF-Cophenet: (np.float64(0.8504380027434334), np.float64(0.8244424769948856), np.float64(0.8521265982395763), np.float64(0.8203981029903963), np.float64(0.8212785011416456), np.float64(0.7477020436210435), np.float64(0.7490090715970202))
+LDA-Cophenet | Optimal topics, better to worst: 6 7 8 9 10 11 12 14
+Correlation values LDA-Cophenet: (np.float64(0.795301071302923), np.float64(0.8117207411800472), np.float64(0.7848153729997138), np.float64(0.7927538221290932), np.float64(0.7314802783714226), np.float64(0.7488608599481901), np.float64(0.7299200319024972), np.float64(0.739485109675957))
+------
+
+:end:
 
 Wir können jetzt die Dateien mit dem optimalen Anzahl an Topics -- hier sieht es mit 4 besser aus -- modellieren.
 
@@ -385,6 +420,7 @@ Dann modellieren wir den ersten Ordner:
 
 #+name: testmta
 #+begin_src shell :var user=nuser :results none
+  source /home/cpsoz/TM-WS-25/.venv/bin/activate
   cat $user/TM-Skripten/jobmta-test.txt | python3 $user/TM-Skripten/MTA.py
 #+end_src
 
@@ -423,78 +459,81 @@ Einmal die Kontrolle der Berichte erfolgt, bilden wir die Entwicklung der Topics
 
 Wir bilden die Entwicklung der Topics in der Zeit ab. Wir fügen dann die Daten zur Mobilität der Akteure zwischen diesen Topics je nachdem hinzu, welchen Topic die Akteure im Laufe der Zeit am meisten unterstützt haben. Die Graphik zeigt somit, wie die Arbeitsklassen, die die Topic darstellen, in der Zeit entwickelt wurden, und wie die Akteure zwischen diesen Arbeitsklassen zirkuliert sind:
 
-#+name: groupy2_dt
-#+begin_src python :var dt="/home/cpsoz/TM-WS-25/TM-Analyse-3/JOBDT.csv" :var saveplot="/home/cpsoz/TM-WS-25/TM-Analyse-3/TopicsLine.pdf" :results TopicsLine.pdf file
-  import matplotlib.pyplot as plt
-  import matplotlib.patches as mpatches
-  import numpy as np
-  import seaborn as sns
-  import pandas as pd
-  import csv
-  from matplotlib import rc
 
-  # Schrift
-  #rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
-  rc('font',**{'family':'serif','serif':['Times'],'size':9})
-  rc('text', usetex=True)
 
-  path = dt
-  pathplot = saveplot
-  df = pd.read_csv(path)
-  df.rename(columns={ df.columns[0]: "Dokumente" }, inplace = True)
-  #df.drop('Dominant_Topic_NMF', axis=1, inplace=True)
-  df['Jahr'] = df['Dokumente']
-  df['Proto'] = df['Dokumente']
-  df['Jahr']= df['Jahr'].map(lambda x: str(x)[0:4])
-  df['Jahr'].astype(int)
-  df['Proto']= df['Proto'].map(lambda x: str(x)[6:14])
-  df_trends = df.sort_values(by='Jahr',ascending=True)
-  df_trends['Jahr'] = pd.to_numeric(df_trends['Jahr'])
-  group = df_trends['Jahr']//5*5
 
-  # Dataframes zu den Topics
+    #+begin_src python :session venv :var dt="/home/cpsoz/TM-WS-25/TM-Analyse-3/JOBDT.csv" :var saveplot="/home/cpsoz/TM-WS-25/TM-Analyse-3/TopicsLine.pdf" :results TopicsLine.pdf file
+      import matplotlib.pyplot as plt
+      import matplotlib.patches as mpatches
+      import numpy as np
+      import seaborn as sns
+      import pandas as pd
+      import csv
+      from matplotlib import rc
 
-  df_trends_0 = df_trends.groupby([group])['0'].mean()
-  df_trends_1 = df_trends.groupby([group])['1'].mean()
-  df_trends_2 = df_trends.groupby([group])['2'].mean()
-  df_trends_3 = df_trends.groupby([group])['3'].mean()
-  df_concat = pd.concat([df_trends_0, df_trends_1, df_trends_2, df_trends_3], axis=1)
-  df_concat['Max'] = df_concat[['0', '1', '2', '3']].max(axis=1)
+      # Schrift
+      #rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+      rc('font',**{'family':'serif','serif':['Times'],'size':9})
+      rc('text', usetex=True)
 
-  df_concat['Schriftst./Edit./Journ.'] = df_concat['0'].rolling(5).mean()
-  df_concat['Schule/Arbeiter/Buchhandl.'] = df_concat['1'].rolling(5).mean()
-  df_concat['Handel/Gewerbe/Ing.'] = df_concat['2'].rolling(5).mean()
-  df_concat['Pol./Medien'] = df_concat['3'].rolling(5).mean()
-  df_concat['Mobilität'] = df_concat['Max'].rolling(5).mean()
+      path = dt
+      pathplot = saveplot
+      df = pd.read_csv(path)
+      df.rename(columns={ df.columns[0]: "Dokumente" }, inplace = True)
+      #df.drop('Dominant_Topic_NMF', axis=1, inplace=True)
+      df['Jahr'] = df['Dokumente']
+      df['Proto'] = df['Dokumente']
+      df['Jahr']= df['Jahr'].map(lambda x: str(x)[0:4])
+      df['Jahr'].astype(int)
+      df['Proto']= df['Proto'].map(lambda x: str(x)[6:14])
+      df_trends = df.sort_values(by='Jahr',ascending=True)
+      df_trends['Jahr'] = pd.to_numeric(df_trends['Jahr'])
+      group = df_trends['Jahr']//5*5
 
-  # Graphiken zu den Topics
+      # Dataframes zu den Topics
 
-  sns.lineplot(x="Jahr",y="Schriftst./Edit./Journ.",
-           label="Schriftst./Edit./Journ.(HIGH)", data=df_concat,
-           errorbar=None, color='#d62828')
-  sns.lineplot(x="Jahr",y="Handel/Gewerbe/Ing.",
-           label="Handel/Gewerbe/Ing.(MID)", data=df_concat,
-           errorbar=None, color='#f77f00')
-  sns.lineplot(x="Jahr",y="Schule/Arbeiter/Buchhandl.",
-           label="Schule/Arbeiter/Buchhandl.(LOW)", data=df_concat,
-           errorbar=None, color='#fcbf49')
-  sns.lineplot(x="Jahr",y="Pol./Medien",
-           label="Pol./Medien", data=df_concat,
-           errorbar=None, color='#003049')
-  sns.lineplot(x="Jahr",y="Mobilität",
-           label="Mobilitätstrend", data=df_concat,
-           errorbar=None, color='#0077b6')
+      df_trends_0 = df_trends.groupby([group])['0'].mean()
+      df_trends_1 = df_trends.groupby([group])['1'].mean()
+      df_trends_2 = df_trends.groupby([group])['2'].mean()
+      df_trends_3 = df_trends.groupby([group])['3'].mean()
+      df_concat = pd.concat([df_trends_0, df_trends_1, df_trends_2, df_trends_3], axis=1)
+      df_concat['Max'] = df_concat[['0', '1', '2', '3']].max(axis=1)
 
-  plt.legend(loc=2, prop={'size':14}, bbox_to_anchor=(1,1),ncol=1)
-  plt.ylabel('Rollender Durchschnitt')
-  plt.xlabel('Jahre')
-  plt.xticks(rotation=45, ha="right")
+      df_concat['Schriftst./Edit./Journ.'] = df_concat['0'].rolling(5).mean()
+      df_concat['Schule/Arbeiter/Buchhandl.'] = df_concat['1'].rolling(5).mean()
+      df_concat['Handel/Gewerbe/Ing.'] = df_concat['2'].rolling(5).mean()
+      df_concat['Pol./Medien'] = df_concat['3'].rolling(5).mean()
+      df_concat['Mobilität'] = df_concat['Max'].rolling(5).mean()
 
-  plt.savefig(pathplot, dpi=300, bbox_inches='tight')
+      # Graphiken zu den Topics
+
+      sns.lineplot(x="Jahr",y="Schriftst./Edit./Journ.",
+               label="Schriftst./Edit./Journ.(HIGH)", data=df_concat,
+               errorbar=None, color='#d62828')
+      sns.lineplot(x="Jahr",y="Handel/Gewerbe/Ing.",
+               label="Handel/Gewerbe/Ing.(MID)", data=df_concat,
+               errorbar=None, color='#f77f00')
+      sns.lineplot(x="Jahr",y="Schule/Arbeiter/Buchhandl.",
+               label="Schule/Arbeiter/Buchhandl.(LOW)", data=df_concat,
+               errorbar=None, color='#fcbf49')
+      sns.lineplot(x="Jahr",y="Pol./Medien",
+               label="Pol./Medien", data=df_concat,
+               errorbar=None, color='#003049')
+      sns.lineplot(x="Jahr",y="Mobilität",
+               label="Mobilitätstrend", data=df_concat,
+               errorbar=None, color='#0077b6')
+
+      plt.legend(loc=2, prop={'size':14}, bbox_to_anchor=(1,1),ncol=1)
+      plt.ylabel('Rollender Durchschnitt')
+      plt.xlabel('Jahre')
+      plt.xticks(rotation=45, ha="right")
+
+      plt.savefig(pathplot, dpi=300, bbox_inches='tight')
 #+end_src
 
-#+RESULTS: groupy2_dt
+#+RESULTS:
 [[file:None]]
+
 
 Wir können ebenfalls einen Dataframe herstellen, wenn wir die Mobilität auf der Ebene von den Einzelakteuren untersuchen möchten. Zuerst müssen wir die Datei 'Dominant_Topic_NMF' mit awk parsen, damit wir am Ende einen Datensatz mit Namen der Personen, Jahre und Dominant Topic erhalten:
 
@@ -508,7 +547,7 @@ Wir können ebenfalls einen Dataframe herstellen, wenn wir die Mobilität auf de
 Dann können wir einen Dataframe mit awk2.csv machen und mit dem catplot von seaborn die Einzelfälle auf der Y-Axe und die Jahre auf der X-Axe darstellen. Dort sieht man, wie oft die Akteure den Beruf gewechselt haben und ob dieser Wechsel zum Aufstieg, Abstieg oder Stillstand im Beruf geführt hat:
 
 #+name: awkdataframe
-#+begin_src python :var dt="/home/cpsoz/TM-WS-25/TM-Analyse-3/awk2.csv" :var saveplot="/home/cpsoz/TM-WS-25/TM-Analyse-3/TopicsJOB-Einzelfall.pdf" :results TopicsJOB-Einzelfall.pdf file
+#+begin_src python :session venv :var dt="/home/cpsoz/TM-WS-25/TM-Analyse-3/awk2.csv" :var saveplot="/home/cpsoz/TM-WS-25/TM-Analyse-3/TopicsJOB-Einzelfall.pdf" :results TopicsJOB-Einzelfall.pdf file
   import matplotlib.pyplot as plt
   import matplotlib.patches as mpatches
   import numpy as np
@@ -561,7 +600,7 @@ Am Ende der Untersuchung speichern wir alle Daten in einem 'JOB-Results'-Ordner:
   mv $user/*.pdf $user/JOB-Results
 #+end_src
 
-* Problem
+*** Problem
 
 Das Problem haben wir mit den Datensätzen selbst, die nicht gut getrennt sind. Hiermit der Beleg dafür:
 
@@ -727,7 +766,7 @@ Auf der Grundlage dieser Daten können wir einen T-Test berechnen, um zu wissen,
 
 Wir konvertieren die Dateien in entsprechenden Dataframes und wir führen die T-Tests durch:
 
-#+begin_src python :results output
+#+begin_src python :session venv :results output
   import scipy.stats as stats
   import numpy as np
   import csv
@@ -797,6 +836,28 @@ Wir konvertieren die Dateien in entsprechenden Dataframes und wir führen die T-
   print(t3_34)
   print("~~~~~")
 #+end_src
+
+#+RESULTS:
+#+begin_example
+Unterscheidung in der HIGH-Klasse
+~~~~~
+TtestResult(statistic=array([5.06309989]), pvalue=array([1.28883475e-06]), df=array([138.74436583]))
+TtestResult(statistic=array([2.52472591]), pvalue=array([0.01247524]), df=array([173.58647025]))
+TtestResult(statistic=array([-1.10879989]), pvalue=array([0.269044]), df=array([174.31068051]))
+~~~~~
+Unterscheidung in der MID-Klasse
+~~~~~
+TtestResult(statistic=array([2.16498222]), pvalue=array([0.03187045]), df=array([160.0515813]))
+TtestResult(statistic=array([2.46280712]), pvalue=array([0.01484854]), df=array([159.48737894]))
+TtestResult(statistic=array([-2.48614571]), pvalue=array([0.01399473]), df=array([152.09011703]))
+~~~~~
+Unterscheidung in der LOW-Klasse
+~~~~~
+TtestResult(statistic=array([3.69775126]), pvalue=array([0.00035958]), df=array([97.5329952]))
+TtestResult(statistic=array([1.53559125]), pvalue=array([0.12680432]), df=array([145.90654045]))
+TtestResult(statistic=array([-0.20250837]), pvalue=array([0.83975561]), df=array([174.22251791]))
+~~~~~
+#+end_example
 
 Wir beobachten die folgenden signifikanten Unterscheidungen:
 
