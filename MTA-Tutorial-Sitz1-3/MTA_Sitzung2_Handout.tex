@@ -1,0 +1,808 @@
+\documentclass[a4paper,11pt]{article}
+
+\usepackage{fontspec}
+\usepackage[ngerman,provide=*]{babel}
+\usepackage{csquotes}
+
+\usepackage[a4paper,margin=2.5cm,headheight=14pt]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{parskip}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=*,topsep=2pt,itemsep=2pt}
+\setlist[enumerate]{leftmargin=*,topsep=2pt,itemsep=2pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyhead[L]{\footnotesize MTA -- Sitzung 2: Wie funktionieren Topic-Modelle?}
+\fancyhead[R]{\footnotesize Seite \thepage}
+\fancyfoot[C]{\footnotesize Prof.\ Dr.\ Christian Papilloud · Institut für Soziologie · MLU Halle-Wittenberg}
+
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.6em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.6em}{}
+\titlespacing*{\section}{0pt}{1.5em}{0.5em}
+\titlespacing*{\subsection}{0pt}{1.0em}{0.3em}
+
+\usepackage{xcolor}
+\definecolor{boxgrau}{gray}{0.95}
+\usepackage[most]{tcolorbox}
+\newtcolorbox{merkbox}[1][]{
+  colback=boxgrau,colframe=black!40,boxrule=0.4pt,
+  arc=2pt,left=8pt,right=8pt,top=4pt,bottom=4pt,
+  fonttitle=\bfseries,#1
+}
+
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black!70,
+  urlcolor=black!60,
+  citecolor=black!60,
+  pdftitle={MTA Sitzung 2 -- Handout},
+  pdfauthor={Christian Papilloud},
+}
+
+\title{\textbf{Wie funktionieren Topic-Modelle?}\\[4pt]
+\large Sitzung 2 -- Mathematische Grundlagen, LDA, NMF\\
+und der Sprung zu BERT/LLMs\\[8pt]
+\normalsize Begleitendes Handout}
+\author{Prof.\ Dr.\ Christian Papilloud\\
+\small Institut für Soziologie -- Martin-Luther-Universität Halle-Wittenberg}
+\date{Master Soziologie -- 2026}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{fancy}
+
+\vspace{-1em}
+
+% ===============================================================
+\section{Wo wir stehen}
+
+In der ersten Sitzung haben wir Topic-Modelle (TM) methodologisch
+positioniert: \emph{quantitativ basiert}, aber im Dienst der
+qualitativen Forschung, näher an Mayrings qualitativer Inhaltsanalyse
+als an Oevermanns objektiver Hermeneutik. Heute fragen wir: \emph{Wie
+funktioniert das technisch?} -- vom kleinen Beispiel bis zu den
+neuesten Verfahren.
+
+Dieses Handout folgt der gleichen Struktur wie die Sitzung:
+
+\begin{enumerate}
+\item Was ist ein \emph{topic}? Die Matrixfaktorisierung anhand eines
+kleinen Beispiels.
+\item Vergleich mit Clusteranalyse und Faktorenanalyse.
+\item Die zwei klassischen Verfahren: LDA und NMF.
+\item Die neue Welt: BERTopic und Large Language Models.
+\end{enumerate}
+
+% ===============================================================
+\section{Was ist ein \emph{topic}?}
+
+\subsection{Die Intuition}
+
+Ein \emph{topic} ist nichts Geheimnisvolles. Es ist eine
+\textbf{Wortliste} -- eine Gruppe von Wörtern, die in den
+Dokumenten der untersuchten Textquelle \emph{oft gemeinsam}
+vorkommen. Wenn die Wörter \enquote{Milch} und \enquote{Katze}
+immer wieder in denselben Dokumenten auftauchen, gibt es vermutlich
+ein topic, das beide enthält. Wenn ein drittes Wort, \enquote{Schale},
+ebenfalls oft gemeinsam mit den ersten beiden auftaucht, gehört es
+ebenfalls dazu. So entsteht durch wiederholte Ko-Okkurrenz eine
+Wortgruppe, die wir als \emph{semantisches Thema} interpretieren.
+
+Ein Topic-Modell liefert immer zwei Resultate:
+
+\begin{itemize}
+\item Die \textbf{Topic-Wort-Zugehörigkeit}: für jedes topic eine
+Liste von Wörtern, jeweils mit einem \emph{Gewicht}, das ausdrückt,
+wie zentral das Wort für dieses topic ist.
+
+\item Die \textbf{Topic-Gewichte der Dokumente}: für jedes Dokument
+eine Verteilung über die topics, die ausdrückt, in welchem Maße
+das Dokument zu welchem topic gehört.
+\end{itemize}
+
+In MTA werden wir diese beiden Resultate als CSV-Tabellen, JSON-Dateien
+und als Heatmap-Diagramme wiederfinden.
+
+\subsection{Das MLU-Sommer-Beispiel}
+
+Das Buch von Papilloud \& Hinneburg (2018, Abb.~2.1) illustriert die
+Idee mit drei kleinen Dokumenten:
+
+\begin{itemize}
+\item \emph{Dokument 1:} Die Studenten der MLU können die Teile des
+Campus im Sommer per Fahrrad erreichen.
+\item \emph{Dokument 2:} Im Sommer gehen Menschen gern schwimmen oder
+fahren Fahrrad.
+\item \emph{Dokument 3:} Die MLU bietet auf ihrem Campus den Studenten
+kostenlos Internet an.
+\end{itemize}
+
+Wir reduzieren die Texte auf ihre Substantive: \emph{Campus, Fahrrad,
+Internet, Mensch, Sommer, Student, Teil, MLU}. Intuitiv erkennen Sie
+zwei Themenfelder: \textbf{Universität} (MLU, Campus, Student, Internet)
+und \textbf{Sommer} (Sommer, Fahrrad, Mensch).
+
+Die zentrale Frage ist: Kann ein Algorithmus diese zwei Themen
+\emph{ohne semantisches Vorwissen} finden? Die Antwort ist ja -- und
+zwar durch eine mathematische Operation, die \textbf{Matrixfaktorisierung}.
+
+\subsection{Schritt 1: die Dokument-Wort-Matrix}
+
+Wir bauen eine Tabelle: jede Zeile ist ein Dokument, jede Spalte ein
+Wort. Der Eintrag in Zeile $i$, Spalte $j$ ist die Häufigkeit, mit
+der Wort $j$ in Dokument $i$ vorkommt:
+
+\smallskip
+\begin{center}
+\footnotesize
+\begin{tabular}{@{}l|cccccccc@{}}
+\toprule
+& Campus & Fahrrad & Internet & Mensch & Sommer & Student & Teil & MLU \\
+\midrule
+Dok.\ 1 & 1 & 1 & 0 & 0 & 1 & 1 & 1 & 1 \\
+Dok.\ 2 & 0 & 1 & 0 & 1 & 1 & 0 & 0 & 0 \\
+Dok.\ 3 & 1 & 0 & 1 & 0 & 0 & 1 & 0 & 1 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\smallskip
+
+Diese \textbf{Dokument-Wort-Matrix} -- nennen wir sie $A$ -- ist der
+Input jedes Topic-Modells. Bei einem realen Korpus von z.B.\ zehntausend
+Texten mit einem Vokabular von fünftausend Wörtern enthält sie 50
+Millionen Einträge, von denen die allermeisten Nullen sind (kein
+einzelner Text enthält das gesamte Vokabular). Solche Matrizen heißen
+\emph{sparse}.
+
+\subsection{Schritt 2: die Faktorisierung}
+
+Ein Topic-Modell zerlegt $A$ in das \emph{Produkt zweier kleinerer
+Matrizen}:
+\[
+\underbrace{A}_{\text{Dokumente}\times\text{Wörter}}
+\;\approx\;
+\underbrace{W}_{\text{Dokumente}\times K}
+\;\cdot\;
+\underbrace{H}_{K\times\text{Wörter}}
+\]
+wobei $K$ die Anzahl der topics ist -- ein Parameter, den wir vorher
+festlegen (im Beispiel: $K=2$).
+
+Was bedeuten $W$ und $H$? Die Matrix $W$ sagt für jedes Dokument, wie
+stark es zu jedem topic gehört (die \emph{Topic-Gewichte}). Die Matrix
+$H$ sagt für jedes topic, wie stark jedes Wort zu diesem topic gehört
+(der \emph{Topic-Inhalt}).
+
+\begin{merkbox}
+\textbf{Warum funktioniert das?} Die Faktorisierung erzwingt eine
+\emph{Datenkompression}: Statt 24 Einträge in $A$ zu speichern,
+brauchen wir nur $3\times 2 + 2\times 8 = 22$ Einträge in $W$ und $H$.
+Bei großen Matrizen ist die Reduktion enorm. Diese Kompression
+\emph{zwingt} das Modell, die \textbf{wesentlichen Strukturen} der
+Daten zu finden -- jene Strukturen, die sich \enquote{lohnen}, weil sie
+viele Dokumente und viele Wörter zugleich erklären.
+\end{merkbox}
+
+Das Ergebnis im Beispiel:
+
+\smallskip
+\textbf{Topic-Wort-Zugehörigkeit $H$:}
+\begin{center}
+\footnotesize
+\begin{tabular}{@{}l|cccccccc@{}}
+\toprule
+& Campus & Fahrrad & Internet & Mensch & Sommer & Student & Teil & MLU \\
+\midrule
+Topic 1 (\emph{Uni}) & 1 & 0 & 1 & 0 & 0 & 1 & 1 & 1 \\
+Topic 2 (\emph{Sommer}) & 0 & 1 & 0 & 1 & 1 & 0 & 0 & 0 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\smallskip
+\textbf{Topic-Gewichte $W$:} Dok.\ 1 enthält \emph{beide} topics
+(Gewicht 1 und 1). Dok.\ 2 nur Sommer (0 und 1). Dok.\ 3 nur Uni
+(1 und 0). Der Algorithmus hat ohne semantisches Vorwissen die zwei
+Themenfelder gefunden, die wir intuitiv erkannt hatten.
+
+\subsection{Wie findet der Algorithmus die Zerlegung?}
+
+Das Problem ist \emph{zirkulär}: Wenn man die topics kennt, kann man
+die Dokumente aufteilen; wenn man die Aufteilung kennt, kann man die
+topics bestimmen. Aber zu Beginn kennt man keines von beiden. Die
+Lösung ist die \textbf{iterative Annäherung}:
+
+\begin{enumerate}
+\item Man startet mit einer \emph{zufälligen} Konfiguration der topics.
+\item Man berechnet daraus die beste Dokumentaufteilung.
+\item Man berechnet daraus wieder die besten topics.
+\item Man wiederholt, bis sich nichts mehr ändert (Konvergenz).
+\end{enumerate}
+
+Mit jeder Iteration verringert sich der \emph{Rekonstruktionsfehler}
+-- der Abstand zwischen der originalen Matrix $A$ und ihrer
+Rekonstruktion $W \cdot H$. Weil dieser Fehler nach unten beschränkt
+ist (er kann nicht kleiner als 0 werden), konvergiert das Verfahren.
+
+\subsection{Eine wichtige Eigenschaft: die \enquote{Halluzinationen}}
+
+Wenn wir $W$ und $H$ multiplizieren, erhalten wir eine
+\emph{rekonstruierte} Version der Dokument-Wort-Matrix. Diese
+Rekonstruktion ist nicht identisch mit dem Original.
+
+Im Beispiel hatte Dok.\ 1 ursprünglich keinen Eintrag für die Wörter
+\enquote{Internet} und \enquote{Mensch}. Die Rekonstruktion sagt aber:
+diese Wörter \emph{passen} zu Dok.\ 1, denn dieses Dokument enthält
+die topics, zu denen sie gehören.
+
+\begin{merkbox}
+\textbf{Diese \enquote{Halluzinationen} sind kein Fehler.} Sie sind
+einer der wichtigsten qualitativen Mehrwerte von Topic-Modellen:
+Sie machen \emph{implizite} Bedeutungen sichtbar -- semantische
+Nähen, die im Text \emph{vorhanden}, aber nicht \emph{explizit
+ausgesprochen} sind. Wenn ein Text über \enquote{Studenten} und
+\enquote{Campus} spricht, ohne \enquote{Internet} zu erwähnen, sagt
+uns das Modell trotzdem, dass dieses Thema in der Nähe ist.
+\end{merkbox}
+
+% ===============================================================
+\section{Vergleich mit Cluster- und Faktorenanalyse}
+
+\subsection{Topic-Modelle vs.\ Clusteranalyse}
+
+Auf den ersten Blick wirken Topic-Modelle wie eine Spielart der
+Clusteranalyse. Beide bilden Gruppen von Objekten. Aber es gibt einen
+fundamentalen Unterschied:
+
+\begin{itemize}
+\item Eine Clusteranalyse (etwa K-Means) teilt Dokumente
+\textbf{disjunkt} ein: jedes Dokument gehört zu einem und nur einem
+Cluster. Das ist eine \emph{harte} Klassifikation.
+
+\item Topic-Modelle sind \textbf{Mixed-Membership-Models}
+(Airoldi et al.\ 2014): Ein Dokument ist eine \emph{Mischung} aus
+topics. Es kann zu 60\,\% aus Topic 1, zu 30\,\% aus Topic 2 und zu
+10\,\% aus Topic 3 bestehen.
+\end{itemize}
+
+Dieser Unterschied ist nicht nur technisch. In der
+sozialwissenschaftlichen Praxis ist er entscheidend: Texte sind in
+aller Regel \emph{thematisch heterogen}. Ein Interview enthält
+meistens mehrere Themen; ein wissenschaftlicher Artikel ebenso; eine
+Zeitungsausgabe sowieso. Eine harte Clusterung würde dieser
+Heterogenität nicht gerecht.
+
+\textbf{Ein anschauliches Beispiel:} Drei Gruppen von Dokumenten --
+nur über Sommer (Gruppe A), nur über die Universität (Gruppe B), über
+beides (Gruppe C). Eine Clusteranalyse fände \emph{drei} Cluster:
+Sommer, Uni, Sommer+Uni. Die Kombination wird zu einem eigenen
+Cluster. Ein Topic-Modell findet \emph{zwei} topics: Sommer und Uni.
+Die Gruppe C wird durch eine Mischung der beiden topics beschrieben.
+
+Topic-Modelle finden also weniger, aber \emph{interpretierbarere}
+Strukturen. Sie \emph{zerlegen} die Komplexität in elementarere
+Themen, statt sie durch Kombinationen zu vervielfachen. Mathematisch
+ausgedrückt (Erosheva, Fienberg \& Joutard 2007, später Galyardt 2014):
+Ein Topic-Modell mit $K$ topics, das Dokumente mit insgesamt $T$
+Wörtern beschreibt, kann durch ein Cluster-Modell mit $K^T$ Clustern
+\emph{repräsentiert} werden. Die Mixed-Membership-Repräsentation ist
+also \emph{viel} kompakter.
+
+\subsection{Topic-Modelle vs.\ Faktorenanalyse}
+
+Auch die Faktorenanalyse (FA) und die Hauptkomponentenanalyse (PCA)
+sind Matrixfaktorisierungen: $X \approx Z \cdot W^T$. Sie sehen
+strukturell wie Topic-Modelle aus. Es gibt aber zwei Unterschiede:
+
+\textbf{Erstens: die Vorzeichen.} PCA und FA lassen \emph{negative}
+Einträge in $Z$ und $W$ zu. Ein negativer Wert bedeutet semantisch:
+\enquote{dieses Wort soll \emph{nicht} im Dokument vorkommen}. Solche
+\enquote{negativen topics} sind für die qualitative Textanalyse kaum
+interpretierbar. Topic-Modelle wie NMF und LDA verlangen, dass
+\emph{alle Einträge} $\geq 0$ sind. Diese Einschränkung macht die
+gefundenen topics zu \emph{additiven Beiträgen}, die sich klar und
+eindeutig interpretieren lassen.
+
+\textbf{Zweitens: die Verteilungsannahmen.} PCA setzt implizit eine
+\emph{Normalverteilung} der Daten voraus. Worthäufigkeiten sind aber
+nicht normalverteilt: sie folgen Long-Tail-Verteilungen mit sehr
+vielen Nullen und einigen extrem häufigen Wörtern. Topic-Modelle wie
+LDA nutzen passendere Verteilungen (Multinomial, Dirichlet-Multinomial),
+die diese Eigenschaft besser abbilden.
+
+% ===============================================================
+\section{Die zwei klassischen Verfahren: LDA und NMF}
+
+\subsection{LDA -- Latent Dirichlet Allocation}
+
+LDA (Blei, Ng \& Jordan 2003) ist ein \emph{probabilistisches}
+Topic-Modell. Es beschreibt die Erzeugung von Dokumenten als
+Zufallsprozess. Die Geschichte, die das Modell erzählt, klingt so:
+
+\begin{enumerate}
+\item Jedes topic ist eine \emph{Wahrscheinlichkeitsverteilung über
+das Vokabular}. Wenn man dem topic eine Münze in die Hand gibt und
+sie würfeln lässt, kommt mit hoher Wahrscheinlichkeit ein Wort heraus,
+das zentral zum topic gehört -- mit niedriger Wahrscheinlichkeit ein
+peripheres Wort. Parameter: $\varphi_k$ für topic $k$.
+
+\item Jedes Dokument hat ebenfalls eine \emph{Verteilung über die
+topics}. Wenn man dem Dokument eine Münze in die Hand gibt, kommt
+mit hoher Wahrscheinlichkeit dasjenige topic, das dieses Dokument
+dominiert. Parameter: $\theta_d$ für Dokument $d$.
+
+\item \emph{Wie entsteht ein Wort im Dokument?} Für jedes Wort:
+würfle zuerst ein topic aus $\theta_d$, dann würfle aus diesem topic
+ein Wort aus seiner Verteilung $\varphi_k$.
+\end{enumerate}
+
+Das ist natürlich nicht, wie Menschen tatsächlich Texte schreiben.
+Es ist ein \emph{generatives Modell}, das mathematisch gut zu
+handhaben ist. Die Berechnung kehrt das Modell um: gegeben die Wörter
+im Korpus, was sind die wahrscheinlichsten topics $\varphi$ und
+Dokument-Verteilungen $\theta$?
+
+Mathematisch sucht man die \emph{Posterior-Verteilung}
+$p(\varphi, \theta, z \mid w)$. Sie ist nicht direkt berechenbar; es
+gibt zwei Approximationsverfahren: die \textbf{Variationsinferenz}
+(Blei et al.\ 2003) und das \textbf{Collapsed Gibbs Sampling}
+(Griffiths \& Steyvers 2004). Was Sie sich merken sollten:
+\emph{LDA liefert Wahrscheinlichkeiten, keine Punktwerte.}
+
+\subsection{NMF -- Non-Negative Matrix Factorization}
+
+NMF (Lee \& Seung 1999, 2001) löst dasselbe Problem ohne probabilistische
+Mathematik, rein durch lineare Algebra. Die Aufgabe ist ein
+Optimierungsproblem:
+\[
+\min_{W, H \geq 0} \| A - W \cdot H \|_F
+\]
+wobei $\| \cdot \|_F$ die \emph{Frobenius-Norm} ist -- eine Maßzahl,
+die misst, wie weit die rekonstruierte Matrix $W \cdot H$ vom
+Original $A$ entfernt ist. Der Algorithmus, der diese Optimierung
+löst, heißt \emph{Alternating Least Squares}: man hält $W$ fest und
+optimiert $H$, dann hält man $H$ fest und optimiert $W$, und so weiter,
+bis Konvergenz erreicht ist.
+
+Im Gegensatz zu LDA hat NMF \emph{keine} probabilistische Interpretation.
+Aber NMF ist meistens \emph{schneller}, \emph{deterministischer}
+(bei festem Startwert: identische Ergebnisse) und in vielen praktischen
+Situationen \emph{stabiler}, besonders bei kleinen Korpora.
+
+\subsection{Wann LDA, wann NMF?}
+
+\begin{tabularx}{\textwidth}{@{}p{0.22\textwidth}XX@{}}
+\toprule
+& \textbf{LDA} & \textbf{NMF} \\
+\midrule
+Grundlage
+  & Probabilistisches Modell
+  & Lineare Algebra \\
+\addlinespace[3pt]
+Ausgabe
+  & Wahrscheinlichkeiten
+  & Gewichte (positiv) \\
+\addlinespace[3pt]
+Reproduzierbarkeit
+  & Stochastisch, variiert je Lauf
+  & Deterministisch bei festem Startwert \\
+\addlinespace[3pt]
+Geschwindigkeit
+  & langsamer
+  & schneller \\
+\addlinespace[3pt]
+Kleine Korpora
+  & instabil
+  & oft besser \\
+\addlinespace[3pt]
+Theoretische Eleganz
+  & Bayessches Netzwerk
+  & Optimierungsproblem \\
+\bottomrule
+\end{tabularx}
+
+In MTA sind beide Verfahren implementiert. Eine empfehlenswerte
+Praxis ist, \emph{beide laufen zu lassen} und ihre Ergebnisse zu
+vergleichen. Wenn LDA und NMF ähnliche topics liefern, ist das ein
+starkes Indiz für die Stabilität der gefundenen Strukturen. Wenn sie
+sehr unterschiedliche topics liefern, ist Vorsicht geboten -- entweder
+die Topic-Anzahl ist falsch gewählt, oder das Korpus ist zu klein, oder
+die Vorverarbeitung muss verbessert werden.
+
+\subsection{Wie viele topics?}
+
+Sowohl LDA als auch NMF setzen die Anzahl $K$ der topics als
+\emph{externen Parameter} voraus. Diese Wahl ist nicht trivial; sie
+ist methodologisch und interpretativ.
+
+Drei Strategien sind in der Literatur und in MTA verfügbar:
+
+\begin{enumerate}
+\item \textbf{Perplexity / Log-Likelihood} (für LDA): Wie gut beschreibt
+das Modell \emph{neue} Daten, die nicht für das Training verwendet
+wurden? Theoretisch elegant, aber: nicht jedes topic, das die
+Perplexity verbessert, ist \emph{interpretierbar} (Chang et al.\ 2009).
+Menschliche Bewertungen korrelieren manchmal sogar \emph{negativ}
+mit Perplexity-Werten.
+
+\item \textbf{Topic-Kohärenz} (PMI, Newman et al.\ 2010): Wie oft
+tauchen die top-Wörter eines topics nahe beieinander im Korpus auf?
+Diese Maßzahl korreliert besser mit menschlicher Bewertung. Verschiedene
+Varianten existieren (Röder, Both \& Hinneburg 2015).
+
+\item \textbf{Kreuzvalidierung mit Clusterverfahren} (in MTA
+implementiert): MTA berechnet eine Reihe von Indikatoren -- Elbow,
+Silhouette, Calinski-Harabasz, Davies-Bouldin, Cophenet -- und schlägt
+Ihnen einen Wertebereich für $K$ vor.
+\end{enumerate}
+
+\begin{merkbox}
+\textbf{Keine dieser Methoden liefert \emph{die eine} richtige Zahl.}
+Sie liefern einen \emph{Wertebereich}, in dem die Entscheidung
+interpretativ getroffen werden muss. Die Frage \enquote{wie viele
+topics?} ist immer auch eine \emph{theoretische} Frage: Wie fein
+soll Ihre Themenstruktur sein? Was wollen Sie sehen?
+\end{merkbox}
+
+% ===============================================================
+\section{Die neue Welt: BERTopic und LLMs}
+
+\subsection{Ein methodologischer Sprung seit 2018}
+
+Das Buch von Papilloud \& Hinneburg ist 2018 erschienen. Damals
+galten LDA und NMF als \emph{state of the art}. Seitdem hat sich das
+Feld erheblich verändert. Vier Schritte:
+
+\begin{itemize}
+\item \textbf{2013 -- Word2Vec} (Mikolov et al.): die Idee der
+\emph{word embeddings}. Jedes Wort wird durch einen Vektor in einem
+hochdimensionalen Raum repräsentiert (typischerweise 100 bis 300
+Dimensionen). Wörter mit ähnlicher Bedeutung haben \emph{ähnliche}
+Vektoren. Die berühmte Gleichung
+$\vec{v}(\text{König}) - \vec{v}(\text{Mann}) + \vec{v}(\text{Frau})
+\approx \vec{v}(\text{Königin})$
+illustriert das Prinzip.
+
+\item \textbf{2018-2019 -- BERT} (Devlin et al.): kontextuelle
+Embeddings. Dasselbe Wort hat verschiedene Vektoren je nach Satzkontext.
+\enquote{Bank} in \enquote{Sitzbank im Park} ist nicht
+\enquote{Bank} in \enquote{Geld auf der Bank}.
+
+\item \textbf{2022 -- BERTopic} (Grootendorst 2022): ein
+Topic-Modell, das BERT-Embeddings nutzt -- der direkte
+\enquote{Nachfolger} von LDA und NMF im Stand der Forschung.
+
+\item \textbf{2022 ff.\ -- ChatGPT, GPT-4, Claude, LLaMA \dots}: Large
+Language Models, die Texte direkt \emph{verstehen} und
+\emph{annotieren} können, ohne dass man ihnen eine
+Dokument-Wort-Matrix vorlegt.
+\end{itemize}
+
+\subsection{Word2Vec, BERT und das Konzept der Embeddings}
+
+\emph{Embeddings} sind die zentrale Neuerung, die alles, was danach
+kommt, ermöglicht. Die Grundidee: anstatt Wörter als \emph{Symbole}
+zu behandeln (\enquote{Hund} ist einfach das fünfte Wort im Vokabular,
+mit Index 5), behandelt man sie als \emph{Punkte in einem geometrischen
+Raum}. In diesem Raum gilt: semantisch ähnliche Wörter sind räumlich
+nahe.
+
+Klassische Topic-Modelle (LDA, NMF) arbeiten mit \emph{rohen}
+Worthäufigkeiten. Für sie sind die Wörter \enquote{König} und
+\enquote{Königin} unverbunden -- sie sehen sich nur die Ko-Okkurrenz
+in Dokumenten an. Embeddings lösen dieses Problem: \enquote{König}
+und \enquote{Königin} haben ähnliche Vektoren, weil sie in ähnlichen
+Kontexten auftreten.
+
+In MTA finden Sie diese Idee bereits in der Funktion \emph{Semantic
+Context}: dort werden Word2Vec-ähnliche Embeddings (in der Standardform
+über Ko-Okkurrenz und PCA) genutzt, um semantische Nachbarn von Wörtern
+zu finden. Die Idee der Embeddings ist also keine ferne
+Zukunftsmusik -- sie ist bereits Teil unserer Praxis.
+
+\subsection{BERTopic -- ein moderner Topic-Modell-Workflow}
+
+BERTopic (Grootendorst 2022) bricht mit der Matrixfaktorisierung. Sein
+Workflow besteht aus vier Schritten:
+
+\begin{enumerate}
+\item Jedes Dokument wird durch \textbf{BERT} in einen
+hochdimensionalen Vektor verwandelt (typischerweise 768 Dimensionen).
+
+\item Diese Vektoren werden durch \textbf{UMAP} auf wenige Dimensionen
+reduziert (Vorbereitung für das Clustering).
+
+\item Die reduzierten Vektoren werden durch \textbf{HDBSCAN}
+geclustert. Jeder Cluster ist ein topic.
+
+\item Für jeden Cluster wird die top-Wortliste durch eine angepasste
+TF-IDF-Heuristik berechnet (\textbf{c-TF-IDF}, class-based TF-IDF).
+\end{enumerate}
+
+Statt eine Matrix zu faktorisieren, ordnet BERTopic also Dokumente
+einem Cluster zu -- es ist eigentlich näher an einer Clusteranalyse
+als an einem klassischen Topic-Modell. Das macht es schnell und
+kontextsensitiv, hat aber Konsequenzen.
+
+\subsection{Empirische Vergleiche -- die Forschungslage}
+
+Mehrere empirische Vergleiche der vergangenen Jahre haben LDA, NMF
+und BERTopic gegenübergestellt (Egger \& Yu 2022; Kaur \& Wallace
+2024; Mishra 2026; Ma et al.\ 2025).
+
+\textbf{Wo BERTopic besser abschneidet:}
+
+\begin{itemize}
+\item Bei \emph{kurzen} Texten (Tweets, SMS, Antworten auf offene
+Fragen), wo Ko-Okkurrenz allein nicht ausreicht.
+\item In semantisch \emph{nuancierten} Domänen, wo verschiedene
+Bedeutungen desselben Wortes wichtig sind.
+\item Höhere \emph{Topic-Kohärenz} in vielen Benchmarks; auch
+qualitative Forschende präferieren oft BERTopic-Ergebnisse
+(Kaur \& Wallace 2024 zeigen 67\,\% Präferenz für BERTopic in
+einer Studie mit 12 Forschenden).
+\end{itemize}
+
+\textbf{Wo LDA und NMF kompetitiv bleiben:}
+
+\begin{itemize}
+\item Bei \emph{längeren} Texten (Artikeln, Interviews, Büchern),
+wo die Ko-Okkurrenz im Dokument reichlich Information liefert.
+\item Wenn \emph{Interpretierbarkeit} und \emph{Reproduzierbarkeit}
+wichtiger sind als marginale Kohärenz-Gewinne.
+\item Bei \emph{kleinen} Korpora -- BERTopic verlangt oft sehr viele
+Dokumente und verwirft regelmäßig 30 bis 70\,\% als
+\enquote{Outliers} (Soledad et al.\ 2022).
+\item Bei \emph{spezialisierten} Sprachen oder Disziplinen, für die
+kein guter vortrainierter BERT-Modell verfügbar ist (etwa
+historisches Deutsch, juristische Texte einer bestimmten
+Tradition, Korpora in selteneren Sprachen).
+\end{itemize}
+
+\subsection{Large Language Models als analytische Werkzeuge}
+
+Seit 2022 verändert sich das Feld noch einmal. LLMs (GPT-4, Claude,
+LLaMA \dots) bieten Möglichkeiten, die klassische TM nicht hatten:
+
+\begin{itemize}
+\item \textbf{Direkte Codierung von Texten} -- inklusive deduktiver
+Codierung anhand eines Codebuchs (Tai et al.\ 2024).
+\item \textbf{Automatische Beschriftung} bestehender topics
+(TopicGPT, QualIT bei Amazon).
+\item \textbf{Reflexive Begleitung}: das LLM schreibt Memos, weist
+auf Widersprüche zwischen Codierungen hin, schlägt theoretische
+Rahmungen vor (Sinha et al.\ 2024).
+\item \textbf{Thematische Analyse von Interviews} ohne klassisches
+TM (De Paoli 2023).
+\end{itemize}
+
+Eine umfangreiche Literatur ist seit 2023 entstanden. Hayes (2025) und
+Than et al.\ (2025) bieten gute Überblicke aus soziologischer Sicht.
+
+\subsection{Eine empirische Warnung: Ashwin, Chhabra \& Rao (2025)}
+
+Eine besonders wichtige Arbeit ist 2025 in den \emph{Sociological
+Methods \& Research} erschienen. Die Autoren untersuchten Interviews
+mit Rohingya-Geflüchteten und ihren bengalischen Gastgebern in
+Bangladesch. Sie verglichen die Codierung durch einen LLM mit der
+Codierung durch trainierte menschliche Codiererinnen.
+
+\begin{merkbox}
+\textbf{Der zentrale Befund.} Die LLM-Codierungen sind nicht nur
+\emph{ungenau}, sondern \textbf{systematisch verzerrt}. Die Fehler
+des LLMs verteilen sich \emph{nicht zufällig}, sondern korrelieren
+mit Merkmalen der Befragten -- ihrer Sprache, ihrem Bildungsgrad,
+ihrer Herkunftsregion. Inferenzen, die auf solchen Codierungen
+beruhen, können in eine \emph{bestimmte Richtung} systematisch falsch
+sein.
+\end{merkbox}
+
+Die Konsequenz, die die Autoren ziehen: Es sei oft besser, ein
+\emph{eigenes, kleineres} Modell auf hochwertigen, manuell codierten
+Daten zu trainieren als einen generischen LLM einzusetzen. Diese
+Empfehlung ist auch für die qualitative Sozialforschung relevant:
+Quantitative Effizienz darf nicht auf Kosten methodologischer
+Belastbarkeit gehen.
+
+\subsection{Warum bleibt MTA bei LDA und NMF?}
+
+Eine berechtigte Frage. Die Antwort hat vier Aspekte:
+
+\begin{enumerate}
+\item \textbf{Lokal, offline, autonom.} MTA läuft auf Ihrem Laptop
+ohne Internetverbindung und ohne API-Schlüssel. Ihre Forschungsdaten
+verlassen Ihre Maschine nicht. Das ist nicht nur eine Frage der
+Bequemlichkeit, sondern auch der \emph{Forschungsethik} und des
+\emph{Datenschutzes} -- besonders bei sensiblen Daten (Interviews
+mit Geflüchteten, medizinische Texte, persönliche Korrespondenz).
+
+\item \textbf{Interpretierbarkeit.} LDA und NMF liefern
+nachvollziehbare Wortlisten und Gewichte. Sie können einer Kollegin
+oder einer Gutachterin erklären, \emph{warum} ein topic so aussieht,
+wie es aussieht. Bei BERTopic und LLMs ist die Kette zwischen Input
+und Output deutlich opaker.
+
+\item \textbf{Reproduzierbarkeit.} NMF mit festem Startwert produziert
+\emph{exakt dieselben} Ergebnisse, jedes Mal. LDA ist stochastisch,
+aber durch wiederholte Läufe lässt sich die Variabilität abschätzen.
+LLMs sind dagegen oft schlecht reproduzierbar -- ihre Antworten
+hängen vom Modellzustand, von der \emph{Temperature}, von kleinen
+Variationen im Prompt ab.
+
+\item \textbf{Forschungsdidaktik.} Wer LDA und NMF verstanden hat,
+versteht den \emph{Kern} der Topic-Modellierung -- die
+Matrixfaktorisierung, das Mixed-Membership-Prinzip, die Logik der
+Ko-Okkurrenz. Wer mit BERTopic oder einem LLM anfängt, ohne
+Embeddings zu verstehen, arbeitet mit einer Blackbox. Diese
+Vorlesungen wollen Ihnen die Werkzeuge in die Hand geben, später
+\emph{informiert} zwischen den Verfahren wählen zu können.
+\end{enumerate}
+
+% ===============================================================
+\section{Fragen zum Mitnehmen}
+
+Drei Fragen, über die Sie bis zur nächsten Sitzung nachdenken können:
+
+\begin{enumerate}
+\item Wir haben gesehen, dass Topic-Modelle \enquote{Halluzinationen}
+produzieren: sie schreiben einem Dokument Wörter zu, die es
+ursprünglich nicht enthielt. Wir haben diese Eigenschaft als
+\emph{qualitativen Mehrwert} dargestellt. Unter welchen Bedingungen
+könnte sie umgekehrt zum \emph{Problem} werden?
+
+\item Ashwin et al.\ (2025) zeigen, dass LLMs systematisch verzerrte
+Codierungen produzieren. Können Sie sich Quellen \emph{ähnlicher}
+Verzerrungen vorstellen, die auch bei LDA oder NMF auftreten könnten?
+
+\item Die Wahl der Topic-Anzahl $K$ ist immer auch eine
+\emph{theoretische} Wahl. Wenn Sie Interviews mit Studierenden zum
+Thema \enquote{digitale Lehre} analysieren würden, welche Theorien
+würden Ihre Wahl von $K$ leiten?
+\end{enumerate}
+
+% ===============================================================
+\section{Ausblick auf Sitzung 3}
+
+In der dritten und letzten theoretischen Sitzung wenden wir uns dem
+\emph{Vorher} und \emph{Nachher} des Algorithmus zu:
+
+\begin{itemize}
+\item \emph{Vor} dem Algorithmus: die Vorverarbeitung der Textquelle
+(Bereinigung, Stoppwörter, TF-IDF, Lemmatisierung, Named Entity
+Recognition). Was MTA \emph{tut} und was es \emph{nicht} tut.
+\item Metadaten und Topic-Modelle: drei Strategien (Spaltung,
+Hinzufügung, Lernergänzung).
+\item \emph{Nach} dem Algorithmus: der kritische Blick (Buch, Kap.\ 8).
+Was Topic-Modelle \emph{nicht} können. Zwei verbreitete
+Erwartungen, die nicht erfüllt werden.
+\item Was sich für unsere Forschungspraxis ändert -- und wie diese
+drei theoretischen Sitzungen in die folgende Arbeit mit MTA münden.
+\end{itemize}
+
+% ===============================================================
+\section*{Zitierte Literatur}
+\addcontentsline{toc}{section}{Zitierte Literatur}
+
+\footnotesize
+
+\textsc{Grundlage:}
+
+Papilloud, C., \& Hinneburg, A.\ (2018). \emph{Einführung in die
+qualitative Analyse von Texten mit Topic-Modellen}. Wiesbaden:
+Springer. \emph{Bes.\ Kap.\ 2 und 3.}
+
+\bigskip
+\textsc{Klassische Topic-Modelle und Matrixfaktorisierung:}
+
+Airoldi, E.\ M., Blei, D.\ M., Erosheva, E.\ A., \& Fienberg, S.\ E.\
+(Hrsg., 2014). \emph{Handbook of Mixed Membership Models and Their
+Applications}. CRC Press.
+
+Blei, D.\ M.\ (2012). Probabilistic Topic Models.
+\emph{Communications of the ACM}, 55(4), 77--84.
+
+Blei, D.\ M., Ng, A.\ Y., \& Jordan, M.\ I.\ (2003). Latent Dirichlet
+Allocation. \emph{Journal of Machine Learning Research}, 3, 993--1022.
+
+Chang, J., Boyd-Graber, J., Wang, C., Gerrish, S., \& Blei, D.\ M.\
+(2009). Reading Tea Leaves: How Humans Interpret Topic Models.
+\emph{NIPS}.
+
+Erosheva, E.\ A., Fienberg, S.\ E., \& Joutard, C.\ (2007). Describing
+Disability Through Individual-Level Mixture Models for Multivariate
+Binary Data. \emph{Annals of Applied Statistics}, 1(2), 502--537.
+
+Griffiths, T.\ L., \& Steyvers, M.\ (2004). Finding Scientific Topics.
+\emph{PNAS}, 101(suppl.\ 1), 5228--5235.
+
+Lee, D.\ D., \& Seung, H.\ S.\ (2001). Algorithms for Non-Negative
+Matrix Factorization. In \emph{Advances in Neural Information
+Processing Systems}.
+
+Newman, D., Lau, J.\ H., Grieser, K., \& Baldwin, T.\ (2010).
+Automatic Evaluation of Topic Coherence. \emph{NAACL HLT}.
+
+Röder, M., Both, A., \& Hinneburg, A.\ (2015). Exploring the Space
+of Topic Coherence Measures. \emph{WSDM}.
+
+\bigskip
+\textsc{Word Embeddings und BERT:}
+
+Devlin, J., Chang, M.-W., Lee, K., \& Toutanova, K.\ (2019). BERT:
+Pre-training of Deep Bidirectional Transformers for Language
+Understanding. \emph{NAACL HLT}.
+
+Mikolov, T., Sutskever, I., Chen, K., Corrado, G.\ S., \& Dean, J.\
+(2013). Distributed Representations of Words and Phrases and their
+Compositionality. \emph{NIPS}.
+
+Mostafavi, M., Porter, M.\ D., \& Robinson, D.\ T.\ (2025). Contextual
+Embeddings in Sociological Research: Expanding the Analysis of
+Sentiment and Social Dynamics. \emph{Sociological Methodology}.
+
+\bigskip
+\textsc{BERTopic und Vergleiche:}
+
+Egger, R., \& Yu, J.\ (2022). A Topic Modeling Comparison Between
+LDA, NMF, Top2Vec, and BERTopic to Demystify Twitter Posts.
+\emph{Frontiers in Sociology}, 7.
+
+Grootendorst, M.\ (2022). BERTopic: Neural Topic Modeling with a
+Class-Based TF-IDF Procedure. \emph{arXiv:2203.05794}.
+
+Kaur, A., \& Wallace, J.\ R.\ (2024). Moving Beyond LDA: A Comparison
+of Unsupervised Topic Modelling Techniques for Qualitative Data
+Analysis of Online Communities. \emph{arXiv:2412.14486}.
+
+Ma, L., et al.\ (2025). AI-powered Topic Modeling: Comparing LDA
+and BERTopic in Analyzing Opioid-Related Cardiovascular Risks in
+Women. \emph{Experimental Biology and Medicine}.
+
+Mishra, M.\ (2026). Comparative Analysis of BERTopic Versus LDA:
+Topic Modelling in Marketing Research. \emph{Asia-Pacific Journal of
+Management Research and Innovation}.
+
+\bigskip
+\textsc{Large Language Models in der qualitativen Sozialforschung:}
+
+Ashwin, J., Chhabra, A., \& Rao, V.\ (2025). Using Large Language
+Models for Qualitative Analysis can Introduce Serious Bias.
+\emph{Sociological Methods \& Research}.
+
+Bail, C.\ A.\ (2024). Can Generative AI Improve Social Science?
+\emph{PNAS}, 121(21).
+
+De Paoli, S.\ (2023). Performing an Inductive Thematic Analysis of
+Semi-Structured Interviews With a Large Language Model: An
+Exploration and Provocation on the Limits of the Approach.
+\emph{Social Science Computer Review}.
+
+Hayes, A.\ S.\ (2025). \enquote{Conversing} With Qualitative Data:
+Enhancing Qualitative Research Through Large Language Models (LLMs).
+\emph{International Journal of Qualitative Methods}.
+
+Sinha, R., et al.\ (2024). Generative AI as a Reflexive Co-Researcher
+in Grounded Theory.
+
+Tai, R.\ H., Bentley, L.\ R., Xia, X., et al.\ (2024). An Examination
+of the Use of Large Language Models to Aid Analysis of Textual Data.
+\emph{International Journal of Qualitative Methods}.
+
+Than, N., Fan, L., Law, T., Nelson, L.\ K., \& McCall, L.\ (2025).
+Updating \enquote{The Future of Coding}: Qualitative Coding with
+Generative Large Language Models. \emph{Sociological Methods \&
+Research}.
+
+\end{document}

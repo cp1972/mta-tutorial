@@ -1,0 +1,570 @@
+\documentclass[a4paper,11pt]{article}
+
+% ---------------------------------------------------------------
+% Encoding und Sprache (kompatibel mit xelatex)
+% ---------------------------------------------------------------
+\usepackage{fontspec}
+\usepackage[ngerman,provide=*]{babel}
+\usepackage{csquotes}
+
+% ---------------------------------------------------------------
+% Geometrie und Typographie
+% ---------------------------------------------------------------
+\usepackage[a4paper,margin=2.5cm,headheight=14pt]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{parskip}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=*,topsep=2pt,itemsep=2pt}
+\setlist[enumerate]{leftmargin=*,topsep=2pt,itemsep=2pt}
+
+% Kopf-/Fußzeile schlicht
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyhead[L]{\footnotesize MTA -- Sitzung 1: Topic-Modelle als qualitative Methode}
+\fancyhead[R]{\footnotesize Seite \thepage}
+\fancyfoot[C]{\footnotesize Prof.\ Dr.\ Christian Papilloud · Institut für Soziologie · MLU Halle-Wittenberg}
+
+% Schlichte Überschriften
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.6em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}{\normalsize\itshape}{}{0pt}{}
+\titlespacing*{\section}{0pt}{1.5em}{0.5em}
+\titlespacing*{\subsection}{0pt}{1.0em}{0.3em}
+
+% Hervorhebungen
+\usepackage{xcolor}
+\definecolor{boxgrau}{gray}{0.95}
+\usepackage[most]{tcolorbox}
+\newtcolorbox{merkbox}[1][]{
+  colback=boxgrau,colframe=black!40,boxrule=0.4pt,
+  arc=2pt,left=8pt,right=8pt,top=4pt,bottom=4pt,
+  fonttitle=\bfseries,#1
+}
+
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black!70,
+  urlcolor=black!60,
+  citecolor=black!60,
+  pdftitle={MTA Sitzung 1 -- Handout},
+  pdfauthor={Christian Papilloud},
+}
+
+% ---------------------------------------------------------------
+% Titelinformationen
+% ---------------------------------------------------------------
+\title{\textbf{Topic-Modelle als qualitative Methode?}\\[4pt]
+\large Sitzung 1 -- Positionierung gegenüber objektiver Hermeneutik
+und qualitativer Inhaltsanalyse\\[8pt]
+\normalsize Begleitendes Handout}
+\author{Prof.\ Dr.\ Christian Papilloud\\
+\small Institut für Soziologie -- Martin-Luther-Universität Halle-Wittenberg}
+\date{Master Soziologie -- 2026}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{fancy}
+
+\vspace{-1em}
+
+% ===============================================================
+\section{Worum es geht}
+
+Bevor wir zur \emph{praktischen Anwendung} des Topic-Modell-Ansatzes
+mit dem Programm \textbf{MTA} (Multi-Text Analyser) kommen,
+beschäftigen wir uns in drei Sitzungen mit dem \emph{theoretischen
+Hintergrund} von Topic-Modellen. Die heutige Sitzung beantwortet die
+Grundfrage: \textbf{Ist Topic-Modellierung eine qualitative Methode
+der Soziologie?} Wenn ja, in welchem Sinn?
+
+Diese Frage ist nicht rein akademisch. Wer ein Topic-Modell-Programm
+benutzt, ohne zu wissen, \emph{in welchen Methodentraditionen} dieses
+Werkzeug steht, läuft Gefahr, seine Ergebnisse falsch zu
+interpretieren -- entweder zu viel oder zu wenig in sie hineinzulesen.
+Die Auseinandersetzung mit den klassischen qualitativen Methoden ist
+deshalb keine Pflichtübung, sondern eine \emph{epistemologische
+Vorbereitung} der Praxis.
+
+% ===============================================================
+\section{Die kontraintuitive These}
+
+Topic-Modelle (TM) sind ein \emph{quantitativ basiertes} Werkzeug:
+sie zählen Worthäufigkeiten, faktorisieren Matrizen und nutzen
+Wahrscheinlichkeitsverteilungen. Sie dienen aber, das ist die These
+des Buches, der \emph{qualitativen} Forschung. Diese These ist
+kontraintuitiv, weil das Begriffspaar \enquote{quantitativ vs.\
+qualitativ} in den Sozialwissenschaften meistens als unauflösbarer
+Gegensatz auftritt: Statistik gegen Sinnverstehen, Zahlen gegen Texte,
+Erklären gegen Verstehen.
+
+\begin{merkbox}
+\textbf{Worum es nicht geht.} Die These ist \emph{nicht}, dass
+Topic-Modelle die Unterscheidung qualitativ/quantitativ überwinden
+oder \emph{aufheben} -- diese Erwartung wird im Schlusskapitel des
+Buches explizit zurückgewiesen (Kap.~8). Es geht vielmehr darum, zu
+verstehen, dass ein quantitativ basiertes Verfahren \emph{qualitative
+Erkenntnisaufgaben} erfüllen kann: Sinnstrukturen sichtbar machen,
+die ein menschlicher Leser allein nicht erfassen könnte.
+\end{merkbox}
+
+% ===============================================================
+\section{Drei gemeinsame Grundannahmen}
+
+Bevor wir die Unterschiede betrachten, sollten wir die \emph{Gemein\-sam\-keiten}
+ernst nehmen. Die objektive Hermeneutik, die qualitative
+Inhaltsanalyse \emph{und} Topic-Modell-Verfahren gehören zum
+Methodenarsenal der qualitativen Textanalyse, weil sie drei
+Voraussetzungen teilen (Papilloud \& Hinneburg 2018, S.~2--3):
+
+\begin{enumerate}
+\item Begriffe und Sätze werden \textbf{nicht zufällig} verwendet.
+Sinn ist kein zufälliges Ergebnis zusammengestellter Begriffe;
+er wird durch ihren Gebrauch \emph{erzeugt}.
+
+\item Texte enthalten \textbf{Strukturen}, die ihrem Sinn zugrunde
+liegen. Die Aufgabe der Analyse besteht darin, diese Strukturen
+zu rekonstruieren -- nicht, einen vorher feststehenden Inhalt
+\enquote{wiederzugeben}.
+
+\item Die \textbf{Deutung} -- und damit die Person, die deutet --
+spielt eine konstitutive Rolle. Sowohl bei der Organisation des
+analytischen Verfahrens als auch bei der Interpretation der Ergebnisse.
+\end{enumerate}
+
+Diese drei Annahmen reichen, um Topic-Modelle aus dem Lager der
+\emph{rein deskriptiven} oder \emph{rein klassifikatorischen}
+Statistik herauszuheben. TM sind nicht einfach \enquote{Wörter zählen}.
+
+% ===============================================================
+\section{Drei Methoden, drei Antworten}
+
+Aus den gleichen Grundannahmen ergeben sich drei \emph{unterschiedliche}
+Verfahren. Diese Sitzung kontrastiert sie. Sie unterscheiden sich an
+drei Stellen:
+
+\begin{itemize}
+\item Was heißt \emph{Struktur} des Sinns? Wie ist sie aufgebaut?
+\item Wie wird Sinn \emph{algorithmisch} erzeugt (im weiten Sinn von
+\enquote{regelhaft})?
+\item Welche \emph{Rolle} spielt der/die Forschende?
+\end{itemize}
+
+Wir gehen die drei Methoden nacheinander durch -- mit dem Schwerpunkt
+auf das, was sie für den \emph{Kontrast} mit Topic-Modellen
+interessant macht.
+
+% ===============================================================
+\section{Objektive Hermeneutik (Oevermann)}
+
+Die objektive Hermeneutik wurde in den 1970er Jahren am Max-Planck-Institut
+für Bildungsforschung entwickelt. Ulrich Oevermann, ihr wichtigster
+Begründer, hat sie über mehrere Jahrzehnte ausgebaut. Sie ist
+\emph{kein} reines Verfahren: sie ist mit einer spezifischen
+\textbf{Theorie der Lebenspraxis} verbunden, in der jeder
+Einzelakteur grundsätzlich \enquote{an jeder Sequenzstelle seines
+Lebens hypothetische Welten} konstruiert (Oevermann 1996, 6).
+
+\subsection{Lebenspraxis und objektive Sinnstruktur}
+
+Lebenspraxis ist bei Oevermann das Zusammenwirken physischer,
+psychischer, sozialer und kultureller Potentiale, die einem
+Einzelakteur die Gestaltung seines Lebens erlauben (Oevermann 2004,
+157). Das Leben wird als \textbf{Sequenz von Entscheidungen}
+verstanden, in denen Sinnstrukturen \emph{gebildet} werden.
+
+Ein zentraler Begriff ist die \textbf{Krise}: jede
+Entscheidungssituation, in der der Akteur neue Handlungsregeln
+gewinnt und erst \emph{retrospektiv} eine Begründung liefert. Es
+gibt also eine \enquote{widersprüchliche Einheit von
+Entscheidungszwang und Begründungsverpflichtung} (Oevermann
+1996, 5--6): man muss sich entscheiden, ohne eine
+Richtig-Falsch-Kalkulation zur Verfügung zu haben, und man muss
+das Getane danach begründen.
+
+Aus der Verkettung dieser Entscheidungen entsteht eine
+\textbf{objektive Sinnstruktur}: eine \enquote{Fallstrukturgesetzlichkeit},
+die der Lebenspraxis dieses bestimmten Individuums entspricht. Diese
+Sinnstruktur soll die qualitative Analyse rekonstruieren.
+
+\subsection{Manifeste und latente Sinnstrukturen}
+
+Die objektive Sinnstruktur besteht aus zwei Schichten:
+
+\begin{itemize}
+\item Die \textbf{manifeste} Struktur: was ein Akteur explizit sagt,
+was im Protokoll festgehalten ist -- empirisch beobachtbar.
+
+\item Die \textbf{latente} Struktur: was sich aus der \emph{Verkettung}
+der Aussagen ergibt. Sie ist nicht als konkrete Aussage protokolliert
+und muss vom Forschenden \emph{gedeutet} werden (Oevermann 2002).
+\end{itemize}
+
+Hier liegt eine philosophisch starke Annahme: die latente Sinnstruktur
+ist nicht das, was der Akteur \emph{wirklich gemeint} hat. Sie ist
+nach Oevermann eine \enquote{abstrakte Realität}, die \enquote{von der
+manifesten Realisierung dieser Sinnstrukturen im Bewusstsein eines
+konkreten Autors oder Rezipienten unabhängig} ist (Oevermann 2002,
+28--29). Diese Struktur wird durch \enquote{regelgeleitetes Handeln}
+und durch \enquote{Regeln analog zu einem Algorithmus} erzeugt.
+
+\subsubsection{Welcher Algorithmus?}
+
+Der Begriff \enquote{Algorithmus} bei Oevermann ist \emph{nicht}
+der mathematische Algorithmus eines Computers. Es ist die
+generative Grammatik im Sinne Chomskys (1981): eine universelle
+Menge von Regeln, die in der Sprache des Akteurs operieren und
+Bedeutung erzeugen, ohne dass der Akteur sich dieser Regeln bewusst
+ist. Wer spricht, wendet diese Regeln unbewusst an.
+
+Diese Annahme ist die Quelle einer Reihe von Kritiken an der objektiven
+Hermeneutik -- nicht zuletzt der Vorwurf, die Suche nach latenten
+Sinnstrukturen sei eher ein \emph{metaphysisches} als ein empirisches
+Problem (Reichertz 2004). Für uns ist nur wichtig festzuhalten:
+\textbf{die objektive Hermeneutik setzt eine universelle generative
+Grammatik voraus}. Wir werden sehen, dass dies eine zentrale Differenz
+zu Topic-Modellen ist.
+
+\subsection{Das Verfahren: Sequenzanalyse}
+
+Konkret arbeitet die objektive Hermeneutik durch die
+\textbf{Sequenzanalyse}. Das Protokoll wird Schritt für Schritt
+durchgegangen. An jeder Sequenzstelle entwickelt der/die Forschende
+viele \emph{Lesarten} -- Gedankenexperimente, alternative Deutungen,
+die in diesem Kontext denkbar wären. Schrittweise werden Lesarten
+eliminiert, die mit dem weiteren Verlauf des Protokolls nicht
+vereinbar sind. Was übrig bleibt, ist die rekonstruierte
+\textbf{Fallstrukturgesetzlichkeit} des beobachteten Falls.
+
+Es ist ein arbeitsintensives Verfahren. Eine Sequenzanalyse kann
+über Stunden hinweg \emph{einen einzigen Satz} betreffen. Sie wird
+oft in Forschungsgruppen durchgeführt, damit verschiedene Lesarten
+miteinander konfrontiert werden können. Typische Korpora sind
+\emph{klein}: ein bis zwanzig Fälle.
+
+% ===============================================================
+\section{Qualitative Inhaltsanalyse (Mayring)}
+
+Philipp Mayring entwickelt seit Anfang der 1980er Jahre einen
+methodischen Vorschlag, der die qualitative Forschung von ihrer
+\emph{handwerklichen} Variante in Richtung einer \emph{systematischen}
+Auswertung bringen will. Sein Programm ist explizit \textbf{hybrid}:
+es soll \enquote{die Vorteile der quantitativen Inhaltsanalyse bewahren
+und auf qualitativ-interpretative Auswertungsschritte übertragen}.
+
+\subsection{Das Kategoriensystem}
+
+Die zentrale Operation ist die Konstruktion eines
+\textbf{Kategoriensystems}. Es besteht aus:
+
+\begin{itemize}
+\item Kategorien und Unterkategorien;
+\item Kategoriendefinitionen, die eindeutig sein müssen;
+\item Ankerbeispielen, die zeigen, was zu einer Kategorie gehört;
+\item einer Rückkopplungsschleife, in der die Kategorien im Laufe
+der Auswertung überarbeitet werden.
+\end{itemize}
+
+Ein Kategoriensystem soll zwei Ansprüche miteinander verbinden:
+
+\begin{enumerate}
+\item In hermeneutischer Tradition: den \emph{manifesten} \emph{und}
+den \emph{latenten} Sinn der Textquelle abbilden (Ramsenthaler 2013, 23).
+
+\item In quantitativer Tradition: eine \emph{systematische Überprüfung}
+von Strukturen ermöglichen, mit \textbf{Reliabilität},
+\textbf{Inter\-ko\-der\-re\-lia\-bi\-li\-tät} und
+\textbf{Triangulation} (Mayring 2000).
+\end{enumerate}
+
+Ziel ist eine \enquote{intersubjektiv nachvollziehbare} Auswertung
+(Rinker 2013, 40): zwei unabhängige Codiererinnen sollen mit
+demselben System zu vergleichbaren Ergebnissen kommen.
+
+\subsection{Eine bekannte Kritik}
+
+Mayrings Ansatz wird seit Jahrzehnten diskutiert und kritisiert.
+Drei wiederkehrende Kritikpunkte sind:
+
+\begin{enumerate}
+\item Die \emph{Einbindung statistischer Methoden} bleibt
+rudimentär. Sie beschränkt sich meistens auf das Auszählen von
+Kategorienhäufigkeiten -- Kategorien, die zuvor ohnehin durch den
+Forschenden codiert wurden.
+
+\item Die Kategorien werden \emph{zwar} induktiv aus dem Text
+gewonnen, sind \emph{aber} zunächst deduktiv angesetzt. Der Bezug
+zum Text als Ganzes geht damit verloren (Plant 1996, Froggatt 2001,
+Lamnek \& Krell 2005).
+
+\item Nach Kruse (2015, 399) wirkt in manchen Spielarten eine
+\emph{rein quantifizierende Subsumtionslogik}. Mayring würde
+Äußerungen \emph{inventarisieren}, ohne die Ebene der
+\emph{latenten Strukturen} zu erreichen. Damit blieben Fragen der
+\textbf{Indexikalität} der Sprache unbeantwortet -- die Frage also,
+wie Akteure ihre Perspektive(n) auf die Realität durch ihre
+Sprachgebrauchspraxis konstruieren (Bohnsack 2003).
+\end{enumerate}
+
+Diese letzte Kritik ist für unsere Fragestellung besonders wichtig.
+Sie wird uns helfen zu verstehen, was Topic-Modelle \emph{anders}
+machen.
+
+% ===============================================================
+\section{Wo Topic-Modelle stehen}
+
+Topic-Modelle teilen mit \emph{beiden} klassischen Methoden die drei
+Grundannahmen vom Anfang. Sie unterscheiden sich aber in einem
+entscheidenden Punkt:
+
+\begin{merkbox}
+\textbf{Was sich grundsätzlich ändert.} Bei Oevermann und Mayring ist
+das, was die Analyse strukturiert -- die Fallstrukturgesetzlichkeit,
+das Kategoriensystem --, das \emph{Ergebnis menschlicher Interpretation}.
+
+Bei Topic-Modellen ist es das \emph{Ergebnis eines mathematischen
+Algorithmus}, der dann seinerseits durch den Forschenden interpretiert
+werden muss. Die Interpretation verschwindet nicht; sie verschiebt sich.
+\end{merkbox}
+
+\subsection{Drei Unterschiede zur objektiven Hermeneutik}
+
+\paragraph{1. Begriff von \enquote{Algorithmus}.}
+Bei Oevermann ist Algorithmus die regelgeleitete Selektion in
+Möglichkeitswelten, die eine universelle generative Grammatik
+voraussetzt. Bei Topic-Modellen sind Algorithmen
+\emph{statistisch} oder \emph{linearealgebraisch} definiert. Sie
+setzen \emph{nicht} voraus, dass die Grammatik universell ist; im
+Gegenteil: die Regeln der Sprache verändern sich mit Gebrauch, Zeit,
+Gesellschaft und Kultur (Foraker u.a.\ 2009, Kam \& Newport 2009,
+Everett 2012).
+
+\paragraph{2. Was wird gesucht?}
+Bei Oevermann: die \emph{Fallstrukturgesetzlichkeit} eines bestimmten
+Falls. Bei Topic-Modellen: \emph{Klassifikationsmuster} über viele
+Dokumente hinweg. TM sind also strukturell auf den \textbf{Vergleich}
+hin gebaut -- zwischen Texten, zwischen Akteuren, zwischen Zeitpunkten.
+
+\paragraph{3. Rolle der Kontextvariation.}
+Bei Oevermann: Gedankenexperimente und Lesarten werden \emph{aktiv}
+mobilisiert; alternative Kontexte sind das Herz des Verfahrens. Bei
+Topic-Modellen werden solche Variationen \emph{bewusst vermieden}
+(Sinclair 1992). Es zählen die typischen Merkmale des Textes selbst.
+Was interpretiert werden muss, ist das \textbf{Klassifikationsmuster},
+das der Algorithmus erzeugt -- eine \emph{Hypothese} darüber, welche
+Inhalte die Akteure mitgeteilt haben.
+
+\subsection{Nähe zur qualitativen Inhaltsanalyse}
+
+Topic-Modelle stehen Mayring deutlich näher als Oevermann. Beide
+Verfahren:
+
+\begin{itemize}
+\item bauen Kategoriensysteme aus dem Material auf;
+\item streben Intersubjektivität an;
+\item nutzen Häufigkeiten als Grundlage.
+\end{itemize}
+
+Es gibt aber eine wichtige Differenz: was an Mayring kritisiert wird
+(die Kategorien bleiben oberflächlich, sie inventarisieren, statt
+latente Strukturen zu erreichen), versucht TM \emph{methodisch} zu
+vermeiden. Topic-Modelle nehmen die \textbf{Indexikalität der Sprache}
+ernst: Bedeutung ergibt sich aus der \emph{Konfiguration} von
+Begriffen, nicht aus ihrer isolierten Codierung. Das, was die topics
+ausmacht, ist die wiederholte Ko-Okkurrenz von Begriffen in
+Dokumenten -- und das ist eine Aussage über die latente Struktur eines
+Korpus, keine Inventarisierung der Oberfläche.
+
+% ===============================================================
+\section{Synopse}
+
+Die folgende Tabelle fasst zusammen, was wir bisher gesehen haben.
+Sie ist ein \emph{erstes} Schema; es wird in der dritten Sitzung
+durch das, was Topic-Modelle nicht leisten können, präzisiert.
+
+\smallskip
+
+\begin{tabularx}{\textwidth}{@{}p{0.18\textwidth}XXX@{}}
+\toprule
+& \textbf{Objektive Hermeneutik} & \textbf{Qualitative Inhaltsanalyse} & \textbf{Topic-Modell} \\
+\midrule
+\textbf{Gegenstand}
+  & Einzelfall, biographische Sequenz
+  & Textmaterial, Inventar von Aussagen
+  & Textsammlung, Korpus \\
+\addlinespace[3pt]
+\textbf{Algorithmus}
+  & generative Grammatik (Chomsky)
+  & Kategoriensystem, manuelle Codierung
+  & statistische / lineare Algebra \\
+\addlinespace[3pt]
+\textbf{Sinnbegriff}
+  & latent, regelerzeugt, objektiv
+  & manifest \emph{und} latent
+  & latent als Konfiguration von Begriffen \\
+\addlinespace[3pt]
+\textbf{Rolle der Forschenden}
+  & Deutung, Entwicklung von Lesarten
+  & Codierung anhand des Systems
+  & Interpretation des Klassifikationsmusters \\
+\addlinespace[3pt]
+\textbf{Ergebnis}
+  & Fallstrukturgesetzlichkeit
+  & Kategorien mit Häufigkeiten
+  & Topics + Dokument\-zugehörigkeiten \\
+\addlinespace[3pt]
+\textbf{Korpusgröße}
+  & klein (1--20 Fälle)
+  & mittel
+  & groß (Hunderte bis Millionen) \\
+\bottomrule
+\end{tabularx}
+
+% ===============================================================
+\section{Fragen zum Mitnehmen}
+
+Drei Fragen, über die Sie bis zur nächsten Sitzung nachdenken können:
+
+\begin{enumerate}
+\item Eine Sozialwissenschaftlerin, die mit MTA arbeitet, codiert nicht
+selbst -- sie liest die Codierung einer Maschine. Verschiebt das die
+\emph{Subjektivität der Interpretation} oder verlagert es sie nur an
+einen anderen, weniger sichtbaren Ort?
+
+\item Wir haben gesehen, dass Topic-Modelle dem Verfahren Mayrings
+strukturell nahe stehen. Was, glauben Sie, würde Oevermann zu einer
+Topic-Modell-Analyse einer Sammlung seiner eigenen Interviewprotokolle
+sagen?
+
+\item Die Behauptung, eine Methode könne \enquote{die latente
+Sinnstruktur} eines Textes erschließen, wird sowohl von Oevermann als
+auch (mit Einschränkungen) von Mayring erhoben. Topic-Modelle erheben
+sie ebenfalls. Welche Form von \emph{Belastbarkeit} verlangen wir
+jeweils, damit eine solche Behauptung legitim ist?
+\end{enumerate}
+
+% ===============================================================
+\section{Ausblick auf Sitzung 2}
+
+In der nächsten Sitzung verlassen wir die methodologische
+Standortbestimmung und schauen uns an, \emph{wie Topic-Modelle
+funktionieren}. Im Mittelpunkt:
+
+\begin{itemize}
+\item Was ist ein \emph{topic} mathematisch? Wir gehen das
+Beispiel \enquote{MLU/Sommer} aus dem Buch durch (Abb.~2.1 in
+Papilloud \& Hinneburg 2018).
+
+\item Vergleich mit zwei verwandten Verfahren, die Sie aus
+quantitativen Methoden kennen: Clusteranalyse und Faktorenanalyse.
+
+\item Die zwei klassischen TM-Verfahren: \textbf{LDA} (Latent
+Dirichlet Allocation, probabilistisch-bayessch) und \textbf{NMF}
+(Non-negative Matrix Factorization, lineare Algebra). Beide
+finden Sie als Optionen in MTA.
+
+\item \textbf{Neue Welt:} \emph{BERTopic} (Grootendorst 2022) und
+der Sprung zu \emph{Embeddings}. Was bringen Large Language Models
+(GPT, Claude) in die Diskussion ein? Wir besprechen die jüngste
+Literatur (2022--2026) zur Anwendung von LLMs in der qualitativen
+Sozialforschung -- inklusive der \emph{Kritik} an dieser Praxis
+(Ashwin u.a.\ 2025).
+
+\item Eine Frage, die uns durch die Praxis mit MTA begleiten wird:
+\emph{warum} verwenden wir NMF und LDA und nicht BERTopic oder
+einen LLM? Es ist nicht nur eine technische Wahl.
+\end{itemize}
+
+% ===============================================================
+\section*{Zitierte Literatur}
+\addcontentsline{toc}{section}{Zitierte Literatur}
+
+\footnotesize
+
+\textsc{Grundtext} der Sitzung:
+
+Papilloud, C., \& Hinneburg, A.\ (2018). \emph{Einführung in die
+qualitative Analyse von Texten mit Topic-Modellen}. Wiesbaden:
+Springer. \emph{Bes.\ Kap.~1.}
+
+\bigskip
+
+\textsc{Objektive Hermeneutik:}
+
+Chomsky, N.\ (1981). \emph{Regeln und Repräsentationen}. Frankfurt:
+Suhrkamp.
+
+Oevermann, U.\ (1995). Ein Modell der Struktur von Religiosität.
+In: M.\ Wohlrab-Sahr (Hrsg.), \emph{Biographie und Religion},
+27--102. Frankfurt: Campus.
+
+Oevermann, U.\ (1996). \emph{Krise und Muße. Struktureigenschaften
+ästhetischer Erfahrung aus soziologischer Sicht}. Vortrag, Städelschule.
+
+Oevermann, U.\ (2002). \emph{Klinische Soziologie auf der Basis der
+Methodologie objektiver Hermeneutik -- Manifest}.
+
+Oevermann, U.\ (2004). Sozialisation als Prozess der Krisenbewältigung.
+In: D.\ Geulen \& H.\ Veith (Hrsg.), \emph{Sozialisationstheorie
+interdisziplinär}, 155--181. Stuttgart: Lucius.
+
+Oevermann, U.\ (2008). \emph{Krise und Routine als analytisches
+Paradigma in den Sozialwissenschaften} (Abschiedsvorlesung).
+
+Przyborski, A., \& Wohlrab-Sahr, M.\ (2009). \emph{Qualitative
+Sozialforschung. Ein Arbeitsbuch}. München: Oldenbourg.
+
+Reichertz, J.\ (2004). \enquote{Das Handlungsrepertoire von
+Gesellschaften erweitern.} \emph{Forum Qualitative Sozialforschung}
+5(3).
+
+\bigskip
+
+\textsc{Qualitative Inhaltsanalyse:}
+
+Bohnsack, R.\ (2003). Dokumentarische Methode. In: R.\ Bohnsack
+et al.\ (Hrsg.), \emph{Hauptbegriffe Qualitativer Sozialforschung},
+40--44.
+
+Kruse, J.\ (2015). \emph{Qualitative Interviewforschung. Ein
+integrativer Ansatz}. Weinheim: Beltz.
+
+Mayring, P.\ (1994). Qualitative Inhaltsanalyse. In: A.\ Boehm et al.\
+(Hrsg.), \emph{Texte verstehen}, 159--175. Konstanz: UVK.
+
+Mayring, P.\ (2000). Qualitative Inhaltsanalyse. \emph{Forum
+Qualitative Sozialforschung} 1(2).
+
+Mayring, P.\ (2002). \emph{Einführung in die qualitative
+Sozialforschung}. Basel: Beltz.
+
+Ramsenthaler, M.\ (2013). Was ist qualitative Inhaltsanalyse?
+In: M.\ W.\ Schnell et al.\ (Hrsg.), \emph{Der Patient am Lebensende},
+23--42. Wiesbaden: Springer.
+
+Rinker, T.\ (2013). \emph{qdap: Quantitative Discourse Analysis
+Package}. Buffalo: University at Buffalo.
+
+\bigskip
+
+\textsc{Topic-Modelle (Vorgriff auf Sitzung 2):}
+
+Blei, D.\ M.\ (2012). Probabilistic Topic Models.
+\emph{Communications of the ACM} 55(4): 77--84.
+
+Grootendorst, M.\ (2022). BERTopic: Neural topic modeling with a
+class-based TF-IDF procedure. \emph{arXiv:2203.05794}.
+
+Sinclair, J.\ (1992). The Automatic Analysis of Corpora. In:
+J.\ Svartvik (Hrsg.), \emph{Directions in Corpus Linguistics}.
+
+\end{document}

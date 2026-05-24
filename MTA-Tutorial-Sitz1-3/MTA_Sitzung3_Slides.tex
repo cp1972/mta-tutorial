@@ -1,0 +1,735 @@
+\documentclass[aspectratio=169,11pt]{beamer}
+
+\usepackage{fontspec}
+\usepackage[ngerman,provide=*]{babel}
+\usepackage{csquotes}
+
+\usetheme{default}
+\usecolortheme{dove}
+\setbeamertemplate{navigation symbols}{}
+\setbeamerfont{title}{size=\Large,series=\bfseries}
+\setbeamerfont{frametitle}{size=\large,series=\bfseries}
+\setbeamercolor{frametitle}{fg=black}
+\setbeamercolor{title}{fg=black}
+\setbeamercolor{structure}{fg=black!75}
+\setbeamercolor{normal text}{fg=black!90}
+\setbeamertemplate{itemize item}{\textbullet}
+\setbeamertemplate{itemize subitem}{\textendash}
+
+\setbeamertemplate{footline}{%
+  \leavevmode%
+  \hbox{%
+    \begin{beamercolorbox}[wd=.55\paperwidth,ht=2.25ex,dp=1ex,leftskip=1em]{author in head/foot}%
+      \footnotesize\color{black!60}MTA -- Sitzung 3: Vom Verfahren zur Interpretation%
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.45\paperwidth,ht=2.25ex,dp=1ex,rightskip=1em,leftskip=2ex]{title in head/foot}%
+      \hfill\footnotesize\color{black!60}\insertframenumber\,/\,\inserttotalframenumber%
+    \end{beamercolorbox}}%
+}
+
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{amsmath}
+\usepackage{tikz}
+
+\title{Vom Verfahren zur Interpretation}
+\subtitle{Sitzung 3 -- Vorverarbeitung, Metadaten\\und ein kritischer Blick auf Topic-Modelle}
+\author{Prof.~Dr.~Christian Papilloud}
+\institute{Institut für Soziologie\\Martin-Luther-Universität Halle-Wittenberg}
+\date{Master Soziologie -- 2026}
+
+\begin{document}
+
+% ===============================================================
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+
+% ===============================================================
+\begin{frame}{Wo wir stehen}
+
+  In den ersten beiden Sitzungen haben wir Topic-Modelle
+  \emph{methodologisch} positioniert und \emph{technisch}
+  verstanden.
+
+  \vfill
+  Heute schließen wir den theoretischen Teil ab mit dem, was
+  zwischen \emph{Forschungsfrage} und \emph{Algorithmus} liegt --
+  und was \emph{nach} dem Algorithmus folgt:
+
+  \vfill
+  \begin{enumerate}
+    \item[\textbf{1.}] \emph{Vor} dem Algorithmus:
+          Was ist ein Dokument? Wie reinigt man eine Textquelle?
+          Was ist TF-IDF?
+    \item[\textbf{2.}] Wie kann man \emph{Metadaten} in eine
+          Topic-Modell-Analyse einbinden? Drei Strategien.
+    \item[\textbf{3.}] \emph{Nach} dem Algorithmus -- der kritische
+          Blick: Zwei verbreitete Erwartungen, die Topic-Modelle
+          \emph{nicht} erfüllen.
+    \item[\textbf{4.}] Was sich für unsere Forschungspraxis ändert.
+          Übergang zur Praxis mit MTA.
+  \end{enumerate}
+
+\end{frame}
+
+% ===============================================================
+\section{1. Was \emph{vor} dem Algorithmus geschieht}
+
+\begin{frame}{Die unsichtbare Hauptarbeit}
+
+  Eine Topic-Modell-Analyse besteht aus vier Phasen
+  (Papilloud \& Hinneburg 2018, Kap.\ 2.4):
+
+  \vfill
+  \begin{enumerate}
+    \item \textbf{Datenvorverarbeitung} \hfill -- der heutige Schwerpunkt
+    \item \textbf{Topic-Modell-Inferenz} \hfill -- letzte Sitzung
+    \item \textbf{Evaluation}
+    \item \textbf{Interpretation}
+  \end{enumerate}
+
+  \vfill
+  \begin{block}{Pointe}
+    Die Vorverarbeitung ist der Schritt, der die meiste Zeit kostet --
+    und der die größten methodologischen Konsequenzen hat. Wer schlecht
+    vorverarbeitet, bekommt schlechte topics. Es gibt keinen Algorithmus,
+    der diese Phase ersetzt.
+  \end{block}
+
+\end{frame}
+
+% ===============================================================
+\begin{frame}{Frage 1: Was ist ein \emph{Dokument}?}
+
+  Es klingt trivial, ist es aber nicht.
+
+  \vfill
+  \begin{itemize}
+    \item Ein Interview = \emph{ein} Dokument? Oder eine
+          \emph{Aussage} = ein Dokument?
+    \vfill
+    \item Eine ganze Tageszeitung = ein Dokument? Oder ein
+          \emph{Artikel}? Oder ein \emph{Absatz}?
+    \vfill
+    \item Ein Buch = ein Dokument? Oder ein \emph{Kapitel}?
+          Oder eine \emph{Seite}?
+  \end{itemize}
+
+  \vfill
+  Diese Wahl ist \emph{nicht} technisch. Sie ist eine \emph{theoretische
+  Wahl}: Auf welcher Ebene sehen Sie die Strukturen, die Sie suchen?
+
+  \vfill
+  Beispiel: Wenn Sie tageszeitungsweise gruppieren, finden Sie topics,
+  die ganze \emph{Ausgaben} dominieren. Wenn Sie artikelweise gruppieren,
+  finden Sie topics, die einzelne \emph{Themen} ausmachen. Wenn Sie
+  absatzweise gruppieren, finden Sie \emph{rhetorische Muster}. Drei
+  Analysen, drei \emph{verschiedene} Befunde.
+
+\end{frame}
+
+% ===============================================================
+\begin{frame}{Frage 2: Welche Wörter zählen?}
+
+  Nicht alle Wörter sind gleich nützlich für die Themenfindung.
+  Zwei Gruppen werden meistens entfernt:
+
+  \vfill
+  \begin{enumerate}
+    \item \textbf{Wenig aussagekräftige Wörter} (Stoppwörter):
+          Artikel, Pronomen, Präpositionen, Hilfsverben.
+          \\[2pt]
+          \emph{ein, mein, er, sie, und, aber, ist, hat, durch, mit \dots}
+          \\[2pt]
+          Sehr häufig, semantisch arm.
+    \vfill
+    \item \textbf{Sehr seltene Wörter}: Wörter, die nur in einem oder
+          zwei Dokumenten vorkommen.
+          \\[2pt]
+          Sie können keinem topic stabil zugewiesen werden und
+          \emph{stören} die Inferenz statistisch.
+  \end{enumerate}
+
+  \vfill
+  \footnotesize\color{black!60}
+  In MTA: Sie laden eine Stoppwörterliste hoch
+  (\texttt{stopwords\_de.txt}, \texttt{stopwords\_en.txt}, \dots).
+  Bei der Datenvorbereitung können Sie zusätzliche Wörter manuell
+  ausschließen.
+
+\end{frame}
+
+% ===============================================================
+\begin{frame}{TF-IDF -- eine zentrale Gewichtung}
+
+  TF-IDF (Term Frequency -- Inverse Document Frequency) gewichtet
+  Wörter doppelt:
+
+  \vfill
+  \begin{itemize}
+    \item \textbf{TF} -- Häufigkeit eines Wortes \emph{im Dokument}.
+          Je öfter, desto wichtiger für dieses Dokument.
+    \vfill
+    \item \textbf{IDF} -- inverse Häufigkeit \emph{über die Dokumente}.
+          \[ \mathrm{idf}_i = \log_{10}\!\left(\frac{N}{n_i}\right) \]
+          mit $N$ = Gesamtzahl der Dokumente, $n_i$ = Anzahl der
+          Dokumente, die das Wort $i$ enthalten.
+          \\[2pt]
+          Wörter, die in \emph{allen} Dokumenten vorkommen, bekommen
+          einen niedrigen IDF-Wert.
+  \end{itemize}
+
+  \vfill
+  \textbf{Beispiel:} im Reuters-Korpus (806.791 Texte) haben die
+  Wörter \emph{Versuch} und \emph{Versicherung} ähnliche
+  Gesamthäufigkeiten ($\sim$10\,400). Aber \emph{Versuch} kommt in
+  8.760 Dokumenten vor, \emph{Versicherung} nur in 3.997.
+  \emph{Versicherung} ist also stärker konzentriert -- höherer
+  IDF-Wert -- für die Topic-Analyse aussagekräftiger.
+
+\end{frame}
+
+% ===============================================================
+\begin{frame}{Lemmatisierung, NER, Phrasen -- optionale Schritte}
+
+  Drei sprachliche Operationen, die Topic-Modelle verbessern können:
+
+  \vfill
+  \begin{itemize}
+    \item \textbf{Lemmatisierung.} Reduziert Wörter auf ihre Grundform:
+          \emph{lief}, \emph{laufen}, \emph{gelaufen} $\rightarrow$ \emph{laufen}.
+          \\[2pt]
+          Vermeidet, dass dieselbe semantische Einheit über mehrere
+          topics verteilt wird.
+    \vfill
+    \item \textbf{Named Entity Recognition (NER).} Erkennt
+          Eigennamen und mehrwortige Ausdrücke:
+          \\[2pt]
+          \emph{Martin Luther University Halle-Wittenberg}
+          $\rightarrow$ ein Token statt fünf.
+    \vfill
+    \item \textbf{Wortphrasen.} Häufige Wortgruppen werden zu
+          \emph{einem} Token zusammengefasst.
+          \\[2pt]
+          \emph{battery life} $\rightarrow$ \emph{battery\_life}.
+  \end{itemize}
+
+  \vfill
+  \textbf{In MTA:} Stoppwörter und TF-IDF sind eingebaut.
+  Lemmatisierung, NER und Phrasen \emph{nicht} -- sie können vorher
+  durch externe Werkzeuge (TreeTagger, spaCy) angewendet werden,
+  wenn nötig.
+
+\end{frame}
+
+% ===============================================================
+\begin{frame}{Eine wichtige Empfehlung: pro Sprache, pro Korpus}
+
+  \begin{block}{Aus dem Buch (Papilloud \& Hinneburg 2018, S.~8 der Doc)}
+    \enquote{Wenn Sie Dateien in verschiedenen Sprachen haben, legen
+    Sie sie \emph{nicht} in dasselbe Verzeichnis. Erstellen Sie
+    so viele Verzeichnisse wie nötig, z.B.\ eines für Ihre
+    französischen Dateien, eines für Ihre deutschen, eines für
+    Ihre englischen.}
+  \end{block}
+
+  \vfill
+  Diese Trennung gilt aber nicht nur für Sprachen. Sie gilt auch für:
+  \begin{itemize}
+    \item Verschiedene \emph{Autoren} (wenn der Stil unterschiedlich ist),
+    \vfill
+    \item Verschiedene \emph{Genres} (Interviews vs.\ Briefe vs.\ Berichte),
+    \vfill
+    \item Verschiedene \emph{Zeitperioden} (wenn das Vokabular sich
+          stark gewandelt hat).
+  \end{itemize}
+
+  \vfill
+  Jede Mischung führt zu \emph{vermischten} topics. Trennen, dann
+  vergleichen.
+
+\end{frame}
+
+% ===============================================================
+\section{2. Metadaten und Topic-Modelle}
+
+\begin{frame}{Was sind Metadaten?}
+
+  \emph{Meta\-daten} = Informationen über die Dokumente, die nicht
+  im Text enthalten sind:
+  \vfill
+  \begin{itemize}
+    \item Zeit der Veröffentlichung,
+    \item Autorin oder Autor,
+    \item Geschlecht, Alter, Bildungsstand der Befragten,
+    \item Quelle (Zeitung, Plattform, Region),
+    \item Zitate, Genre, Sprache \ldots
+  \end{itemize}
+
+  \vfill
+  Diese Informationen sind für die soziologische Interpretation
+  \emph{wertvoll}. Wie binden wir sie in eine Topic-Modell-Analyse ein?
+
+  \vfill
+  Es gibt drei Strategien.
+
+\end{frame}
+
+% ===============================================================
+\begin{frame}{Strategie 1 -- \emph{Spaltung}}
+
+  \textbf{Idee:} Man teilt das Korpus nach der Metadaten-Variable
+  in Teilkorpora und führt für jedes eine separate Topic-Analyse durch.
+
+  \vfill
+  \emph{Beispiel:} Korpus aus 2.000 Zeitungsartikeln zu Migration,
+  2015--2020. Wir wollen die \emph{zeitliche Entwicklung} sehen.
+
+  $\rightarrow$ Wir machen sechs separate Analysen, eine pro Jahr,
+  und vergleichen die topics.
+
+  \vfill
+  \textbf{Vorteil:} einfach umzusetzen, sauber interpretierbar pro
+  Teilgruppe.
+
+  \vfill
+  \textbf{Nachteil:} jede Teilgruppe muss groß genug bleiben.
+  Bei wenigen Dokumenten pro Jahr ist die Analyse instabil.
+  Außerdem: man verliert die \emph{gemeinsamen} topics über die
+  Gruppen hinweg.
+
+  \vfill
+  \footnotesize\color{black!60}
+  \emph{In MTA} entspricht das: man legt mehrere Verzeichnisse an
+  und analysiert sie nacheinander.
+
+\end{frame}
+
+% ===============================================================
+\begin{frame}{Strategie 2 -- \emph{Hinzufügung}}
+
+  \textbf{Idee:} Die Metadaten werden \emph{nach} der Topic-Inferenz
+  in die Analyse eingebunden. Man rechnet \emph{ein} Topic-Modell auf
+  dem gesamten Korpus und betrachtet dann, wie sich die
+  Topic-Verteilungen \emph{nach Gruppen unterscheiden}.
+
+  \vfill
+  \emph{Beispiel:} Wir berechnen 8 topics auf allen Migrations-Artikeln.
+  Dann fragen wir: kommt Topic 3 (Wirtschaftliche Aspekte) bei der FAZ
+  häufiger vor als bei der taz?
+
+  \vfill
+  \textbf{Vorteil:} flexibel, statistisch gut kontrollierbar (man
+  kann statistische Tests anwenden, wie in MTA mit Welch + BH).
+
+  \vfill
+  \textbf{Nachteil:} die topics selbst sind \emph{nicht} durch die
+  Metadaten beeinflusst. Wenn die Metadaten die topics
+  \emph{strukturieren}, geht das verloren.
+
+  \vfill
+  \footnotesize\color{black!60}
+  \emph{In MTA} entspricht das: \enquote{Group Comparison}-Menü
+  (mit Welch-t-Test und Benjamini-Hochberg-Korrektur).
+
+\end{frame}
+
+% ===============================================================
+\begin{frame}{Strategie 3 -- \emph{Lernergänzung}}
+
+  \textbf{Idee:} Die Metadaten werden \emph{während} der Topic-Inferenz
+  einbezogen. Das Topic-Modell selbst wird so erweitert, dass es die
+  Metadaten als Teil seines Modells nutzt.
+
+  \vfill
+  Beispiele aus der Literatur:
+  \begin{itemize}
+    \item \emph{Dynamic Topic Models} (Blei \& Lafferty 2006):
+          topics, die sich über die Zeit verändern dürfen.
+    \item \emph{Author-Topic Models} (Rosen-Zvi et al.\ 2004):
+          Autoren haben eigene Topic-Profile.
+    \item \emph{Structural Topic Model (STM)} (Roberts et al.\ 2014):
+          Metadaten beeinflussen sowohl Topic-Verteilung als auch
+          Topic-Inhalt.
+  \end{itemize}
+
+  \vfill
+  \textbf{Vorteil:} elegant; topics werden \emph{strukturell} mit
+  Metadaten verbunden.
+
+  \vfill
+  \textbf{Nachteil:} mathematisch komplex; spezialisierte Implementierungen
+  nötig. \emph{In MTA nicht implementiert.}
+
+\end{frame}
+
+% ===============================================================
+\begin{frame}{Welche Strategie wann?}
+
+  \footnotesize
+  \begin{tabularx}{\textwidth}{@{}p{0.20\textwidth}XXX@{}}
+    \toprule
+    & \textbf{Spaltung} & \textbf{Hinzufügung} & \textbf{Lernergänzung} \\
+    \midrule
+    \textbf{Voraussetzung}
+      & große Teilgruppen
+      & gemeinsames Korpus
+      & spezialisiertes Modell \\[6pt]
+    \textbf{Topic-Inhalt}
+      & kann pro Gruppe variieren
+      & gemeinsam für alle Gruppen
+      & strukturell beeinflusst \\[6pt]
+    \textbf{Interpretation}
+      & gruppenweise
+      & vergleichend
+      & vereinheitlicht \\[6pt]
+    \textbf{Statistische Tests}
+      & schwer möglich
+      & \textbf{ja} (Welch, Mann-Whitney, BH)
+      & im Modell integriert \\[6pt]
+    \textbf{Verfügbar in MTA}
+      & ja
+      & ja
+      & nein \\
+    \bottomrule
+  \end{tabularx}
+
+  \vfill
+  \normalsize
+  \footnotesize\color{black!60}
+  Empfehlung des Buches (Papilloud \& Hinneburg 2018, S.~35):
+  Strategie 2 (Hinzufügung) ist meistens vorzuziehen, wenn die
+  Metadaten nicht zwingend strukturell modelliert werden müssen.
+
+\end{frame}
+
+% ===============================================================
+\section{3. Der kritische Blick}
+
+\begin{frame}{Topic-Modelle haben Grenzen}
+
+  Wir kommen zum Kapitel 8 des Buches -- \emph{Rück- und Ausblick}.
+  Zwei verbreitete Erwartungen werden dort explizit zurückgewiesen.
+  Beide werden Sie in der Literatur und in der Praxis immer wieder
+  hören. Beide sind \emph{falsch}.
+
+  \vfill
+  \begin{itemize}
+    \item \textbf{Erwartung 1:} Topic-Modelle überwinden die
+          Unterscheidung qualitativ / quantitativ.
+    \vfill
+    \item \textbf{Erwartung 2:} Topic-Modelle reduzieren die
+          Interpretationsarbeit \emph{auf ein Minimum}.
+  \end{itemize}
+
+  \vfill
+  Wir nehmen beide Erwartungen kurz auseinander.
+
+\end{frame}
+
+% ===============================================================
+\begin{frame}{Erwartung 1 -- \enquote{Quali/Quanti überwinden}}
+
+  Das Argument lautet meistens: Da Topic-Modelle Statistik und
+  Mathematik einsetzen, lösen sie das alte Paar
+  \emph{qualitativ vs.\ quantitativ} auf.
+
+  \vfill
+  \textbf{Warum das nicht stimmt} (Buch, S.~152):
+  \begin{itemize}
+    \item Topic-Modelle setzen die Arbeit an \emph{Texten} voraus --
+          also am \emph{Sinn} von Begriffen.
+    \vfill
+    \item Diese Daten lassen sich nicht auf eine einzige Bedeutung
+          reduzieren. Sie können nicht rein quantitativ interpretiert
+          werden.
+    \vfill
+    \item Topic-Modelle reduzieren die Komplexität von Textquellen
+          \emph{nicht} -- im Gegenteil, sie laden dazu ein,
+          \emph{Multiperspektivität} zu erkennen.
+  \end{itemize}
+
+  \vfill
+  \begin{block}{Pointe}
+    Topic-Modelle können quantitative Verfahren \emph{begleiten}
+    (Mixed-Methods-Forschung). Aber sie sind nicht \emph{a priori}
+    \enquote{besser} oder \enquote{neutraler}, weil sie mit Zahlen
+    arbeiten.
+  \end{block}
+
+\end{frame}
+
+% ===============================================================
+\begin{frame}{Erwartung 2 -- \enquote{Interpretation auf ein Minimum reduzieren}}
+
+  Das Argument: Da der Algorithmus die Kategorien selbst findet,
+  müssen wir nur noch die Ergebnisse \enquote{lesen}.
+
+  \vfill
+  \textbf{Warum das nicht stimmt} (Buch, S.~152--153):
+  \begin{itemize}
+    \item Die Ergebnisse eines Topic-Modells hängen \emph{stark} ab von:
+          \begin{itemize}
+            \item der Forschungsfrage (was wir suchen);
+            \item den theoretischen Rahmenannahmen;
+            \item den Vorverarbeitungsentscheidungen;
+            \item der Wahl von $K$;
+            \item der Wahl von LDA oder NMF;
+            \item der Stoppwörterliste;
+            \item \dots
+          \end{itemize}
+    \vfill
+    \item Die topics sind \emph{Hypothesen}, keine Befunde.
+    \vfill
+    \item Die Bedeutung der topics muss durch Lektüre der besten
+          Dokumente, durch Vergleich mit Theorie, durch Diskussion
+          mit Kollegen \emph{erarbeitet} werden.
+  \end{itemize}
+
+\end{frame}
+
+% ===============================================================
+\begin{frame}{Eine Pflichtlektüre: Schmidt 2012}
+
+  \begin{block}{Schmidt 2012 -- die Kritik}
+    Schmidt zeigt anhand historischer und geographischer Daten, wie
+    Topic-Modelle zu \emph{falschen Ergebnissen} führen können,
+    wenn sie \enquote{blind} angewendet werden.
+  \end{block}
+
+  \vfill
+  Seine Forderung: Topic-Modelle in den Geistes- und Sozialwissenschaften
+  müssen \textbf{mit Vorsicht und kritischer Reflexivität} angewendet
+  werden.
+
+  \vfill
+  Was heißt das konkret?
+  \begin{enumerate}
+    \item Topics nicht für bare Münze nehmen -- immer mit den
+          besten Dokumenten konfrontieren.
+    \item Mehrere Modelle laufen lassen (verschiedene $K$, LDA und
+          NMF) und Konsistenz prüfen.
+    \item Ergebnisse mit unabhängigen Quellen vergleichen.
+    \item Die theoretische Rahmung explizit machen.
+  \end{enumerate}
+
+\end{frame}
+
+% ===============================================================
+\begin{frame}{Wo bleibt der/die Forschende?}
+
+  \begin{block}{Frage vom Ende der ersten Sitzung}
+    Eine Sozialwissenschaftlerin, die mit MTA arbeitet, codiert nicht
+    selbst, sondern sie liest die Codierung einer Maschine. Verschiebt
+    das die Subjektivität der Interpretation -- oder verlagert es sie
+    nur an einen anderen Ort?
+  \end{block}
+
+  \vfill
+  Die Antwort lautet jetzt: \emph{ja, es verlagert sie}. Aber:
+
+  \vfill
+  \begin{itemize}
+    \item Die Verlagerung ist \emph{sichtbarer}: alle Vorverarbeitungs- und
+          Modellierungsentscheidungen sind dokumentierbar.
+    \vfill
+    \item Sie ist \emph{prüfbar}: jede andere Forscherin kann die
+          Analyse mit denselben Parametern wiederholen.
+    \vfill
+    \item Sie ist \emph{kommunizierbar}: man kann mit Kollegen über
+          Parameter streiten, was bei rein interpretativen Verfahren
+          schwerer ist.
+  \end{itemize}
+
+  \vfill
+  Die Subjektivität verschwindet nicht. Sie wird transparenter.
+
+\end{frame}
+
+% ===============================================================
+\section{4. Was sich für unsere Praxis ändert}
+
+\begin{frame}{Eine andere Art zu lesen}
+
+  Das vielleicht wichtigste, was Topic-Modelle in die qualitative
+  Forschung einbringen, ist eine \emph{neue Lesepraxis}:
+
+  \vfill
+  \begin{block}{Buch, S.~153}
+    Topic-Modelle erlauben, Texte nicht mehr nur \emph{sequenziell}
+    zu lesen, sondern sie auch \emph{parallel} zu berücksichtigen.
+  \end{block}
+
+  \vfill
+  Die klassische qualitative Forschung liest Texte einzeln,
+  sequenziell, hermeneutisch. Topic-Modelle erlauben:
+  \begin{itemize}
+    \item parallele Sicht auf Hunderte oder Tausende von Texten,
+    \vfill
+    \item \emph{Navigation} im Korpus über die topics,
+    \vfill
+    \item \emph{vergleichende} Lektüre der besten Dokumente pro topic,
+    \vfill
+    \item Erkundung der \emph{semantischen Nachbarschaften} von Begriffen.
+  \end{itemize}
+
+  \vfill
+  Das ist nicht der \emph{Ersatz} qualitativer Lektüre. Es ist ihr
+  \emph{Vorlauf} -- eine Strukturierung, die das eigentliche
+  Lesen vorbereitet.
+
+\end{frame}
+
+% ===============================================================
+\begin{frame}{Konsequenzen für die Forschungspraxis}
+
+  Wer mit Topic-Modellen arbeitet, ändert eine Reihe von Praktiken:
+
+  \vfill
+  \begin{itemize}
+    \item \textbf{Korpusgröße:} Hunderte oder Tausende von Texten
+          werden zugänglich. Was \enquote{relevante Literatur} ist,
+          wird neu definiert.
+    \vfill
+    \item \textbf{Forschungsfrage:} sie muss explizit \emph{operationalisiert}
+          werden -- in Form von Vorverarbeitungsentscheidungen und
+          Parameterwahl.
+    \vfill
+    \item \textbf{Kooperation:} weil Parameter dokumentiert werden,
+          können andere die Analyse \emph{reproduzieren}, \emph{kritisieren},
+          \emph{weiterentwickeln}.
+    \vfill
+    \item \textbf{Wissenschaftliche Schreibweise:} man schreibt über
+          \emph{Verfahren}, nicht nur über \emph{Befunde}.
+          Methodenkapitel werden länger.
+  \end{itemize}
+
+\end{frame}
+
+% ===============================================================
+\begin{frame}{Was wir gelernt haben -- Bilanz der drei Sitzungen}
+
+  \begin{enumerate}
+    \item \textbf{Sitzung 1:} Topic-Modelle gehören zu den qualitativen
+          Methoden -- sie teilen mit objektiver Hermeneutik und
+          qualitativer Inhaltsanalyse drei Grundannahmen, aber sie
+          unterscheiden sich in dem, was bei ihnen \emph{algorithmisch}
+          ist.
+    \vfill
+    \item \textbf{Sitzung 2:} Mathematisch sind sie eine
+          \emph{Matrixfaktorisierung} mit \emph{Mixed-Membership}.
+          LDA und NMF sind zwei Wege zum gleichen Ziel. BERTopic
+          und LLMs sind moderne Alternativen mit Vor- und Nachteilen.
+          MTA bleibt aus guten Gründen bei LDA und NMF.
+    \vfill
+    \item \textbf{Heute, Sitzung 3:} Der Algorithmus ist nur die
+          \emph{Mitte} einer Topic-Modell-Analyse. Vorverarbeitung
+          und Interpretation machen den \emph{Großteil} der Arbeit
+          aus -- und tragen die größte Verantwortung.
+  \end{enumerate}
+
+\end{frame}
+
+% ===============================================================
+\begin{frame}{Übergang zur Praxis}
+
+  Ab der nächsten Sitzung beginnen wir die praktische Arbeit mit MTA.
+
+  \vfill
+  \textbf{Was Sie für die erste Praxis-Sitzung mitbringen sollten:}
+  \begin{itemize}
+    \item Ein kleines eigenes Korpus von Texten (5--20 Dateien)
+          als \texttt{.txt} (UTF-8). \\
+          \footnotesize Beispiele: Zeitungsartikel zu einem Thema, das
+          Sie interessiert; ein paar Interviewtranskripte aus einem
+          früheren Projekt; offene Antworten aus einer Umfrage.
+          \normalsize
+    \vfill
+    \item Eine Frage, die Sie an diesen Texten stellen würden.
+    \vfill
+    \item MTA bereits auf Ihrem Laptop installiert (Installationsanleitung
+          auf GitHub).
+  \end{itemize}
+
+  \vfill
+  \begin{block}{Erinnerung}
+    Die theoretischen Grundlagen, die wir besprochen haben, sind
+    \emph{nicht} optional. Sie sind die Grundlage, auf der jede
+    Topic-Modell-Analyse sinnvoll wird.
+  \end{block}
+
+\end{frame}
+
+% ===============================================================
+\begin{frame}[allowframebreaks]{Zitierte Literatur}
+
+  \footnotesize
+
+  \textsc{Grundlage:} \\[2pt]
+  Papilloud, C., \& Hinneburg, A.\ (2018). \emph{Einführung in die
+  qualitative Analyse von Texten mit Topic-Modellen}. Wiesbaden:
+  Springer. \emph{Bes.\ Kap.\ 2.5 und Kap.\ 8.}
+
+  \medskip
+  \textsc{Vorverarbeitung von Textquellen:}
+  \begin{itemize}
+    \item Boyd-Graber, J., Mimno, D., \& Newman, D.\ (2014).
+          Care and Feeding of Topic Models. In E.\ M.\ Airoldi et al.\
+          (Hrsg.), \emph{Handbook of Mixed Membership Models}. CRC Press.
+    \item Manning, C.\ D., Raghavan, P., \& Schütze, H.\ (2008).
+          \emph{Introduction to Information Retrieval}. Cambridge UP.
+          (TF-IDF, Kap.\ 6.2)
+    \item Mimno, D.\ (2015). Optimizing Semantic Coherence in Topic
+          Models. \emph{EMNLP}.
+    \item Schofield, A., \& Mimno, D.\ (2016). Comparing Apples to
+          Apple: The Effects of Stemmers on Topic Models. \emph{TACL}.
+  \end{itemize}
+
+  \medskip
+  \textsc{Metadaten und erweiterte Topic-Modelle:}
+  \begin{itemize}
+    \item Blei, D.\ M., \& Lafferty, J.\ D.\ (2006). Dynamic Topic
+          Models. \emph{ICML}.
+    \item Roberts, M.\ E., et al.\ (2014). Structural Topic Models for
+          Open-Ended Survey Responses. \emph{American Journal of
+          Political Science}, 58(4), 1064--1082.
+    \item Rosen-Zvi, M., Griffiths, T., Steyvers, M., \& Smyth, P.\
+          (2004). The Author-Topic Model for Authors and Documents.
+          \emph{UAI}.
+    \item Mimno, D., \& McCallum, A.\ (2008). Topic Models Conditioned
+          on Arbitrary Features with Dirichlet-Multinomial Regression.
+          \emph{UAI}.
+  \end{itemize}
+
+  \medskip
+  \textsc{Kritische Reflexion:}
+  \begin{itemize}
+    \item Blei, D.\ M.\ (2013). Topic Modeling and Digital Humanities.
+          \emph{Journal of Digital Humanities}, 2(1).
+    \item Gelman, A., Hennig, C., et al.\ (2013). Comment on
+          \enquote{Hierarchical} Models in the Social Sciences.
+    \item Mimno, D., \& Blei, D.\ (2011). Bayesian Checking for Topic
+          Models. \emph{EMNLP}.
+    \item Schmidt, B.\ M.\ (2012). Words Alone: Dismantling Topic
+          Models in the Humanities. \emph{Journal of Digital
+          Humanities}, 2(1).
+  \end{itemize}
+
+\end{frame}
+
+% ===============================================================
+\begin{frame}[plain]
+  \begin{center}
+    \vspace*{1.5em}
+    {\Large\bfseries Ende des theoretischen Teils.}
+    \\[2em]
+    Ab der nächsten Sitzung: Praxis mit MTA.
+    \\[3em]
+    \footnotesize\color{black!60}
+    christian.papilloud@soziologie.uni-halle.de
+  \end{center}
+\end{frame}
+
+\end{document}
