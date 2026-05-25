@@ -1,47 +1,122 @@
 \documentclass[aspectratio=169,11pt]{beamer}
 
-% Sprache und Schrift (xelatex)
+% ---------------------------------------------------------------
+% Encoding und Sprache (xelatex required)
+% ---------------------------------------------------------------
 \usepackage{fontspec}
 \usepackage[ngerman,provide=*]{babel}
 \usepackage{csquotes}
 
-% Beamer-Theme: schlicht, akademisch
-\usetheme{default}
-\usecolortheme{dove}
-\setbeamertemplate{navigation symbols}{}
-\setbeamerfont{title}{size=\Large,series=\bfseries}
-\setbeamerfont{frametitle}{size=\large,series=\bfseries}
-\setbeamercolor{frametitle}{fg=black}
-\setbeamercolor{title}{fg=black}
-\setbeamercolor{structure}{fg=black!75}
-\setbeamercolor{normal text}{fg=black!90}
-\setbeamertemplate{itemize item}{\textbullet}
-\setbeamertemplate{itemize subitem}{\textendash}
+% ---------------------------------------------------------------
+% Polices : Inconsolata (mono) pour titres, Open Sans pour le corps
+% ---------------------------------------------------------------
+\setmainfont{Open Sans}[
+  Scale=0.96,
+  BoldFont={Open Sans Bold},
+  ItalicFont={Open Sans Italic},
+  BoldItalicFont={Open Sans Bold Italic},
+]
+\setmonofont{Inconsolata}[Scale=0.95]
+% \titlemono pour les titres en mono.
+% \mdash : en-dash en DejaVu Sans Mono (Inconsolata Medium n'a pas U+2013).
+\newfontfamily\titlemono{Inconsolata}[Scale=0.96]
+\newfontfamily\monodash{DejaVu Sans Mono}[Scale=0.95]
+\newcommand{\mdash}{\,{\monodash–}\,}
 
+% ---------------------------------------------------------------
+% Palette Solarized dark (Ethan Schoonover)
+% ---------------------------------------------------------------
+\usepackage{xcolor}
+\definecolor{solBase03}{HTML}{002b36}
+\definecolor{solBase02}{HTML}{073642}
+\definecolor{solBase01}{HTML}{586e75}
+\definecolor{solBase00}{HTML}{657b83}
+\definecolor{solBase0}{HTML}{839496}
+\definecolor{solBase1}{HTML}{93a1a1}
+\definecolor{solBase2}{HTML}{eee8d5}
+\definecolor{solBase3}{HTML}{fdf6e3}
+\definecolor{solYellow}{HTML}{b58900}
+\definecolor{solOrange}{HTML}{cb4b16}
+\definecolor{solRed}{HTML}{dc322f}
+\definecolor{solMagenta}{HTML}{d33682}
+\definecolor{solViolet}{HTML}{6c71c4}
+\definecolor{solBlue}{HTML}{268bd2}
+\definecolor{solCyan}{HTML}{2aa198}
+\definecolor{solGreen}{HTML}{859900}
+
+% ---------------------------------------------------------------
+% Beamer theme: Solarized dark
+% ---------------------------------------------------------------
+\usetheme{default}
+\setbeamertemplate{navigation symbols}{}
+
+% Fond et texte par défaut
+\setbeamercolor{background canvas}{bg=solBase03}
+\setbeamercolor{normal text}{fg=solBase0,bg=solBase03}
+\setbeamercolor{structure}{fg=solCyan}
+\setbeamercolor{alerted text}{fg=solOrange}
+\setbeamercolor{example text}{fg=solGreen}
+
+% Accents renforcés : \emph en cyan italique, \textbf en blanc cassé
+\let\oldemph\emph
+\renewcommand{\emph}[1]{{\color{solCyan}\oldemph{#1}}}
+\let\oldtextbf\textbf
+\renewcommand{\textbf}[1]{{\color{solBase3}\oldtextbf{#1}}}
+
+% Titres et sous-titres de slide
+\setbeamerfont{frametitle}{family=\titlemono,size=\large,series=\bfseries}
+\setbeamercolor{frametitle}{fg=solBase3,bg=solBase03}
+\setbeamerfont{title}{family=\titlemono,size=\Large,series=\bfseries}
+\setbeamercolor{title}{fg=solBase3}
+\setbeamerfont{subtitle}{family=\titlemono,size=\normalsize}
+\setbeamercolor{subtitle}{fg=solBase1}
+\setbeamerfont{author}{size=\small}
+\setbeamercolor{author}{fg=solBase1}
+\setbeamercolor{institute}{fg=solBase01}
+\setbeamercolor{date}{fg=solBase01}
+
+% Bullets
+\setbeamertemplate{itemize item}{\color{solYellow}\rule[0.4ex]{0.5ex}{0.5ex}}
+\setbeamertemplate{itemize subitem}{\color{solCyan}\textendash}
+\setbeamertemplate{enumerate item}{\color{solYellow}\bfseries\insertenumlabel.}
+
+% Blocks
+\setbeamercolor{block title}{fg=solBase3,bg=solBase02}
+\setbeamercolor{block body}{fg=solBase0,bg=solBase02}
+\setbeamerfont{block title}{family=\titlemono,series=\bfseries,size=\normalsize}
+
+% Footer discret
 \setbeamertemplate{footline}{%
   \leavevmode%
   \hbox{%
-    \begin{beamercolorbox}[wd=.55\paperwidth,ht=2.25ex,dp=1ex,leftskip=1em]{author in head/foot}%
-      \footnotesize\color{black!60}MTA -- Sitzung 2: Wie funktionieren Topic-Modelle?%
+    \begin{beamercolorbox}[wd=.55\paperwidth,ht=2.25ex,dp=1ex,leftskip=1em]{footer}%
+      \footnotesize\color{solBase01}\titlemono\small MTA\mdash{}Sitzung 2\normalsize%
     \end{beamercolorbox}%
-    \begin{beamercolorbox}[wd=.45\paperwidth,ht=2.25ex,dp=1ex,rightskip=1em,leftskip=2ex]{title in head/foot}%
-      \hfill\footnotesize\color{black!60}\insertframenumber\,/\,\inserttotalframenumber%
+    \begin{beamercolorbox}[wd=.45\paperwidth,ht=2.25ex,dp=1ex,rightskip=1em,leftskip=2ex]{footer}%
+      \hfill\footnotesize\color{solBase01}\titlemono\insertframenumber\,/\,\inserttotalframenumber%
     \end{beamercolorbox}}%
 }
 
+% ---------------------------------------------------------------
+% Autres paquets
+% ---------------------------------------------------------------
 \usepackage{booktabs}
 \usepackage{array}
 \usepackage{tabularx}
+\usepackage{colortbl}
 \usepackage{amsmath}
 \usepackage{tikz}
-\usetikzlibrary{positioning,arrows.meta,calc,matrix,fit}
+\usetikzlibrary{positioning,arrows.meta,calc,matrix,fit,backgrounds}
+\arrayrulecolor{solBase01}
 
 % ---------------------------------------------------------------
+% Titelinformationen
+% ---------------------------------------------------------------
 \title{Wie funktionieren Topic-Modelle?}
-\subtitle{Sitzung 2 -- Mathematische Grundlagen,\\LDA, NMF und der Sprung zu BERT/LLMs}
+\subtitle{Sitzung 2\mdash{}Mathematische Grundlagen,\\LDA, NMF und der Sprung zu BERT/LLMs}
 \author{Prof.~Dr.~Christian Papilloud}
 \institute{Institut für Soziologie\\Martin-Luther-Universität Halle-Wittenberg}
-\date{Master Soziologie -- 2026}
+\date{Master Soziologie – 2026}
 
 \begin{document}
 
@@ -55,7 +130,7 @@
 
   In der letzten Sitzung haben wir Topic-Modelle (TM) \emph{methodologisch}
   positioniert: Sie sind \emph{quantitativ basiert}, dienen aber der
-  qualitativen Forschung -- näher an Mayring als an Oevermann.
+  qualitativen Forschung – näher an Mayring als an Oevermann.
 
   \vfill
   Heute fragen wir: \textbf{Wie funktioniert das technisch?}
@@ -81,7 +156,7 @@
 \begin{frame}{Die zentrale Intuition}
 
   \begin{block}{Definition (sehr informell)}
-    Ein \emph{topic} ist eine \textbf{Wortliste} -- eine Gruppe von
+    Ein \emph{topic} ist eine \textbf{Wortliste} – eine Gruppe von
     Wörtern, die \emph{oft gemeinsam} in Dokumenten vorkommen.
     \\[4pt]
     Wenn \enquote{Milch} und \enquote{Katze} immer wieder gemeinsam
@@ -160,7 +235,7 @@
   \vfill
   Diese \textbf{Dokument-Wort-Matrix} $A$ ist der Input jedes
   Topic-Modells. Bei einem realen Korpus von 10\,000 Texten mit
-  einem Vokabular von 5\,000 Wörtern hat sie 50 Millionen Einträge --
+  einem Vokabular von 5\,000 Wörtern hat sie 50 Millionen Einträge –
   meistens Nullen (\emph{sparse matrix}).
 
 \end{frame}
@@ -181,13 +256,13 @@
 
   \vfill
   Was bedeutet das? \\[6pt]
-  -- $W$ sagt: \emph{Welches topic in welchem Dokument?} (Topic-Gewichte) \\
-  -- $H$ sagt: \emph{Welche Wörter in welchem topic?} (Topic-Inhalt)
+  – $W$ sagt: \emph{Welches topic in welchem Dokument?} (Topic-Gewichte) \\
+  – $H$ sagt: \emph{Welche Wörter in welchem topic?} (Topic-Inhalt)
 
   \vfill
   Statt $3\times 8 = 24$ Werte (in $A$) brauchen wir nur
   $3\times 2 + 2\times 8 = 22$ Werte (in $W$ und $H$).
-  Bei größeren Matrizen ist die Reduktion enorm -- und sie zwingt das
+  Bei größeren Matrizen ist die Reduktion enorm – und sie zwingt das
   Modell, die \emph{wesentlichen Strukturen} zu finden.
 
 \end{frame}
@@ -195,7 +270,7 @@
 % ===============================================================
 \begin{frame}{Ergebnis im Beispiel}
 
-  \textbf{Topic-Wort-Zugehörigkeit $H$} -- welche Wörter bilden welches topic:
+  \textbf{Topic-Wort-Zugehörigkeit $H$} – welche Wörter bilden welches topic:
   \footnotesize
   \begin{center}
     \begin{tabular}{@{}l|cccccccc@{}}
@@ -254,7 +329,7 @@
   \vfill
   \footnotesize\color{black!60}
   Mit jeder Iteration verringert sich der \enquote{Rekonstruktionsfehler}
-  -- der Unterschied zwischen $A$ und $W\cdot H$.
+  – der Unterschied zwischen $A$ und $W\cdot H$.
 
 \end{frame}
 
@@ -290,7 +365,7 @@
 
   \begin{block}{Pointe für die qualitative Analyse}
     Diese \enquote{Halluzinationen} sind oft \textbf{kein Fehler}:
-    Sie machen \emph{implizite} Bedeutungen sichtbar -- semantische
+    Sie machen \emph{implizite} Bedeutungen sichtbar – semantische
     Nähen, die im Text vorhanden, aber nicht explizit ausgesprochen sind.
   \end{block}
 
@@ -418,7 +493,7 @@
 % ===============================================================
 \section{3. Die zwei klassischen Verfahren: LDA und NMF}
 
-\begin{frame}{LDA -- Latent Dirichlet Allocation}
+\begin{frame}{LDA \mdash{} Latent Dirichlet Allocation}
 
   LDA (Blei, Ng \& Jordan 2003) ist ein \textbf{probabilistisches}
   Topic-Modell. Es modelliert die Erzeugung von Dokumenten als
@@ -448,7 +523,7 @@
 \end{frame}
 
 % ===============================================================
-\begin{frame}{LDA -- die Berechnung in einem Satz}
+\begin{frame}{LDA \mdash{} die Berechnung in einem Satz}
 
   Wir \emph{kehren das Modell um}: gegeben die Wörter im Korpus, was
   sind die wahrscheinlichsten topics und Topic-Verteilungen?
@@ -460,12 +535,12 @@
   Approximationsverfahren:
   \vfill
   \begin{itemize}
-    \item \textbf{Variationsinferenz} (Blei et al.\ 2003) --
+    \item \textbf{Variationsinferenz} (Blei et al.\ 2003) –
           analytisch, sucht eine einfachere Verteilung in der Nähe
           der echten.
     \vfill
     \item \textbf{Collapsed Gibbs Sampling} (Griffiths \& Steyvers
-          2004) -- stichprobenartig, würfelt Wort-Topic-Zuordnungen
+          2004) – stichprobenartig, würfelt Wort-Topic-Zuordnungen
           neu, bis sich ein stabiles Bild ergibt.
   \end{itemize}
 
@@ -477,7 +552,7 @@
 \end{frame}
 
 % ===============================================================
-\begin{frame}{NMF -- Non-Negative Matrix Factorization}
+\begin{frame}{NMF \mdash{} Non-Negative Matrix Factorization}
 
   NMF (Lee \& Seung 2001) löst dasselbe Problem \emph{ohne Statistik}:
   rein linearealgebraisch.
@@ -505,7 +580,7 @@
 \end{frame}
 
 % ===============================================================
-\begin{frame}{LDA vs.\ NMF -- praktischer Vergleich}
+\begin{frame}{LDA vs.\ NMF \mdash{} praktischer Vergleich}
 
   \footnotesize
   \begin{tabularx}{\textwidth}{@{}p{0.20\textwidth}XX@{}}
@@ -519,7 +594,7 @@
       & Wahrscheinlichkeiten
       & Gewichte (positiv) \\[6pt]
     \textbf{Reproduzierbarkeit}
-      & Stochastisch -- variiert je Lauf
+      & Stochastisch – variiert je Lauf
       & Deterministisch bei festem Startwert \\[6pt]
     \textbf{Geschwindigkeit}
       & langsamer
@@ -583,18 +658,18 @@
   \vfill
   Seitdem hat sich Vieles verändert:
   \begin{itemize}
-    \item 2013: \textbf{Word2Vec} (Mikolov et al.) -- die Idee von
+    \item 2013: \textbf{Word2Vec} (Mikolov et al.) – die Idee von
           \emph{word embeddings}: jedes Wort als Punkt in einem
           hochdimensionalen Vektorraum.
     \vfill
-    \item 2018-2019: \textbf{BERT} (Devlin et al.) -- kontextuelle
+    \item 2018-2019: \textbf{BERT} (Devlin et al.) – kontextuelle
           Embeddings: dasselbe Wort hat \emph{verschiedene}
           Repräsentationen je nach Satz.
     \vfill
-    \item 2022: \textbf{BERTopic} (Grootendorst) -- ein Topic-Modell,
+    \item 2022: \textbf{BERTopic} (Grootendorst) – ein Topic-Modell,
           das BERT-Embeddings nutzt.
     \vfill
-    \item 2022 ff.: \textbf{ChatGPT, GPT-4, Claude, LLaMA \ldots} --
+    \item 2022 ff.: \textbf{ChatGPT, GPT-4, Claude, LLaMA \ldots} –
           Large Language Models. Sie können Texte
           \emph{verstehen} und \emph{annotieren}.
   \end{itemize}
@@ -668,7 +743,7 @@
 \end{frame}
 
 % ===============================================================
-\begin{frame}{BERTopic vs.\ LDA/NMF -- die Forschungslage}
+\begin{frame}{BERTopic vs.\ LDA/NMF \mdash{} die Forschungslage}
 
   Empirische Vergleiche (Egger \& Yu 2022; Kaur \& Wallace 2024;
   Mishra 2026; Ma et al.\ 2025):
@@ -689,8 +764,8 @@
     \item Bei \emph{längeren} Texten (Artikel, Interviews, Bücher).
     \item Wenn \emph{Interpretierbarkeit} und \emph{Reproduzierbarkeit}
           wichtiger sind als Kohärenz allein.
-    \item Bei \emph{kleinen} Korpora -- BERTopic verlangt oft sehr
-          viele Dokumente und verwirft 30--70\,\% als \emph{Outliers}
+    \item Bei \emph{kleinen} Korpora – BERTopic verlangt oft sehr
+          viele Dokumente und verwirft 30–70\,\% als \emph{Outliers}
           (Soledad et al.\ 2022).
     \item Bei \emph{spezialisierten} Sprachen oder Disziplinen, für
           die kein guter vortrainierter BERT verfügbar ist.
@@ -708,7 +783,7 @@
   \begin{itemize}
     \item Transkripte \textbf{zusammenfassen} und thematisch annotieren.
     \vfill
-    \item Texte direkt \textbf{codieren} -- inklusive
+    \item Texte direkt \textbf{codieren} – inklusive
           \emph{deduktiver} Codierung anhand eines Codebuches
           (Tai et al.\ 2024).
     \vfill
@@ -728,7 +803,7 @@
 % ===============================================================
 \begin{frame}{Aber: erste empirische Kritik}
 
-  \begin{block}{Ashwin, Chhabra \& Rao (2025) -- \emph{Sociological Methods \& Research}}
+  \begin{block}{Ashwin, Chhabra \& Rao (2025) \mdash{} \emph{Sociological Methods \& Research}}
     Untersuchung von Interviews mit Rohingya-Geflüchteten und
     bengalischen Gastgebern. Befund:
 
@@ -740,7 +815,7 @@
 
   \vfill
   \textbf{Konsequenz:} Inferenzen, die auf LLM-Codierungen beruhen,
-  können \emph{systematisch falsch} sein -- in eine \emph{bestimmte}
+  können \emph{systematisch falsch} sein – in eine \emph{bestimmte}
   Richtung.
 
   \vfill
@@ -811,14 +886,14 @@
 % ===============================================================
 \begin{frame}{Ausblick auf Sitzung 3}
 
-  \textbf{Sitzung 3 -- Vom Verfahren zur Interpretation}
+  \textbf{Sitzung 3 – Vom Verfahren zur Interpretation}
 
   \vfill
   \begin{itemize}
     \item Bevor der Algorithmus läuft: was ist ein \emph{Dokument}?
           Was sind \emph{Stoppwörter}? Wie reinigt man eine Textquelle?
     \vfill
-    \item TF-IDF, Lemmatisierung, NER -- und was MTA \emph{nicht} tut.
+    \item TF-IDF, Lemmatisierung, NER – und was MTA \emph{nicht} tut.
     \vfill
     \item Metadaten und Topic-Modelle: drei Strategien.
     \vfill
@@ -826,7 +901,7 @@
           \emph{nicht} können. Zwei Erwartungen, die nicht erfüllt
           werden.
     \vfill
-    \item Was sich für unsere Forschungspraxis ändert -- und wie
+    \item Was sich für unsere Forschungspraxis ändert – und wie
           diese drei Sitzungen in die folgende Arbeit mit MTA münden.
   \end{itemize}
 
@@ -847,11 +922,11 @@
   \begin{itemize}
     \item Blei, D.\ M., Ng, A.\ Y., \& Jordan, M.\ I.\ (2003). Latent
           Dirichlet Allocation. \emph{Journal of Machine Learning
-          Research}, 3, 993--1022.
+          Research}, 3, 993–1022.
     \item Lee, D.\ D., \& Seung, H.\ S.\ (2001). Algorithms for
           Non-Negative Matrix Factorization. \emph{NIPS}.
     \item Griffiths, T.\ L., \& Steyvers, M.\ (2004). Finding scientific
-          topics. \emph{PNAS}, 101(suppl.\ 1), 5228--5235.
+          topics. \emph{PNAS}, 101(suppl.\ 1), 5228–5235.
     \item Newman, D., Lau, J.\ H., Grieser, K., \& Baldwin, T.\ (2010).
           Automatic Evaluation of Topic Coherence. \emph{NAACL HLT}.
     \item Chang, J., et al.\ (2009). Reading Tea Leaves: How Humans

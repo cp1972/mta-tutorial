@@ -1,43 +1,122 @@
 \documentclass[aspectratio=169,11pt]{beamer}
 
+% ---------------------------------------------------------------
+% Encoding und Sprache (xelatex required)
+% ---------------------------------------------------------------
 \usepackage{fontspec}
 \usepackage[ngerman,provide=*]{babel}
 \usepackage{csquotes}
 
-\usetheme{default}
-\usecolortheme{dove}
-\setbeamertemplate{navigation symbols}{}
-\setbeamerfont{title}{size=\Large,series=\bfseries}
-\setbeamerfont{frametitle}{size=\large,series=\bfseries}
-\setbeamercolor{frametitle}{fg=black}
-\setbeamercolor{title}{fg=black}
-\setbeamercolor{structure}{fg=black!75}
-\setbeamercolor{normal text}{fg=black!90}
-\setbeamertemplate{itemize item}{\textbullet}
-\setbeamertemplate{itemize subitem}{\textendash}
+% ---------------------------------------------------------------
+% Polices : Inconsolata (mono) pour titres, Open Sans pour le corps
+% ---------------------------------------------------------------
+\setmainfont{Open Sans}[
+  Scale=0.96,
+  BoldFont={Open Sans Bold},
+  ItalicFont={Open Sans Italic},
+  BoldItalicFont={Open Sans Bold Italic},
+]
+\setmonofont{Inconsolata}[Scale=0.95]
+% \titlemono pour les titres en mono.
+% \mdash : en-dash en DejaVu Sans Mono (Inconsolata Medium n'a pas U+2013).
+\newfontfamily\titlemono{Inconsolata}[Scale=0.96]
+\newfontfamily\monodash{DejaVu Sans Mono}[Scale=0.95]
+\newcommand{\mdash}{\,{\monodash–}\,}
 
+% ---------------------------------------------------------------
+% Palette Solarized dark (Ethan Schoonover)
+% ---------------------------------------------------------------
+\usepackage{xcolor}
+\definecolor{solBase03}{HTML}{002b36}
+\definecolor{solBase02}{HTML}{073642}
+\definecolor{solBase01}{HTML}{586e75}
+\definecolor{solBase00}{HTML}{657b83}
+\definecolor{solBase0}{HTML}{839496}
+\definecolor{solBase1}{HTML}{93a1a1}
+\definecolor{solBase2}{HTML}{eee8d5}
+\definecolor{solBase3}{HTML}{fdf6e3}
+\definecolor{solYellow}{HTML}{b58900}
+\definecolor{solOrange}{HTML}{cb4b16}
+\definecolor{solRed}{HTML}{dc322f}
+\definecolor{solMagenta}{HTML}{d33682}
+\definecolor{solViolet}{HTML}{6c71c4}
+\definecolor{solBlue}{HTML}{268bd2}
+\definecolor{solCyan}{HTML}{2aa198}
+\definecolor{solGreen}{HTML}{859900}
+
+% ---------------------------------------------------------------
+% Beamer theme: Solarized dark
+% ---------------------------------------------------------------
+\usetheme{default}
+\setbeamertemplate{navigation symbols}{}
+
+% Fond et texte par défaut
+\setbeamercolor{background canvas}{bg=solBase03}
+\setbeamercolor{normal text}{fg=solBase0,bg=solBase03}
+\setbeamercolor{structure}{fg=solCyan}
+\setbeamercolor{alerted text}{fg=solOrange}
+\setbeamercolor{example text}{fg=solGreen}
+
+% Accents renforcés : \emph en cyan italique, \textbf en blanc cassé
+\let\oldemph\emph
+\renewcommand{\emph}[1]{{\color{solCyan}\oldemph{#1}}}
+\let\oldtextbf\textbf
+\renewcommand{\textbf}[1]{{\color{solBase3}\oldtextbf{#1}}}
+
+% Titres et sous-titres de slide
+\setbeamerfont{frametitle}{family=\titlemono,size=\large,series=\bfseries}
+\setbeamercolor{frametitle}{fg=solBase3,bg=solBase03}
+\setbeamerfont{title}{family=\titlemono,size=\Large,series=\bfseries}
+\setbeamercolor{title}{fg=solBase3}
+\setbeamerfont{subtitle}{family=\titlemono,size=\normalsize}
+\setbeamercolor{subtitle}{fg=solBase1}
+\setbeamerfont{author}{size=\small}
+\setbeamercolor{author}{fg=solBase1}
+\setbeamercolor{institute}{fg=solBase01}
+\setbeamercolor{date}{fg=solBase01}
+
+% Bullets
+\setbeamertemplate{itemize item}{\color{solYellow}\rule[0.4ex]{0.5ex}{0.5ex}}
+\setbeamertemplate{itemize subitem}{\color{solCyan}\textendash}
+\setbeamertemplate{enumerate item}{\color{solYellow}\bfseries\insertenumlabel.}
+
+% Blocks
+\setbeamercolor{block title}{fg=solBase3,bg=solBase02}
+\setbeamercolor{block body}{fg=solBase0,bg=solBase02}
+\setbeamerfont{block title}{family=\titlemono,series=\bfseries,size=\normalsize}
+
+% Footer discret
 \setbeamertemplate{footline}{%
   \leavevmode%
   \hbox{%
-    \begin{beamercolorbox}[wd=.55\paperwidth,ht=2.25ex,dp=1ex,leftskip=1em]{author in head/foot}%
-      \footnotesize\color{black!60}MTA -- Sitzung 3: Vom Verfahren zur Interpretation%
+    \begin{beamercolorbox}[wd=.55\paperwidth,ht=2.25ex,dp=1ex,leftskip=1em]{footer}%
+      \footnotesize\color{solBase01}\titlemono\small MTA\mdash{}Sitzung 3\normalsize%
     \end{beamercolorbox}%
-    \begin{beamercolorbox}[wd=.45\paperwidth,ht=2.25ex,dp=1ex,rightskip=1em,leftskip=2ex]{title in head/foot}%
-      \hfill\footnotesize\color{black!60}\insertframenumber\,/\,\inserttotalframenumber%
+    \begin{beamercolorbox}[wd=.45\paperwidth,ht=2.25ex,dp=1ex,rightskip=1em,leftskip=2ex]{footer}%
+      \hfill\footnotesize\color{solBase01}\titlemono\insertframenumber\,/\,\inserttotalframenumber%
     \end{beamercolorbox}}%
 }
 
+% ---------------------------------------------------------------
+% Autres paquets
+% ---------------------------------------------------------------
 \usepackage{booktabs}
 \usepackage{array}
 \usepackage{tabularx}
+\usepackage{colortbl}
 \usepackage{amsmath}
 \usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,calc,matrix,fit,backgrounds}
+\arrayrulecolor{solBase01}
 
+% ---------------------------------------------------------------
+% Titelinformationen
+% ---------------------------------------------------------------
 \title{Vom Verfahren zur Interpretation}
-\subtitle{Sitzung 3 -- Vorverarbeitung, Metadaten\\und ein kritischer Blick auf Topic-Modelle}
+\subtitle{Sitzung 3\mdash{}Vorverarbeitung, Metadaten\\und ein kritischer Blick auf Topic-Modelle}
 \author{Prof.~Dr.~Christian Papilloud}
 \institute{Institut für Soziologie\\Martin-Luther-Universität Halle-Wittenberg}
-\date{Master Soziologie -- 2026}
+\date{Master Soziologie – 2026}
 
 \begin{document}
 
@@ -55,7 +134,7 @@
 
   \vfill
   Heute schließen wir den theoretischen Teil ab mit dem, was
-  zwischen \emph{Forschungsfrage} und \emph{Algorithmus} liegt --
+  zwischen \emph{Forschungsfrage} und \emph{Algorithmus} liegt –
   und was \emph{nach} dem Algorithmus folgt:
 
   \vfill
@@ -65,7 +144,7 @@
           Was ist TF-IDF?
     \item[\textbf{2.}] Wie kann man \emph{Metadaten} in eine
           Topic-Modell-Analyse einbinden? Drei Strategien.
-    \item[\textbf{3.}] \emph{Nach} dem Algorithmus -- der kritische
+    \item[\textbf{3.}] \emph{Nach} dem Algorithmus – der kritische
           Blick: Zwei verbreitete Erwartungen, die Topic-Modelle
           \emph{nicht} erfüllen.
     \item[\textbf{4.}] Was sich für unsere Forschungspraxis ändert.
@@ -84,15 +163,15 @@
 
   \vfill
   \begin{enumerate}
-    \item \textbf{Datenvorverarbeitung} \hfill -- der heutige Schwerpunkt
-    \item \textbf{Topic-Modell-Inferenz} \hfill -- letzte Sitzung
+    \item \textbf{Datenvorverarbeitung} \hfill – der heutige Schwerpunkt
+    \item \textbf{Topic-Modell-Inferenz} \hfill – letzte Sitzung
     \item \textbf{Evaluation}
     \item \textbf{Interpretation}
   \end{enumerate}
 
   \vfill
   \begin{block}{Pointe}
-    Die Vorverarbeitung ist der Schritt, der die meiste Zeit kostet --
+    Die Vorverarbeitung ist der Schritt, der die meiste Zeit kostet –
     und der die größten methodologischen Konsequenzen hat. Wer schlecht
     vorverarbeitet, bekommt schlechte topics. Es gibt keinen Algorithmus,
     der diese Phase ersetzt.
@@ -162,17 +241,17 @@
 \end{frame}
 
 % ===============================================================
-\begin{frame}{TF-IDF -- eine zentrale Gewichtung}
+\begin{frame}{TF-IDF \mdash{} eine zentrale Gewichtung}
 
-  TF-IDF (Term Frequency -- Inverse Document Frequency) gewichtet
+  TF-IDF (Term Frequency – Inverse Document Frequency) gewichtet
   Wörter doppelt:
 
   \vfill
   \begin{itemize}
-    \item \textbf{TF} -- Häufigkeit eines Wortes \emph{im Dokument}.
+    \item \textbf{TF} – Häufigkeit eines Wortes \emph{im Dokument}.
           Je öfter, desto wichtiger für dieses Dokument.
     \vfill
-    \item \textbf{IDF} -- inverse Häufigkeit \emph{über die Dokumente}.
+    \item \textbf{IDF} – inverse Häufigkeit \emph{über die Dokumente}.
           \[ \mathrm{idf}_i = \log_{10}\!\left(\frac{N}{n_i}\right) \]
           mit $N$ = Gesamtzahl der Dokumente, $n_i$ = Anzahl der
           Dokumente, die das Wort $i$ enthalten.
@@ -186,13 +265,13 @@
   Wörter \emph{Versuch} und \emph{Versicherung} ähnliche
   Gesamthäufigkeiten ($\sim$10\,400). Aber \emph{Versuch} kommt in
   8.760 Dokumenten vor, \emph{Versicherung} nur in 3.997.
-  \emph{Versicherung} ist also stärker konzentriert -- höherer
-  IDF-Wert -- für die Topic-Analyse aussagekräftiger.
+  \emph{Versicherung} ist also stärker konzentriert – höherer
+  IDF-Wert – für die Topic-Analyse aussagekräftiger.
 
 \end{frame}
 
 % ===============================================================
-\begin{frame}{Lemmatisierung, NER, Phrasen -- optionale Schritte}
+\begin{frame}{Lemmatisierung, NER, Phrasen \mdash{} optionale Schritte}
 
   Drei sprachliche Operationen, die Topic-Modelle verbessern können:
 
@@ -218,7 +297,7 @@
 
   \vfill
   \textbf{In MTA:} Stoppwörter und TF-IDF sind eingebaut.
-  Lemmatisierung, NER und Phrasen \emph{nicht} -- sie können vorher
+  Lemmatisierung, NER und Phrasen \emph{nicht} – sie können vorher
   durch externe Werkzeuge (TreeTagger, spaCy) angewendet werden,
   wenn nötig.
 
@@ -278,14 +357,14 @@
 \end{frame}
 
 % ===============================================================
-\begin{frame}{Strategie 1 -- \emph{Spaltung}}
+\begin{frame}{Strategie 1 \mdash{} \emph{Spaltung}}
 
   \textbf{Idee:} Man teilt das Korpus nach der Metadaten-Variable
   in Teilkorpora und führt für jedes eine separate Topic-Analyse durch.
 
   \vfill
   \emph{Beispiel:} Korpus aus 2.000 Zeitungsartikeln zu Migration,
-  2015--2020. Wir wollen die \emph{zeitliche Entwicklung} sehen.
+  2015–2020. Wir wollen die \emph{zeitliche Entwicklung} sehen.
 
   $\rightarrow$ Wir machen sechs separate Analysen, eine pro Jahr,
   und vergleichen die topics.
@@ -308,7 +387,7 @@
 \end{frame}
 
 % ===============================================================
-\begin{frame}{Strategie 2 -- \emph{Hinzufügung}}
+\begin{frame}{Strategie 2 \mdash{} \emph{Hinzufügung}}
 
   \textbf{Idee:} Die Metadaten werden \emph{nach} der Topic-Inferenz
   in die Analyse eingebunden. Man rechnet \emph{ein} Topic-Modell auf
@@ -337,7 +416,7 @@
 \end{frame}
 
 % ===============================================================
-\begin{frame}{Strategie 3 -- \emph{Lernergänzung}}
+\begin{frame}{Strategie 3 \mdash{} \emph{Lernergänzung}}
 
   \textbf{Idee:} Die Metadaten werden \emph{während} der Topic-Inferenz
   einbezogen. Das Topic-Modell selbst wird so erweitert, dass es die
@@ -410,7 +489,7 @@
 
 \begin{frame}{Topic-Modelle haben Grenzen}
 
-  Wir kommen zum Kapitel 8 des Buches -- \emph{Rück- und Ausblick}.
+  Wir kommen zum Kapitel 8 des Buches – \emph{Rück- und Ausblick}.
   Zwei verbreitete Erwartungen werden dort explizit zurückgewiesen.
   Beide werden Sie in der Literatur und in der Praxis immer wieder
   hören. Beide sind \emph{falsch}.
@@ -430,7 +509,7 @@
 \end{frame}
 
 % ===============================================================
-\begin{frame}{Erwartung 1 -- \enquote{Quali/Quanti überwinden}}
+\begin{frame}{Erwartung 1 \mdash{} \enquote{Quali/Quanti überwinden}}
 
   Das Argument lautet meistens: Da Topic-Modelle Statistik und
   Mathematik einsetzen, lösen sie das alte Paar
@@ -439,7 +518,7 @@
   \vfill
   \textbf{Warum das nicht stimmt} (Buch, S.~152):
   \begin{itemize}
-    \item Topic-Modelle setzen die Arbeit an \emph{Texten} voraus --
+    \item Topic-Modelle setzen die Arbeit an \emph{Texten} voraus –
           also am \emph{Sinn} von Begriffen.
     \vfill
     \item Diese Daten lassen sich nicht auf eine einzige Bedeutung
@@ -447,7 +526,7 @@
           werden.
     \vfill
     \item Topic-Modelle reduzieren die Komplexität von Textquellen
-          \emph{nicht} -- im Gegenteil, sie laden dazu ein,
+          \emph{nicht} – im Gegenteil, sie laden dazu ein,
           \emph{Multiperspektivität} zu erkennen.
   \end{itemize}
 
@@ -462,13 +541,13 @@
 \end{frame}
 
 % ===============================================================
-\begin{frame}{Erwartung 2 -- \enquote{Interpretation auf ein Minimum reduzieren}}
+\begin{frame}{Erwartung 2 \mdash{} \enquote{Interpretation auf ein Minimum reduzieren}}
 
   Das Argument: Da der Algorithmus die Kategorien selbst findet,
   müssen wir nur noch die Ergebnisse \enquote{lesen}.
 
   \vfill
-  \textbf{Warum das nicht stimmt} (Buch, S.~152--153):
+  \textbf{Warum das nicht stimmt} (Buch, S.~152–153):
   \begin{itemize}
     \item Die Ergebnisse eines Topic-Modells hängen \emph{stark} ab von:
           \begin{itemize}
@@ -493,7 +572,7 @@
 % ===============================================================
 \begin{frame}{Eine Pflichtlektüre: Schmidt 2012}
 
-  \begin{block}{Schmidt 2012 -- die Kritik}
+  \begin{block}{Schmidt 2012 \mdash{} die Kritik}
     Schmidt zeigt anhand historischer und geographischer Daten, wie
     Topic-Modelle zu \emph{falschen Ergebnissen} führen können,
     wenn sie \enquote{blind} angewendet werden.
@@ -507,7 +586,7 @@
   \vfill
   Was heißt das konkret?
   \begin{enumerate}
-    \item Topics nicht für bare Münze nehmen -- immer mit den
+    \item Topics nicht für bare Münze nehmen – immer mit den
           besten Dokumenten konfrontieren.
     \item Mehrere Modelle laufen lassen (verschiedene $K$, LDA und
           NMF) und Konsistenz prüfen.
@@ -523,7 +602,7 @@
   \begin{block}{Frage vom Ende der ersten Sitzung}
     Eine Sozialwissenschaftlerin, die mit MTA arbeitet, codiert nicht
     selbst, sondern sie liest die Codierung einer Maschine. Verschiebt
-    das die Subjektivität der Interpretation -- oder verlagert es sie
+    das die Subjektivität der Interpretation – oder verlagert es sie
     nur an einen anderen Ort?
   \end{block}
 
@@ -577,7 +656,7 @@
 
   \vfill
   Das ist nicht der \emph{Ersatz} qualitativer Lektüre. Es ist ihr
-  \emph{Vorlauf} -- eine Strukturierung, die das eigentliche
+  \emph{Vorlauf} – eine Strukturierung, die das eigentliche
   Lesen vorbereitet.
 
 \end{frame}
@@ -594,7 +673,7 @@
           wird neu definiert.
     \vfill
     \item \textbf{Forschungsfrage:} sie muss explizit \emph{operationalisiert}
-          werden -- in Form von Vorverarbeitungsentscheidungen und
+          werden – in Form von Vorverarbeitungsentscheidungen und
           Parameterwahl.
     \vfill
     \item \textbf{Kooperation:} weil Parameter dokumentiert werden,
@@ -609,11 +688,11 @@
 \end{frame}
 
 % ===============================================================
-\begin{frame}{Was wir gelernt haben -- Bilanz der drei Sitzungen}
+\begin{frame}{Was wir gelernt haben \mdash{} Bilanz der drei Sitzungen}
 
   \begin{enumerate}
     \item \textbf{Sitzung 1:} Topic-Modelle gehören zu den qualitativen
-          Methoden -- sie teilen mit objektiver Hermeneutik und
+          Methoden – sie teilen mit objektiver Hermeneutik und
           qualitativer Inhaltsanalyse drei Grundannahmen, aber sie
           unterscheiden sich in dem, was bei ihnen \emph{algorithmisch}
           ist.
@@ -627,7 +706,7 @@
     \item \textbf{Heute, Sitzung 3:} Der Algorithmus ist nur die
           \emph{Mitte} einer Topic-Modell-Analyse. Vorverarbeitung
           und Interpretation machen den \emph{Großteil} der Arbeit
-          aus -- und tragen die größte Verantwortung.
+          aus – und tragen die größte Verantwortung.
   \end{enumerate}
 
 \end{frame}
@@ -640,7 +719,7 @@
   \vfill
   \textbf{Was Sie für die erste Praxis-Sitzung mitbringen sollten:}
   \begin{itemize}
-    \item Ein kleines eigenes Korpus von Texten (5--20 Dateien)
+    \item Ein kleines eigenes Korpus von Texten (5–20 Dateien)
           als \texttt{.txt} (UTF-8). \\
           \footnotesize Beispiele: Zeitungsartikel zu einem Thema, das
           Sie interessiert; ein paar Interviewtranskripte aus einem
@@ -694,7 +773,7 @@
           Models. \emph{ICML}.
     \item Roberts, M.\ E., et al.\ (2014). Structural Topic Models for
           Open-Ended Survey Responses. \emph{American Journal of
-          Political Science}, 58(4), 1064--1082.
+          Political Science}, 58(4), 1064–1082.
     \item Rosen-Zvi, M., Griffiths, T., Steyvers, M., \& Smyth, P.\
           (2004). The Author-Topic Model for Authors and Documents.
           \emph{UAI}.
