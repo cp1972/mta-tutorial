@@ -318,42 +318,85 @@ Verfügbar in MTA
 \section{Der kritische Blick: zwei falsche Erwartungen}
 
 Wir kommen zum Kapitel 8 des Buches (\emph{Rück- und Ausblick}). Zwei
-verbreitete Erwartungen werden dort explizit zurückgewiesen. Beide
-werden Sie in der Literatur und in der Praxis immer wieder hören.
-Beide sind \emph{falsch}.
+verbreitete Erwartungen werden dort behandelt. Beide werden Sie in der
+Literatur und in der Praxis immer wieder hören. Die erste muss man
+\emph{nuancieren} – es ist nicht einfach falsch, von Brücken zwischen
+qualitativer und quantitativer Forschung zu sprechen, wenn man Topic-Modelle
+einsetzt; es ist allerdings falsch, daraus eine Auflösung der Unterscheidung
+abzuleiten. Die zweite muss man \emph{klar zurückweisen}.
 
-\subsection{Erwartung 1 -- \enquote{Topic-Modelle überwinden die
-Unterscheidung quali/quanti}}
+\subsection{Erwartung 1 -- \enquote{Topic-Modelle als Brücke zwischen
+Quali und Quanti?}}
 
 Das Argument lautet meistens: Da Topic-Modelle Statistik und Mathematik
-einsetzen, lösen sie das alte Paar \emph{qualitativ vs.\ quantitativ}
-auf. Sie wären eine Art \emph{Brücke} zwischen beiden Lagern.
+einsetzen, \emph{lösen sie} das alte Paar \emph{qualitativ vs.\
+quantitativ} \emph{vollständig auf}. Sie wären eine Art \emph{Brücke}
+zwischen beiden Lagern.
 
-\paragraph{Warum das nicht stimmt} (Buch, S.~152):
+\paragraph{Die starke Version ist falsch} (Buch, S.~152) -- die
+schwächere Version ist begründet. Wir behandeln beide Aspekte
+nacheinander.
+
+\paragraph{Was an der starken Version nicht stimmt.} Topic-Modelle
+setzen die Arbeit an \emph{Texten} voraus -- also am \emph{Sinn} von
+Begriffen und Sprachen. Diese Daten lassen sich nicht auf eine
+einzige Bedeutung reduzieren. Sie können nicht rein quantitativ
+interpretiert werden, \enquote{wie eine Variable}. Topic-Modelle
+reduzieren die Komplexität von Textquellen \emph{nicht}; sie sind
+\emph{im Gegenteil} dazu gemacht, die \emph{Multiperspektivität} einer
+Textquelle nicht zu reduzieren, sondern zu \emph{strukturieren}. Statt
+die Komplexität eines Textes zu reduzieren, laden TM dazu ein, sie zu
+\emph{erkennen} und zu \emph{vertiefen}. Die hermeneutische Lektüre
+bleibt unverzichtbar.
+
+\paragraph{Was an der schwächeren Version richtig ist.} Wenn man die
+Behauptung der \emph{Auflösung} der Unterscheidung nicht teilt, bleibt
+ein methodisch ernst zu nehmender Punkt: Topic-Modelle eröffnen
+\emph{Anschlüsse} zwischen qualitativer und quantitativer Forschung,
+und zwar in einer Weise, die ältere qualitative Verfahren (Oevermann,
+Mayring) so nicht erlauben. Drei konkrete Beispiele, die diese These
+stützen:
 
 \begin{itemize}
-\item Topic-Modelle setzen die Arbeit an \emph{Texten} voraus -- also
-am \emph{Sinn} von Begriffen und Sprachen.
+\item \textbf{Formale Parallele zur Faktorenanalyse.} Die Struktur
+eines Topic-Modells ähnelt jener einer \emph{Faktorenanalyse}: In
+beiden Fällen wird eine hochdimensionale Datenmatrix (hier: die
+Dokument-Wort-Matrix) auf wenige \emph{latente Dimensionen}
+reduziert. Topics entsprechen formal Faktoren, Dokument-Topic-Gewichte
+entsprechen Faktorenwerten. Diese Parallele ist nicht nur
+oberflächlich -- NMF beispielsweise ist ein klassisches
+Verfahren der \emph{linearen Algebra}, das schon vor seiner
+Anwendung auf Texte in der quantitativen Datenanalyse verwendet
+wurde.
 
-\item Diese Daten lassen sich nicht auf eine einzige Bedeutung
-reduzieren. Sie können nicht rein quantitativ interpretiert werden,
-\enquote{wie eine Variable}.
+\item \textbf{Mittelwerttests auf Dokument-Topic-Gewichten.} In MTA
+selbst führen Sie auf der Seite \enquote{Group comparison}
+\emph{Welch-t-Tests} mit Benjamini-Hochberg-Korrektur durch, um zu
+prüfen, ob sich Dokumentgruppen (z.\,B. nach Geschlecht, Altersgruppe,
+Quelle) signifikant in ihren Topic-Gewichten unterscheiden. Das ist
+ein klassisch \emph{quantitatives Verfahren}, angewandt auf Daten
+\emph{qualitativer Herkunft} (Texte). Diese Operation ist nur
+möglich, weil Topic-Modelle ihre Ergebnisse als numerische Gewichte
+ausgeben, die ein Mittelwert-Vergleich überhaupt erst zulässt.
 
-\item Topic-Modelle reduzieren die Komplexität von Textquellen
-\emph{nicht}. Sie sind \emph{im Gegenteil} dazu gemacht, die
-\emph{Multiperspektivität} einer Textquelle nicht zu reduzieren,
-sondern zu \emph{strukturieren}.
-
-\item Statt die Komplexität eines Textes zu reduzieren, laden TM
-dazu ein, sie zu \emph{erkennen} und zu \emph{vertiefen}.
+\item \textbf{Topics als Inputs für eine Hauptkomponentenanalyse.}
+Die Topic-Gewichte selbst können in einem weiteren Schritt einer
+\emph{Hauptkomponentenanalyse} (PCA) unterzogen werden, um Korpora
+in einem stark reduzierten Raum zu vergleichen oder Cluster von
+Dokumenten zu identifizieren. Diese Verkettung
+(Texte~$\to$~Topics~$\to$~Komponenten) ist ein Beispiel für eine
+Forschungspraxis, die qualitative und quantitative Operationen
+\emph{ineinander verschränkt}, ohne sie zu verwechseln.
 \end{itemize}
 
 \begin{merkbox}
-\textbf{Pointe.} Topic-Modelle können quantitative Verfahren
-\emph{begleiten} (Mixed-Methods-Forschung). Aber sie sind nicht
-\emph{a priori} \enquote{besser} oder \enquote{neutraler}, weil sie
-mit Zahlen arbeiten. Wer dies behauptet, missversteht, was ein
-qualitatives Verfahren ist.
+\textbf{Pointe.} Topic-Modelle sind \emph{kein} Brückenschlag, der
+die Unterscheidung qualitativ/quantitativ \emph{aufhebt}. Aber sie
+sind ein Verfahren, das \emph{Anschlüsse} zwischen beiden Traditionen
+ermöglicht -- und zwar auf eine Art, die ältere qualitative Verfahren
+so nicht erlauben. Die qualitative Arbeit am \emph{Sinn} bleibt
+unverzichtbar, ebenso wie die methodische Reflexion über das, was die
+quantitative Operation des Algorithmus eigentlich tut.
 \end{merkbox}
 
 \subsection{Erwartung 2 -- \enquote{Topic-Modelle reduzieren die
@@ -485,8 +528,11 @@ Neuere Verfahren (BERTopic, LLMs) ergänzen das Bild -- aber sie
 ersetzen die klassischen Verfahren nicht, weder methodologisch noch
 praktisch.
 
-\item \textbf{Was können sie nicht?} Sie überwinden nicht die
-Unterscheidung qualitativ/quantitativ; sie reduzieren nicht die
+\item \textbf{Was können sie nicht?} Sie heben die Unterscheidung
+qualitativ/quantitativ nicht auf -- aber sie eröffnen
+\emph{Anschlüsse} zwischen beiden Traditionen (formale Nähe zur
+Faktorenanalyse, Mittelwerttests auf Dokument-Topic-Gewichten,
+mögliche Weiterverwendung in einer PCA). Sie reduzieren nicht die
 Interpretationsarbeit; sie sind keine neutralen Werkzeuge. Die
 Hauptarbeit liegt \emph{vor} dem Algorithmus (Vorverarbeitung) und
 \emph{nach} ihm (Interpretation, kritische Reflexion).
