@@ -490,9 +490,10 @@
 \begin{frame}{Topic-Modelle haben Grenzen}
 
   Wir kommen zum Kapitel 8 des Buches – \emph{Rück- und Ausblick}.
-  Zwei verbreitete Erwartungen werden dort explizit zurückgewiesen.
-  Beide werden Sie in der Literatur und in der Praxis immer wieder
-  hören. Beide sind \emph{falsch}.
+  Zwei verbreitete Erwartungen werden dort behandelt. Beide werden
+  Sie in der Literatur und in der Praxis immer wieder hören. Die
+  erste muss man \emph{nuancieren}, die zweite muss man \emph{klar
+  zurückweisen}.
 
   \vfill
   \begin{itemize}
@@ -509,33 +510,52 @@
 \end{frame}
 
 % ===============================================================
-\begin{frame}{Erwartung 1 \mdash{} \enquote{Quali/Quanti überwinden}}
+\begin{frame}{Erwartung 1 \mdash{} \enquote{Brücke zwischen Quali und Quanti?}}
 
-  Das Argument lautet meistens: Da Topic-Modelle Statistik und
-  Mathematik einsetzen, lösen sie das alte Paar
-  \emph{qualitativ vs.\ quantitativ} auf.
+  Das Argument: Da Topic-Modelle Statistik und Mathematik einsetzen,
+  \textbf{lösen sie} das alte Paar \emph{qualitativ vs.\ quantitativ}
+  \textbf{vollständig auf}.
 
   \vfill
-  \textbf{Warum das nicht stimmt} (Buch, S.~152):
+  \textbf{Diese starke Version ist falsch} (Buch, S.~152) – aber eine
+  schwächere Version ist begründet. Topic-Modelle eröffnen tatsächlich
+  \emph{methodische Brücken} zwischen qualitativer und quantitativer
+  Forschung:
   \begin{itemize}
-    \item Topic-Modelle setzen die Arbeit an \emph{Texten} voraus –
-          also am \emph{Sinn} von Begriffen.
+    \item Formale Nähe zur \emph{Faktorenanalyse}: in beiden Fällen
+          Reduktion einer hochdimensionalen Datenmatrix auf wenige
+          latente Dimensionen.
     \vfill
-    \item Diese Daten lassen sich nicht auf eine einzige Bedeutung
-          reduzieren. Sie können nicht rein quantitativ interpretiert
-          werden.
+    \item In MTA selbst: \textbf{Mittelwerttests} auf den
+          Dokument-Topic-Gewichten (Welch-t-Test, BH-Korrektur) –
+          ein klassisch quantitatives Verfahren auf Daten qualitativer
+          Herkunft.
     \vfill
-    \item Topic-Modelle reduzieren die Komplexität von Textquellen
-          \emph{nicht} – im Gegenteil, sie laden dazu ein,
-          \emph{Multiperspektivität} zu erkennen.
+    \item Topic-Gewichte als \textbf{Inputs für eine
+          Hauptkomponentenanalyse}, um Korpora in einem reduzierten
+          Raum zu vergleichen.
   \end{itemize}
 
+\end{frame}
+
+% ===============================================================
+\begin{frame}{Erwartung 1 \mdash{} Pointe}
+
+  Topic-Modelle sind \emph{kein} Brückenschlag, der die Unterscheidung
+  qualitativ/quantitativ \emph{aufhebt}. Aber sie ermöglichen
+  \textbf{Anschlüsse} zwischen beiden Traditionen – auf eine Art, die
+  ältere qualitative Verfahren (Oevermann, Mayring) so nicht erlauben.
+
   \vfill
-  \begin{block}{Pointe}
-    Topic-Modelle können quantitative Verfahren \emph{begleiten}
-    (Mixed-Methods-Forschung). Aber sie sind nicht \emph{a priori}
-    \enquote{besser} oder \enquote{neutraler}, weil sie mit Zahlen
-    arbeiten.
+  \begin{block}{Was bleibt richtig}
+    Die qualitative Arbeit am \emph{Sinn} von Begriffen bleibt
+    unverzichtbar. Texte lassen sich nicht auf eine einzige Bedeutung
+    reduzieren, und die methodische Brücke entbindet nicht von der
+    hermeneutischen Lektüre.
+
+    \medskip
+    Topic-Modelle sind nicht \emph{a priori} \enquote{besser} oder
+    \enquote{neutraler}, weil sie mit Zahlen arbeiten.
   \end{block}
 
 \end{frame}
